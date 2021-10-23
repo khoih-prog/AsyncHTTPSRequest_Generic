@@ -34,6 +34,8 @@
   * [For ESP32](#for-esp32)
     * [1. AsyncHTTPSRequest_ESP](examples/AsyncHTTPSRequest_ESP)
     * [2. AsyncHTTPSRequest_ESP_WiFiManager](examples/AsyncHTTPSRequest_ESP_WiFiManager)
+  * [For WT32_ETH01](#for-WT32_ETH01)
+    * [1. AsyncHTTPSRequest_WT32_ETH01](examples/WT32_ETH01/AsyncHTTPSRequest_WT32_ETH01)
 * [Example AsyncHTTPSRequest_ESP](#example-AsyncHTTPSRequest_ESP)
   * [1. File AsyncHTTPSRequest_ESP.ino](#1-file-AsyncHTTPSRequest_ESPino)
 * [Debug Terminal Output Samples](#debug-terminal-output-samples) 
@@ -41,8 +43,8 @@
   * [2. AsyncHTTPSRequest_ESP on ESP32S2_DEV](#2-AsyncHTTPSRequest_ESP-on-ESP32S2_DEV)
   * [3. AsyncHTTPSRequest_ESP on ESP32C3_DEV](#3-AsyncHTTPSRequest_ESP-on-ESP32C3_DEV)
   * [4. AsyncHTTPSRequest_ESP_WiFiManager on ESP32_DEV](#4-AsyncHTTPSRequest_ESP_WiFiManager-on-ESP32_DEV)
-  * [5. AsyncHTTPSRequest_WT32_ETH01 on WT32_ETH01 using ESP32 core v2.0.0](#5-AsyncHTTPSRequest_WT32_ETH01-on WT32_ETH01-using-ESP32-core-v200)
-  * [6. AsyncHTTPSRequest_WT32_ETH01 on WT32_ETH01 using ESP32 core v1.0.6](#6-AsyncHTTPSRequest_WT32_ETH01-on WT32_ETH01-using-ESP32-core-v106)
+  * [5. AsyncHTTPSRequest_WT32_ETH01 on WT32_ETH01 using ESP32 core v2.0.0](#5-AsyncHTTPSRequest_WT32_ETH01-on-WT32_ETH01-using-ESP32-core-v200)
+  * [6. AsyncHTTPSRequest_WT32_ETH01 on WT32_ETH01 using ESP32 core v1.0.6](#6-AsyncHTTPSRequest_WT32_ETH01-on-WT32_ETH01-using-ESP32-core-v106)
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
 * [Issues](#issues)
@@ -74,6 +76,8 @@ To use with core v1.0.6-, just define in your sketch
 ```
 #define USING_CORE_ESP32_CORE_V200_PLUS       false
 ```
+
+---
 
 ### Features
 
@@ -262,6 +266,11 @@ Look in file [**adc_common.c**](https://github.com/espressif/esp-idf/blob/master
  1. [AsyncHTTPSRequest_ESP](examples/AsyncHTTPSRequest_ESP)
  2. [AsyncHTTPSRequest_ESP_WiFiManager](examples/AsyncHTTPSRequest_ESP_WiFiManager)
 
+#### For WT32_ETH01
+
+ 1. [AsyncHTTPSRequest_WT32_ETH01](examples/WT32_ETH01/AsyncHTTPSRequest_WT32_ETH01)
+ 
+ 
  
 ---
 
@@ -592,7 +601,7 @@ H
 
 #### 5. AsyncHTTPSRequest_WT32_ETH01 on WT32_ETH01 using ESP32 core v2.0.0
 
-Following is the debug terminal when running example [AsyncHTTPSRequest_ESP_WiFiManager](examples/AsyncHTTPSRequest_ESP_WiFiManager) on WT32_ETH01 to demonstrate the operation of SSL Async HTTPS request, using [AsyncTCP_SSL Library](https://github.com/khoih-prog/AsyncTCP_SSL), and [ESPAsync_WiFiManager Library](https://github.com/khoih-prog/ESPAsync_WiFiManager) and **ESP32 core v2.0.0**
+Following is the debug terminal when running example [AsyncHTTPSRequest_ESP_WiFiManager](examples/WT32_ETH01/AsyncHTTPSRequest_ESP_WiFiManager) on WT32_ETH01 to demonstrate the operation of SSL Async HTTPS request, using [AsyncTCP_SSL Library](https://github.com/khoih-prog/AsyncTCP_SSL) and **ESP32 core v2.0.0**
 
 ```
 Starting AsyncHTTPSRequest_WT32_ETH01 using ESP32_DEV with ETH_PHY_LAN8720
@@ -626,7 +635,7 @@ week_number: 42
 
 #### 6. AsyncHTTPSRequest_WT32_ETH01 on WT32_ETH01 using ESP32 core v1.0.6
 
-Following is the debug terminal when running example [AsyncHTTPSRequest_ESP_WiFiManager](examples/AsyncHTTPSRequest_ESP_WiFiManager) on WT32_ETH01 to demonstrate the operation of SSL Async HTTPS request, using [AsyncTCP_SSL Library](https://github.com/khoih-prog/AsyncTCP_SSL), and [ESPAsync_WiFiManager Library](https://github.com/khoih-prog/ESPAsync_WiFiManager) and **ESP32 core v1.0.6**
+Following is the debug terminal when running example [AsyncHTTPSRequest_ESP_WiFiManager](examples/WT32_ETH01/AsyncHTTPSRequest_ESP_WiFiManager) on WT32_ETH01 to demonstrate the operation of SSL Async HTTPS request, using [AsyncTCP_SSL Library](https://github.com/khoih-prog/AsyncTCP_SSL) and **ESP32 core v1.0.6**
 
 ```
 Starting AsyncHTTPSRequest_WT32_ETH01 using ESP32_DEV with ETH_PHY_LAN8720
