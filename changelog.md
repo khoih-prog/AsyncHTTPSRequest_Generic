@@ -11,6 +11,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v1.1.0](#releases-v110)
   * [Releases v1.0.0](#releases-v100)
 
 ---
@@ -18,6 +19,11 @@
 
 
 ## Changelog
+
+### Releases v1.1.0
+
+1. Add support to ESP32-based WT32_ETH01 using LAN8720 using either ESP32 core v1.0.6- or core v2.0.0+
+2. Add example for WT32_ETH01
 
 ### Releases v1.0.0
 

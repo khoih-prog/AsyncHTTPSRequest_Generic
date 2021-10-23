@@ -12,6 +12,7 @@
 
 
 * [Why do we need the new Async AsyncHTTPSRequest_Generic library](#why-do-we-need-this-async-AsyncHTTPSRequest_Generic-library)
+  * [Important notes for WT32_ETH01](#Important-notes-for-WT32_ETH01)
   * [Features](#features)
   * [Supports](#supports)
   * [Principles of operation](#principles-of-operation)
@@ -40,6 +41,8 @@
   * [2. AsyncHTTPSRequest_ESP on ESP32S2_DEV](#2-AsyncHTTPSRequest_ESP-on-ESP32S2_DEV)
   * [3. AsyncHTTPSRequest_ESP on ESP32C3_DEV](#3-AsyncHTTPSRequest_ESP-on-ESP32C3_DEV)
   * [4. AsyncHTTPSRequest_ESP_WiFiManager on ESP32_DEV](#4-AsyncHTTPSRequest_ESP_WiFiManager-on-ESP32_DEV)
+  * [5. AsyncHTTPSRequest_WT32_ETH01 on WT32_ETH01 using ESP32 core v2.0.0](#5-AsyncHTTPSRequest_WT32_ETH01-on WT32_ETH01-using-ESP32-core-v200)
+  * [6. AsyncHTTPSRequest_WT32_ETH01 on WT32_ETH01 using ESP32 core v1.0.6](#6-AsyncHTTPSRequest_WT32_ETH01-on WT32_ETH01-using-ESP32-core-v106)
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
 * [Issues](#issues)
@@ -54,6 +57,23 @@
 ---
 
 ## Why do we need this Async [AsyncHTTPSRequest_Generic library](https://github.com/khoih-prog/AsyncHTTPSRequest_Generic)
+
+#### Important notes for WT32_ETH01
+
+ESP32 Core v2.0.0 introduces new enum breaking almost all `WT32_ETH01` codes written for core v1.0.6-.
+
+It's really strange to define a breaking enum `arduino_event_id_t` in [**WiFiGeneric.h**#L36-L78](https://github.com/espressif/arduino-esp32/blob/master/libraries/WiFi/src/WiFiGeneric.h#L36-L78), compared to the old `system_event_id_t`, now placed in [**esp_event_legacy.h**#L29-L63](https://github.com/espressif/arduino-esp32/blob/master/tools/sdk/esp32/include/esp_event/include/esp_event_legacy.h#L29-L63)
+
+It's better to preserve the old enum order and just adding new items **to do no harm to pre-2.0.0 codes**
+
+- [**WebServer_WT32_ETH01** Releases v1.2.0-](https://github.com/khoih-prog/WebServer_WT32_ETH01) to be used for EP32 core v1.0.6- only
+- [**WebServer_WT32_ETH01** Releases v1.3.0+](https://github.com/khoih-prog/WebServer_WT32_ETH01) can be used for either EP32 core v2.0.0+ or v1.0.6-. **Default is using core v2.0.0+**
+
+To use with core v1.0.6-, just define in your sketch
+
+```
+#define USING_CORE_ESP32_CORE_V200_PLUS       false
+```
 
 ### Features
 
@@ -95,6 +115,7 @@ This library is based on, modified from:
 ### Currently Supported Boards
 
 #### 1. ESP32 including ESP32_S2 and ESP32_C3
+#### 2. ESP32-based WT32_ETH01 (ESP32_S1 + LAN8720)
 
 
 ---
@@ -107,7 +128,8 @@ This library is based on, modified from:
  2. [`ESP32 Core 2.0.0+`](https://github.com/espressif/arduino-esp32) for ESP32-based boards. [Latest stable release ![Release Version](https://img.shields.io/github/release/espressif/arduino-esp32.svg?style=plastic)
 
  3. [`AsyncTCP_SSL v1.1.0+`](https://github.com/khoih-prog/AsyncTCP_SSL) for ESP32. [![GitHub release](https://img.shields.io/github/release/khoih-prog/AsyncTCP_SSL.svg)](https://github.com/khoih-prog/AsyncTCP_SSL/releases)
- 4. [`ESPAsync_WiFiManager library v1.9.4+`](https://github.com/khoih-prog/ESPAsync_WiFiManager) for ESP32/ESP8266 using some examples. [![GitHub release](https://img.shields.io/github/release/khoih-prog/ESPAsync_WiFiManager.svg)](https://github.com/khoih-prog/ESPAsync_WiFiManager/releases)
+ 4. [`WebServer_WT32_ETH01 v1.3.0+`](https://github.com/khoih-prog/WebServer_WT32_ETH01) for ESP32-based WT32_ETH01 using **either ESP32 core v2.0.0+ or v1.0.6-**. [![GitHub release](https://img.shields.io/github/release/khoih-prog/WebServer_WT32_ETH01.svg)](https://github.com/khoih-prog/WebServer_WT32_ETH01/releases)
+ 5. [`ESPAsync_WiFiManager library v1.9.4+`](https://github.com/khoih-prog/ESPAsync_WiFiManager) for ESP32/ESP8266 using some examples. [![GitHub release](https://img.shields.io/github/release/khoih-prog/ESPAsync_WiFiManager.svg)](https://github.com/khoih-prog/ESPAsync_WiFiManager/releases)
 
 ---
 ---
@@ -399,7 +421,7 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_ESP](exa
 ```
 Starting AsyncHTTPSRequest_ESP using ESP32_DEV
 AsyncTCP_SSL v1.1.0
-AsyncHTTPSRequest_Generic v1.0.0
+AsyncHTTPSRequest_Generic v1.1.0
 Connecting to WiFi SSID: HueNet1
 .......
 AsyncHTTPSRequest @ IP : 192.168.2.78
@@ -449,7 +471,7 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_ESP](exa
 ```
 Starting AsyncHTTPSRequest_ESP using ESP32S2_DEV
 AsyncTCP_SSL v1.1.0
-AsyncHTTPSRequest_Generic v1.0.0
+AsyncHTTPSRequest_Generic v1.1.0
 Connecting to WiFi SSID: HueNet1
 .......
 AsyncHTTPSRequest @ IP : 192.168.2.79
@@ -506,7 +528,7 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_ESP](exa
 ```
 Starting AsyncHTTPSRequest_ESP using ESP32C3_DEV
 AsyncTCP_SSL v1.1.0
-AsyncHTTPSRequest_Generic v1.0.0
+AsyncHTTPSRequest_Generic v1.1.0
 Connecting to WiFi SSID: HueNet1
 .........
 AsyncHTTPSRequest @ IP : 192.168.2.80
@@ -540,7 +562,7 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_ESP_WiFi
 Starting AsyncHTTPSRequest_ESP_WiFiManager using LittleFS on ESP32_DEV
 ESPAsync_WiFiManager v1.9.4
 AsyncTCP_SSL v1.1.0
-AsyncHTTPSRequest_Generic v1.0.0
+AsyncHTTPSRequest_Generic v1.1.0
 Stored: SSID = HueNet1, Pass = 12345678
 Got stored Credentials. Timeout 120s
 ConnectMultiWiFi in setup
@@ -564,6 +586,74 @@ utc_offset: -04:00
 week_number: 42
 **************************************
 H
+```
+
+---
+
+#### 5. AsyncHTTPSRequest_WT32_ETH01 on WT32_ETH01 using ESP32 core v2.0.0
+
+Following is the debug terminal when running example [AsyncHTTPSRequest_ESP_WiFiManager](examples/AsyncHTTPSRequest_ESP_WiFiManager) on WT32_ETH01 to demonstrate the operation of SSL Async HTTPS request, using [AsyncTCP_SSL Library](https://github.com/khoih-prog/AsyncTCP_SSL), and [ESPAsync_WiFiManager Library](https://github.com/khoih-prog/ESPAsync_WiFiManager) and **ESP32 core v2.0.0**
+
+```
+Starting AsyncHTTPSRequest_WT32_ETH01 using ESP32_DEV with ETH_PHY_LAN8720
+WebServer_WT32_ETH01 v1.3.0 for core v2.0.0+
+AsyncTCP_SSL v1.1.0
+AsyncHTTPSRequest_Generic v1.1.0
+ETH MAC: A8:03:2A:A1:61:73, IPv4: 192.168.2.82, FULL_DUPLEX, 100Mbps
+
+HTTP WebClient is @ IP : 192.168.2.82
+
+**************************************
+abbreviation: EDT
+client_ip: 216.154.33.167
+datetime: 2021-10-23T16:21:32.159175-04:00
+day_of_week: 6
+day_of_year: 296
+dst: true
+dst_from: 2021-03-14T07:00:00+00:00
+dst_offset: 3600
+dst_until: 2021-11-07T06:00:00+00:00
+raw_offset: -18000
+timezone: America/Toronto
+unixtime: 1635020492
+utc_datetime: 2021-10-23T20:21:32.159175+00:00
+utc_offset: -04:00
+week_number: 42
+**************************************
+```
+
+---
+
+#### 6. AsyncHTTPSRequest_WT32_ETH01 on WT32_ETH01 using ESP32 core v1.0.6
+
+Following is the debug terminal when running example [AsyncHTTPSRequest_ESP_WiFiManager](examples/AsyncHTTPSRequest_ESP_WiFiManager) on WT32_ETH01 to demonstrate the operation of SSL Async HTTPS request, using [AsyncTCP_SSL Library](https://github.com/khoih-prog/AsyncTCP_SSL), and [ESPAsync_WiFiManager Library](https://github.com/khoih-prog/ESPAsync_WiFiManager) and **ESP32 core v1.0.6**
+
+```
+Starting AsyncHTTPSRequest_WT32_ETH01 using ESP32_DEV with ETH_PHY_LAN8720
+WebServer_WT32_ETH01 v1.3.0 for core v1.0.6-
+AsyncTCP_SSL v1.1.0
+AsyncHTTPSRequest_Generic v1.1.0
+ETH MAC: A8:03:2A:A1:61:73, IPv4: 192.168.2.232, FULL_DUPLEX, 100Mbps
+
+HTTP WebClient is @ IP : 192.168.2.232
+
+**************************************
+abbreviation: EDT
+client_ip: 216.154.33.167
+datetime: 2021-10-23T02:55:20.704254-04:00
+day_of_week: 6
+day_of_year: 296
+dst: true
+dst_from: 2021-03-14T07:00:00+00:00
+dst_offset: 3600
+dst_until: 2021-11-07T06:00:00+00:00
+raw_offset: -18000
+timezone: America/Toronto
+unixtime: 1634972120
+utc_datetime: 2021-10-23T06:55:20.704254+00:00
+utc_offset: -04:00
+week_number: 42
+**************************************
 ```
 
 ---
