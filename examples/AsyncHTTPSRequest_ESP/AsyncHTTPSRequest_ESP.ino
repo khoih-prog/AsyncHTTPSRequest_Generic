@@ -58,8 +58,10 @@
 
 int status;     // the Wifi radio's status
 
-const char* ssid        = "your_ssid";
-const char* password    = "your_pass";
+const char* ssid        = "HueNet1";
+const char* password    = "jenniqqs";
+//const char* ssid        = "your_ssid";
+//const char* password    = "your_pass";
 
 #if (ESP8266)
 #include <ESP8266WiFi.h>
