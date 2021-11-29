@@ -1,21 +1,21 @@
 /****************************************************************************************************************************
   AsyncHTTPSRequest_ESP.ino - Dead simple AsyncHTTPSRequest for ESP8266, ESP32 and currently STM32 with built-in LAN8742A Ethernet
-  
+
   For ESP8266, ESP32 and STM32 with built-in LAN8742A Ethernet (Nucleo-144, DISCOVERY, etc)
-  
+
   AsyncHTTPSRequest_Generic is a library for the ESP8266, ESP32 and currently STM32 run built-in Ethernet WebServer
-  
+
   Based on and modified from AsyncHTTPSRequest Library (https://github.com/boblemaire/AsyncHTTPSRequest)
-  
+
   Built by Khoi Hoang https://github.com/khoih-prog/AsyncHTTPSRequest_Generic
   Licensed under MIT license
-  
+
   Copyright (C) <2018>  <Bob Lemaire, IoTaWatt, Inc.>
-  This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License 
+  This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
   as published bythe Free Software Foundation, either version 3 of the License, or (at your option) any later version.
   This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-  You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.  
+  You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *****************************************************************************************************************************/
 //************************************************************************************************************
 //
@@ -41,7 +41,7 @@
 //*************************************************************************************************************
 
 #if !( defined(ESP8266) ||  defined(ESP32) )
-  #error This code is intended to run on the ESP8266 or ESP32 platform! Please check your Tools->Board setting.
+#error This code is intended to run on the ESP8266 or ESP32 platform! Please check your Tools->Board setting.
 #endif
 
 // Level from 0-4
@@ -62,9 +62,9 @@ const char* ssid        = "your_ssid";
 const char* password    = "your_pass";
 
 #if (ESP8266)
-  #include <ESP8266WiFi.h>
+#include <ESP8266WiFi.h>
 #elif (ESP32)
-  #include <WiFi.h>
+#include <WiFi.h>
 #endif
 
 #include <AsyncHTTPSRequest_Generic.h>           // https://github.com/khoih-prog/AsyncHTTPSRequest_Generic
@@ -94,16 +94,16 @@ void heartBeatPrint(void)
   }
 }
 
-void sendRequest() 
+void sendRequest()
 {
   static bool requestOpenResult;
-  
+
   if (request.readyState() == readyStateUnsent || request.readyState() == readyStateDone)
   {
-    //requestOpenResult = request.open("GET", "http://worldtimeapi.org/api/timezone/Europe/London.txt");
-    //requestOpenResult = request.open("GET", "http://worldtimeapi.org/api/timezone/America/Toronto.txt");
+    //requestOpenResult = request.open("GET", "https://worldtimeapi.org/api/timezone/Europe/London.txt");
+    //requestOpenResult = request.open("GET", "https://worldtimeapi.org/api/timezone/America/Toronto.txt");
     requestOpenResult = request.open("GET", "https://worldtimeapi.org/api/timezone/America/Toronto.txt");
-    
+
     if (requestOpenResult)
     {
       // Only send() if open() returns true, or crash
@@ -120,16 +120,16 @@ void sendRequest()
   }
 }
 
-void requestCB(void* optParm, AsyncHTTPSRequest* request, int readyState) 
+void requestCB(void* optParm, AsyncHTTPSRequest* request, int readyState)
 {
   (void) optParm;
-  
-  if (readyState == readyStateDone) 
+
+  if (readyState == readyStateDone)
   {
     Serial.println("\n**************************************");
     Serial.println(request->responseText());
     Serial.println("**************************************");
-    
+
     request->setDebug(false);
   }
 }
@@ -139,15 +139,21 @@ void setup()
   // put your setup code here, to run once:
   Serial.begin(115200);
   while (!Serial);
-  
+
   Serial.println("\nStarting AsyncHTTPSRequest_ESP using " + String(ARDUINO_BOARD));
+
+#if defined(ESP32)
   Serial.println(ASYNC_TCP_SSL_VERSION);
+#else
+  //Serial.println(ESPASYNC_TCP_SSL_VERSION);
+#endif
+
   Serial.println(ASYNC_HTTPS_REQUEST_GENERIC_VERSION);
 
   WiFi.mode(WIFI_STA);
 
   WiFi.begin(ssid, password);
-  
+
   Serial.println("Connecting to WiFi SSID: " + String(ssid));
 
   while (WiFi.status() != WL_CONNECTED)
@@ -158,20 +164,20 @@ void setup()
 
   Serial.print(F("\nAsyncHTTPSRequest @ IP : "));
   Serial.println(WiFi.localIP());
- 
+
   request.setDebug(false);
-  
+
   request.onReadyStateChange(requestCB);
-   
+
   ticker.attach(HTTPS_REQUEST_INTERVAL, sendRequest);
 
   ticker1.attach(HEARTBEAT_INTERVAL, heartBeatPrint);
-  
+
   // Send first request now
-  sendRequest();  
+  sendRequest();
 }
 
 void loop()
-{ 
+{
   //delay(1);
 }

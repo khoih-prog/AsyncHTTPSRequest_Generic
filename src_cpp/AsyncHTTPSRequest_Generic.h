@@ -16,12 +16,13 @@
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.  
  
-  Version: 1.1.0
+  Version: 1.1.1
   
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   1.0.0    K Hoang     21/10/2021 Initial coding to support only ESP32
   1.1.0    K Hoang     23/10/2021 Add support to ESP32-based WT32-ETH01 using LAN8720
+  1.1.1    K Hoang     29/11/2021 Auto detect ESP32 core version and improve connection time for WT32_ETH01
  *****************************************************************************************************************************/
 
 #pragma once
@@ -33,7 +34,7 @@
   #error This AsyncHTTPSRequest library is currently supporting only ESP32
 #endif
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION   "AsyncHTTPSRequest_Generic v1.1.0"
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION   "AsyncHTTPSRequest_Generic v1.1.1"
 
 #include <Arduino.h>
 
