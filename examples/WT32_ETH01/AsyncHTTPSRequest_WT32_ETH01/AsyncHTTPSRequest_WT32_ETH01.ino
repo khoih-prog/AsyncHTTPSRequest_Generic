@@ -44,6 +44,9 @@
   #error This code is intended to run on the ESP32 platform! Please check your Tools->Board setting.
 #endif
 
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v1.2.0"
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             1002000
+
 // Level from 0-4
 #define ASYNC_HTTPS_DEBUG_PORT          Serial
 
@@ -60,9 +63,13 @@
 // Uncomment to use ESP32 core v1.0.6-
 //#define USING_CORE_ESP32_CORE_V200_PLUS     false
 
-#include <WebServer_WT32_ETH01.h>               // https://github.com/khoih-prog/WebServer_WT32_ETH01
+#include <WebServer_WT32_ETH01.h>                 // https://github.com/khoih-prog/WebServer_WT32_ETH01
 
-#include <AsyncHTTPSRequest_Generic.h>           // https://github.com/khoih-prog/AsyncHTTPSRequest_Generic
+#include <AsyncHTTPSRequest_Generic.h>            // https://github.com/khoih-prog/AsyncHTTPSRequest_Generic
+
+// To be included only in main(), .ino with setup() to avoid `Multiple Definitions` Linker Error
+#include <AsyncHTTPSRequest_Impl_Generic.h>       // https://github.com/khoih-prog/AsyncHTTPSRequest_Generic
+
 #include <Ticker.h>
 
 AsyncHTTPSRequest request;
@@ -155,6 +162,14 @@ void setup()
   Serial.println(ASYNC_HTTPS_REQUEST_GENERIC_VERSION);
 
   Serial.setDebugOutput(true);
+  
+#if defined(ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN)
+  if (ASYNC_HTTPS_REQUEST_GENERIC_VERSION_INT < ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN)
+  {
+    Serial.print("Warning. Must use this example on Version equal or later than : ");
+    Serial.println(ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET);
+  }
+#endif
 
   // To be called before ETH.begin()
   WT32_ETH01_onEvent();

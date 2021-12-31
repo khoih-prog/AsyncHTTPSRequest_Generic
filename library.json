@@ -1,6 +1,6 @@
 {
   "name":"AsyncHTTPSRequest_Generic",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description":"Simple Async HTTPS Request library, supporting GET, POST, PUT, PATCH, DELETE and HEAD, on top of AsyncTCP_SSL library for ESP32 (including ESP32_S2 + ESP32_C3), WT32_ETH01 (ESP32 + LAN8720). Supporting in the future for ESP8266, Portenta_H7, STM32 with LAN8720 or built-in LAN8742A Ethernet, etc.",
   "keywords":"communication, async, tcp, https, ssl, tls, ESP8266, ESP32, ESP32-S2, wt32-eth01, ESPAsyncTCP, AsyncTCP, stm32, ethernet, wifi, lan8742a, lan8720, f407ve, nucleo-144, stm32f7",
   "authors": [
@@ -33,7 +33,7 @@
     {
       "owner": "khoih-prog",
       "name": "AsyncTCP_SSL",
-      "version": ">=1.0.0",
+      "version": ">=1.1.0",
       "platforms": ["espressif32"]
     },
     {
@@ -45,7 +45,7 @@
     {
       "owner": "khoih-prog",
       "name": "ESPAsync_WiFiManager",
-      "version": ">=1.9.6",
+      "version": ">=1.10.0",
       "platforms": ["espressif8266", "espressif32"]
     }
   ],
@@ -53,5 +53,5 @@
   "frameworks": "arduino",
   "platforms": ["espressif8266", "espressif32", "ststm32"],
   "examples": "examples/*/*/*.ino",
-  "headers": "AsyncHTTPSRequest_Generic.h"
+  "headers": ["AsyncHTTPSRequest_Generic.h","AsyncHTTPSRequest_Impl_Generic.h"]
 }

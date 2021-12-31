@@ -16,13 +16,14 @@
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.  
  
-  Version: 1.1.1
+  Version: 1.2.0
   
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   1.0.0    K Hoang     21/10/2021 Initial coding to support only ESP32
   1.1.0    K Hoang     23/10/2021 Add support to ESP32-based WT32-ETH01 using LAN8720
   1.1.1    K Hoang     29/11/2021 Auto detect ESP32 core version and improve connection time for WT32_ETH01
+  1.2.0    K Hoang     30/12/2021 Fix `multiple-definitions` linker error
  *****************************************************************************************************************************/
 
 #pragma once
@@ -34,7 +35,13 @@
   #error This AsyncHTTPSRequest library is currently supporting only ESP32
 #endif
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION   "AsyncHTTPSRequest_Generic v1.1.1"
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION             "AsyncHTTPSRequest_Generic v1.2.0"
+
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MAJOR       1
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MINOR       2
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_PATCH       0
+
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_INT         1002000
 
 #include <Arduino.h>
 
@@ -110,7 +117,111 @@
 #endif
 
 #include <pgmspace.h>
-#include <utility/xbuf.h>
+
+//#include <utility/xbuf.h>
+// Merge xbuf
+////////////////////////////////////////////////////////////////////////////
+
+struct xseg 
+{
+  xseg    *next;
+  uint8_t data[];
+};
+
+class xbuf: public Print 
+{
+  public:
+
+    xbuf(const uint16_t segSize = 64);
+    virtual ~xbuf();
+
+    size_t      write(const uint8_t);
+    size_t      write(const char*);
+    size_t      write(const uint8_t*, const size_t);
+    size_t      write(xbuf*, const size_t);
+    size_t      write(const String& string);
+    size_t      available();
+    int         indexOf(const char, const size_t begin = 0);
+    int         indexOf(const char*, const size_t begin = 0);
+    uint8_t     read();
+    size_t      read(uint8_t*, size_t);
+    String      readStringUntil(const char);
+    String      readStringUntil(const char*);
+    String      readString(int);
+    
+    String      readString() 
+    {
+      return readString(available());
+    }
+    
+    void        flush();
+
+    uint8_t     peek();
+    size_t      peek(uint8_t*, const size_t);
+    
+    String      peekStringUntil(const char target) 
+    {
+      return peekString(indexOf(target, 0));
+    }
+    
+    String      peekStringUntil(const char* target) 
+    {
+      return peekString(indexOf(target, 0));
+    }
+    
+    String      peekString() 
+    {
+      return peekString(_used);
+    }
+    
+    String      peekString(int);
+
+    /*      In addition to the above functions,
+    the following inherited functions from the Print class are available.
+    
+    size_t printf(const char * format, ...)  __attribute__ ((format (printf, 2, 3)));
+    size_t printf_P(PGM_P format, ...) __attribute__((format(printf, 2, 3)));
+    size_t print(const __FlashStringHelper *);
+    size_t print(const String &);
+    size_t print(const char[]);
+    size_t print(char);
+    size_t print(unsigned char, int = DEC);
+    size_t print(int, int = DEC);
+    size_t print(unsigned int, int = DEC);
+    size_t print(long, int = DEC);
+    size_t print(unsigned long, int = DEC);
+    size_t print(double, int = 2);
+    size_t print(const Printable&);
+    
+    size_t println(const __FlashStringHelper *);
+    size_t println(const String &s);
+    size_t println(const char[]);
+    size_t println(char);
+    size_t println(unsigned char, int = DEC);
+    size_t println(int, int = DEC);
+    size_t println(unsigned int, int = DEC);
+    size_t println(long, int = DEC);
+    size_t println(unsigned long, int = DEC);
+    size_t println(double, int = 2);
+    size_t println(const Printable&);
+    size_t println(void);
+    */
+
+  protected:
+
+    xseg        *_head;
+    xseg        *_tail;
+    uint16_t     _used;
+    uint16_t     _free;
+    uint16_t     _offset;
+    uint16_t     _segSize;
+
+    void        addSeg();
+    void        remSeg();
+
+};
+
+////////////////////////////////////////////////////////////////////////////
 
 #define DEBUG_HTTP(format,...)  if(_debug){\
     DEBUG_IOTA_PORT.printf("Debug(%3ld): ", millis()-_requestStartTime);\
@@ -155,9 +266,6 @@ class AsyncHTTPSRequest
         SAFE_DELETE_ARRAY(name)
         SAFE_DELETE_ARRAY(value)
         SAFE_DELETE(next)
-        //delete[] name;
-        //delete[] value;
-        //delete next;
       }
     };
 
@@ -217,7 +325,7 @@ class AsyncHTTPSRequest
 #endif
 
     bool        send();                                                 // Send the request (GET)
-    bool        send(String body);                                      // Send the request (POST)
+    bool        send(const String& body);                               // Send the request (POST)
     bool        send(const char* body);                                 // Send the request (POST)
     bool        send(const uint8_t* buffer, size_t len);                // Send the request (POST) (binary data?)
     bool        send(xbuf* body, size_t len);                           // Send the request (POST) data in an xbuf
@@ -310,7 +418,7 @@ class AsyncHTTPSRequest
     header*     _getHeader(int);
     bool        _buildRequest();
     bool        _parseURL(const char*);
-    bool        _parseURL(String);
+    bool        _parseURL(const String& url);
     void        _processChunks();
     bool        _connect();
     size_t      _send();
@@ -334,7 +442,5 @@ class AsyncHTTPSRequest
     bool _tlsBadFingerprint = false;
     std::vector<std::array<uint8_t, SHA1_SIZE>> _secureServerFingerprints;
 };
-
-#include "AsyncHTTPSRequest_Impl_Generic.h"
 
 #endif    // ASYNC_HTTPS_REQUEST_GENERIC_H

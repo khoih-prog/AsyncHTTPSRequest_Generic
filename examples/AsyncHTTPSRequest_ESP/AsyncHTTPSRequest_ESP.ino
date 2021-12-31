@@ -41,8 +41,11 @@
 //*************************************************************************************************************
 
 #if !( defined(ESP8266) ||  defined(ESP32) )
-#error This code is intended to run on the ESP8266 or ESP32 platform! Please check your Tools->Board setting.
+  #error This code is intended to run on the ESP8266 or ESP32 platform! Please check your Tools->Board setting.
 #endif
+
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v1.2.0"
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             1002000
 
 // Level from 0-4
 #define ASYNC_HTTPS_DEBUG_PORT      Serial
@@ -58,18 +61,20 @@
 
 int status;     // the Wifi radio's status
 
-const char* ssid        = "HueNet1";
-const char* password    = "jenniqqs";
-//const char* ssid        = "your_ssid";
-//const char* password    = "your_pass";
+const char* ssid        = "your_ssid";
+const char* password    = "your_pass";
 
 #if (ESP8266)
-#include <ESP8266WiFi.h>
+  #include <ESP8266WiFi.h>
 #elif (ESP32)
-#include <WiFi.h>
+  #include <WiFi.h>
 #endif
 
-#include <AsyncHTTPSRequest_Generic.h>           // https://github.com/khoih-prog/AsyncHTTPSRequest_Generic
+#include <AsyncHTTPSRequest_Generic.h>            // https://github.com/khoih-prog/AsyncHTTPSRequest_Generic
+
+// To be included only in main(), .ino with setup() to avoid `Multiple Definitions` Linker Error
+#include <AsyncHTTPSRequest_Impl_Generic.h>       // https://github.com/khoih-prog/AsyncHTTPSRequest_Generic
+
 #include <Ticker.h>
 
 AsyncHTTPSRequest request;
@@ -151,6 +156,14 @@ void setup()
 #endif
 
   Serial.println(ASYNC_HTTPS_REQUEST_GENERIC_VERSION);
+
+#if defined(ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN)
+  if (ASYNC_HTTPS_REQUEST_GENERIC_VERSION_INT < ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN)
+  {
+    Serial.print("Warning. Must use this example on Version equal or later than : ");
+    Serial.println(ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET);
+  }
+#endif
 
   WiFi.mode(WIFI_STA);
 
