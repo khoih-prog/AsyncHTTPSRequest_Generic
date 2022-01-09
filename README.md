@@ -10,7 +10,7 @@
 
 ## Table of Contents
 
-
+* [Important Breaking Change from v1.2.0](#Important-Breaking-Change-from-v120)
 * [Why do we need the new Async AsyncHTTPSRequest_Generic library](#why-do-we-need-this-async-AsyncHTTPSRequest_Generic-library)
   * [Important notes for WT32_ETH01](#Important-notes-for-WT32_ETH01)
   * [Features](#features)
@@ -54,6 +54,29 @@
 * [Contributing](#contributing)
 * [License and credits](#license-and-credits)
 * [Copyright](#copyright)
+
+---
+---
+
+### Important Breaking Change from v1.2.0
+
+Please have a look at [HOWTO Fix `Multiple Definitions` Linker Error](#howto-fix-multiple-definitions-linker-error)
+
+From v1.2.0, you must use
+
+```
+#include <AsyncHTTPSRequest_Generic.h>           //https://github.com/khoih-prog/AsyncHTTPSRequest_Generic
+
+// To be included only in main(), .ino with setup() to avoid `Multiple Definitions` Linker Error
+#include <AsyncHTTPSRequest_Impl_Generic.h>      // https://github.com/khoih-prog/AsyncHTTPSRequest_Generic
+```
+
+instead of only
+
+```
+#include <AsyncHTTPRequest_Generic.h>           //https://github.com/khoih-prog/AsyncHTTPSRequest_Generic
+```
+
 
 ---
 ---
