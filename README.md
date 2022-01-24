@@ -10,7 +10,7 @@
 
 ## Table of Contents
 
-* [Important Breaking Change from v1.2.0](#Important-Breaking-Change-from-v120)
+* [Important Change from v1.3.0](#Important-Change-from-v130)
 * [Why do we need the new Async AsyncHTTPSRequest_Generic library](#why-do-we-need-this-async-AsyncHTTPSRequest_Generic-library)
   * [Important notes for WT32_ETH01](#Important-notes-for-WT32_ETH01)
   * [Features](#features)
@@ -32,10 +32,11 @@
   * [3. ESP32 WiFi uses ADC2 for WiFi functions](#3-esp32-wifi-uses-adc2-for-wifi-functions)
 * [Examples](#examples)
   * [For ESP32](#for-esp32)
-    * [1. AsyncHTTPSRequest_ESP](examples/AsyncHTTPSRequest_ESP)
-    * [2. AsyncHTTPSRequest_ESP_WiFiManager](examples/AsyncHTTPSRequest_ESP_WiFiManager)
+    * [1. AsyncHTTPSRequest_ESP](examples/AsyncHTTPSRequest_ESP) 
   * [For WT32_ETH01](#for-WT32_ETH01)
     * [1. AsyncHTTPSRequest_WT32_ETH01](examples/WT32_ETH01/AsyncHTTPSRequest_WT32_ETH01)
+  * [For ESP32 or WT32_ETH01](#for-esp32-or-WT32_ETH01) 
+    * [1. multiFileProject](examples/multiFileProject)
 * [Example AsyncHTTPSRequest_ESP](#example-AsyncHTTPSRequest_ESP)
   * [1. File AsyncHTTPSRequest_ESP.ino](#1-file-AsyncHTTPSRequest_ESPino)
 * [Debug Terminal Output Samples](#debug-terminal-output-samples) 
@@ -58,24 +59,9 @@
 ---
 ---
 
-### Important Breaking Change from v1.2.0
+### Important Change from v1.3.0
 
 Please have a look at [HOWTO Fix `Multiple Definitions` Linker Error](#howto-fix-multiple-definitions-linker-error)
-
-From v1.2.0, you must use
-
-```
-#include <AsyncHTTPSRequest_Generic.h>           //https://github.com/khoih-prog/AsyncHTTPSRequest_Generic
-
-// To be included only in main(), .ino with setup() to avoid `Multiple Definitions` Linker Error
-#include <AsyncHTTPSRequest_Impl_Generic.h>      // https://github.com/khoih-prog/AsyncHTTPSRequest_Generic
-```
-
-instead of only
-
-```
-#include <AsyncHTTPRequest_Generic.h>           //https://github.com/khoih-prog/AsyncHTTPSRequest_Generic
-```
 
 
 ---
@@ -152,13 +138,11 @@ This library is based on, modified from:
 
 ## Prerequisites
 
- 1. [`Arduino IDE 1.8.19+` for Arduino](https://www.arduino.cc/en/Main/Software)
- 
+ 1. [`Arduino IDE 1.8.19+` for Arduino](https://github.com/arduino/Arduino). [![GitHub release](https://img.shields.io/github/release/arduino/Arduino.svg)](https://github.com/arduino/Arduino/releases/latest)
  2. [`ESP32 Core 2.0.2+`](https://github.com/espressif/arduino-esp32) for ESP32-based boards. [Latest stable release ![Release Version](https://img.shields.io/github/release/espressif/arduino-esp32.svg?style=plastic)
-
- 3. [`AsyncTCP_SSL v1.1.0+`](https://github.com/khoih-prog/AsyncTCP_SSL) for ESP32. [![GitHub release](https://img.shields.io/github/release/khoih-prog/AsyncTCP_SSL.svg)](https://github.com/khoih-prog/AsyncTCP_SSL/releases)
+ 3. [`AsyncTCP_SSL v1.2.0+`](https://github.com/khoih-prog/AsyncTCP_SSL) for ESP32. [![GitHub release](https://img.shields.io/github/release/khoih-prog/AsyncTCP_SSL.svg)](https://github.com/khoih-prog/AsyncTCP_SSL/releases)
  4. [`WebServer_WT32_ETH01 v1.4.1+`](https://github.com/khoih-prog/WebServer_WT32_ETH01) for ESP32-based WT32_ETH01 using **either ESP32 core v2.0.0+ or v1.0.6-**. [![GitHub release](https://img.shields.io/github/release/khoih-prog/WebServer_WT32_ETH01.svg)](https://github.com/khoih-prog/WebServer_WT32_ETH01/releases)
- 5. [`ESPAsync_WiFiManager library v1.10.0+`](https://github.com/khoih-prog/ESPAsync_WiFiManager) for ESP32/ESP8266 using some examples. [![GitHub release](https://img.shields.io/github/release/khoih-prog/ESPAsync_WiFiManager.svg)](https://github.com/khoih-prog/ESPAsync_WiFiManager/releases)
+ 5. [`ESPAsync_WiFiManager library v1.11.0+`](https://github.com/khoih-prog/ESPAsync_WiFiManager) for ESP32/ESP8266 using some examples. [![GitHub release](https://img.shields.io/github/release/khoih-prog/ESPAsync_WiFiManager.svg)](https://github.com/khoih-prog/ESPAsync_WiFiManager/releases)
 
 ---
 ---
@@ -213,18 +197,21 @@ Thanks to [Roshan](https://github.com/solroshan) to report the issue in [Error e
 
 The current library implementation, using `xyz-Impl.h` instead of standard `xyz.cpp`, possibly creates certain `Multiple Definitions` Linker error in certain use cases.
 
-You can use
+You can include this `.hpp` file
 
 ```
-#include <AsyncHTTPSRequest_Generic.h>      //https://github.com/khoih-prog/AsyncHTTPSRequest_Generic
+// Can be included as many times as necessary, without `Multiple Definitions` Linker Error
+#include "AsyncHTTPSRequest_Generic.hpp"     //https://github.com/khoih-prog/AsyncHTTPSRequest_Generic
 ```
 
-in many files. But be sure to use the following `#include <AsyncHTTPSRequest_Impl_Generic.h>` **in just 1 `.h`, `.cpp` or `.ino` file**, which must **not be included in any other file**, to avoid `Multiple Definitions` Linker Error
+in many files. But be sure to use the following `.h` file **in just 1 `.h`, `.cpp` or `.ino` file**, which must **not be included in any other file**, to avoid `Multiple Definitions` Linker Error
 
 ```
 // To be included only in main(), .ino with setup() to avoid `Multiple Definitions` Linker Error
-#include <AsyncHTTPSRequest_Impl_Generic.h> // https://github.com/khoih-prog/AsyncHTTPSRequest_Generic
+#include "AsyncHTTPSRequest_Generic.h"           //https://github.com/khoih-prog/AsyncHTTPSRequest_Generic
 ```
+
+Check the new [**multiFileProject** example](examples/multiFileProject) for a `HOWTO` demo.
 
 Have a look at the discussion in [Different behaviour using the src_cpp or src_h lib #80](https://github.com/khoih-prog/ESPAsync_WiFiManager/discussions/80)
 
@@ -303,7 +290,9 @@ Look in file [**adc_common.c**](https://github.com/espressif/esp-idf/blob/master
 
  1. [AsyncHTTPSRequest_WT32_ETH01](examples/WT32_ETH01/AsyncHTTPSRequest_WT32_ETH01)
  
- 
+#### For ESP32 or WT32_ETH01
+
+  1. [multiFileProject](examples/multiFileProject)
  
 ---
 
@@ -316,8 +305,8 @@ Look in file [**adc_common.c**](https://github.com/espressif/esp-idf/blob/master
   #error This code is intended to run on the ESP8266 or ESP32 platform! Please check your Tools->Board setting.
 #endif
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v1.2.0"
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             1002000
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v1.3.0"
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             1003000
 
 // Level from 0-4
 #define ASYNC_HTTPS_DEBUG_PORT      Serial
@@ -342,10 +331,8 @@ const char* password    = "your_pass";
   #include <WiFi.h>
 #endif
 
-#include <AsyncHTTPSRequest_Generic.h>            // https://github.com/khoih-prog/AsyncHTTPSRequest_Generic
-
 // To be included only in main(), .ino with setup() to avoid `Multiple Definitions` Linker Error
-#include <AsyncHTTPSRequest_Impl_Generic.h>       // https://github.com/khoih-prog/AsyncHTTPSRequest_Generic
+#include <AsyncHTTPSRequest_Generic.h>            // https://github.com/khoih-prog/AsyncHTTPSRequest_Generic
 
 #include <Ticker.h>
 
@@ -353,7 +340,7 @@ AsyncHTTPSRequest request;
 Ticker ticker;
 Ticker ticker1;
 
-void heartBeatPrint(void)
+void heartBeatPrint()
 {
   static int num = 1;
 
@@ -481,47 +468,45 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_ESP](exa
 
 ```
 Starting AsyncHTTPSRequest_ESP using ESP32_DEV
-AsyncTCP_SSL v1.1.0
-AsyncHTTPSRequest_Generic v1.2.0
+AsyncTCP_SSL v1.2.0
+AsyncHTTPSRequest_Generic v1.3.0
 Connecting to WiFi SSID: HueNet1
 ........
 AsyncHTTPSRequest @ IP : 192.168.2.168
-
 **************************************
 abbreviation: EST
 client_ip: aaa.bbb.ccc.ddd
-datetime: 2021-12-30T20:50:41.119790-05:00
-day_of_week: 4
-day_of_year: 364
+datetime: 2022-01-23T22:04:28.426154-05:00
+day_of_week: 0
+day_of_year: 23
 dst: false
 dst_from: 
 dst_offset: 0
 dst_until: 
 raw_offset: -18000
 timezone: America/Toronto
-unixtime: 1640915441
-utc_datetime: 2021-12-31T01:50:41.119790+00:00
+unixtime: 1642993468
+utc_datetime: 2022-01-24T03:04:28.426154+00:00
 utc_offset: -05:00
-week_number: 52
+week_number: 3
 **************************************
-HHHHHH
+HH HHHH
 **************************************
 abbreviation: EST
 client_ip: aaa.bbb.ccc.ddd
-datetime: 2021-12-30T20:51:39.491816-05:00
-day_of_week: 4
-day_of_year: 364
+datetime: 2022-01-23T22:05:28.429269-05:00
+day_of_week: 0
+day_of_year: 23
 dst: false
 dst_from: 
 dst_offset: 0
 dst_until: 
 raw_offset: -18000
 timezone: America/Toronto
-unixtime: 1640915499
-utc_datetime: 2021-12-31T01:51:39.491816+00:00
+unixtime: 1642993528
+utc_datetime: 2022-01-24T03:05:28.429269+00:00
 utc_offset: -05:00
-week_number: 52
-
+week_number: 3
 ```
 ---
 
@@ -531,8 +516,8 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_ESP](exa
 
 ```
 Starting AsyncHTTPSRequest_ESP using ESP32S2_DEV
-AsyncTCP_SSL v1.1.0
-AsyncHTTPSRequest_Generic v1.2.0
+AsyncTCP_SSL v1.2.0
+AsyncHTTPSRequest_Generic v1.3.0
 Connecting to WiFi SSID: HueNet1
 .......
 AsyncHTTPSRequest @ IP : 192.168.2.79
@@ -560,24 +545,40 @@ AsyncHTTPSRequest @ IP : 192.168.2.79
 [ATCP] _sent: len = 106
 [ATCP] _handle_async_event: LWIP_TCP_RECV = 0x3FFE5024
 [ATCP] _recv: tot_len = 1016
-
 **************************************
 abbreviation: EST
 client_ip: aaa.bbb.ccc.ddd
-datetime: 2021-12-30T20:53:39.490856-05:00
-day_of_week: 4
-day_of_year: 364
+datetime: 2022-01-23T22:01:30.060567-05:00
+day_of_week: 0
+day_of_year: 23
 dst: false
 dst_from: 
 dst_offset: 0
 dst_until: 
 raw_offset: -18000
 timezone: America/Toronto
-unixtime: 1640915619
-utc_datetime: 2021-12-31T01:53:39.490856+00:00
+unixtime: 1642993290
+utc_datetime: 2022-01-24T03:01:30.060567+00:00
 utc_offset: -05:00
-week_number: 52
+week_number: 3
 **************************************
+HHHHHH
+**************************************
+abbreviation: EST
+client_ip: aaa.bbb.ccc.ddd
+datetime: 2022-01-23T22:02:28.426223-05:00
+day_of_week: 0
+day_of_year: 23
+dst: false
+dst_from: 
+dst_offset: 0
+dst_until: 
+raw_offset: -18000
+timezone: America/Toronto
+unixtime: 1642993348
+utc_datetime: 2022-01-24T03:02:28.426223+00:00
+utc_offset: -05:00
+week_number: 3
 ```
 
 ---
@@ -588,29 +589,45 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_ESP](exa
 
 ```
 Starting AsyncHTTPSRequest_ESP using ESP32C3_DEV
-AsyncTCP_SSL v1.1.0
-AsyncHTTPSRequest_Generic v1.2.0
+AsyncTCP_SSL v1.2.0
+AsyncHTTPSRequest_Generic v1.3.0
 Connecting to WiFi SSID: HueNet1
 .........
 AsyncHTTPSRequest @ IP : 192.168.2.80
-
 **************************************
 abbreviation: EST
 client_ip: aaa.bbb.ccc.ddd
-datetime: 2021-12-30T20:58:39.493064-05:00
-day_of_week: 4
-day_of_year: 364
+datetime: 2022-01-23T22:05:28.429269-05:00
+day_of_week: 0
+day_of_year: 23
 dst: false
 dst_from: 
 dst_offset: 0
 dst_until: 
 raw_offset: -18000
 timezone: America/Toronto
-unixtime: 1640915919
-utc_datetime: 2021-12-31T01:58:39.493064+00:00
+unixtime: 1642993528
+utc_datetime: 2022-01-24T03:05:28.429269+00:00
 utc_offset: -05:00
-week_number: 52
-
+week_number: 3
+**************************************
+HHHHHH 
+**************************************
+abbreviation: EST
+client_ip: aaa.bbb.ccc.ddd
+datetime: 2022-01-23T22:06:28.426271-05:00
+day_of_week: 0
+day_of_year: 23
+dst: false
+dst_from: 
+dst_offset: 0
+dst_until: 
+raw_offset: -18000
+timezone: America/Toronto
+unixtime: 1642993588
+utc_datetime: 2022-01-24T03:06:28.426271+00:00
+utc_offset: -05:00
+week_number: 3
 **************************************
 ```
 
@@ -622,9 +639,9 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_ESP_WiFi
 
 ```
 Starting AsyncHTTPSRequest_ESP_WiFiManager using LittleFS on ESP32_DEV
-ESPAsync_WiFiManager v1.10.0
-AsyncTCP_SSL v1.1.0
-AsyncHTTPSRequest_Generic v1.2.0
+ESPAsync_WiFiManager v1.11.0
+AsyncTCP_SSL v1.2.0
+AsyncHTTPSRequest_Generic v1.3.0
 Stored: SSID = HueNet1, Pass = 12345678
 Got stored Credentials. Timeout 120s
 ConnectMultiWiFi in setup
@@ -633,20 +650,19 @@ H
 **************************************
 abbreviation: EST
 client_ip: aaa.bbb.ccc.ddd
-datetime: 2021-12-30T21:02:39.495006-05:00
-day_of_week: 4
-day_of_year: 364
+datetime: 2022-01-23T22:08:28.431277-05:00
+day_of_week: 0
+day_of_year: 23
 dst: false
 dst_from: 
 dst_offset: 0
 dst_until: 
 raw_offset: -18000
 timezone: America/Toronto
-unixtime: 1640916159
-utc_datetime: 2021-12-31T02:02:39.495006+00:00
+unixtime: 1642993708
+utc_datetime: 2022-01-24T03:08:28.431277+00:00
 utc_offset: -05:00
-week_number: 52
-
+week_number: 3
 **************************************
 H
 ```
@@ -660,8 +676,8 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_WT32_ETH
 ```
 Starting AsyncHTTPSRequest_WT32_ETH01 using ESP32_DEV with ETH_PHY_LAN8720
 WebServer_WT32_ETH01 v1.4.1 for core v2.0.0+
-AsyncTCP_SSL v1.1.0
-AsyncHTTPSRequest_Generic v1.2.0
+AsyncTCP_SSL v1.2.0
+AsyncHTTPSRequest_Generic v1.3.0
 ETH MAC: A8:03:2A:A1:61:73, IPv4: 192.168.2.82, FULL_DUPLEX, 100Mbps
 
 HTTP WebClient is @ IP : 192.168.2.82
@@ -669,20 +685,19 @@ HTTP WebClient is @ IP : 192.168.2.82
 **************************************
 abbreviation: EST
 client_ip: aaa.bbb.ccc.ddd
-datetime: 2021-12-30T21:07:43.532333-05:00
-day_of_week: 4
-day_of_year: 364
+datetime: 2022-01-23T22:09:28.432223-05:00
+day_of_week: 0
+day_of_year: 23
 dst: false
 dst_from: 
 dst_offset: 0
 dst_until: 
 raw_offset: -18000
 timezone: America/Toronto
-unixtime: 1640916463
-utc_datetime: 2021-12-31T02:07:43.532333+00:00
+unixtime: 1642993768
+utc_datetime: 2022-01-24T03:09:28.432223+00:00
 utc_offset: -05:00
-week_number: 52
-
+week_number: 3
 **************************************
 ```
 
@@ -695,29 +710,27 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_WT32_ETH
 ```
 Starting AsyncHTTPSRequest_WT32_ETH01 using ESP32_DEV with ETH_PHY_LAN8720
 WebServer_WT32_ETH01 v1.4.1 for core v1.0.6-
-AsyncTCP_SSL v1.1.0
-AsyncHTTPSRequest_Generic v1.2.0
+AsyncTCP_SSL v1.2.0
+AsyncHTTPSRequest_Generic v1.3.0
 ETH MAC: A8:03:2A:A1:61:73, IPv4: 192.168.2.232, FULL_DUPLEX, 100Mbps
 
 HTTP WebClient is @ IP : 192.168.2.232
-
 **************************************
 abbreviation: EST
 client_ip: aaa.bbb.ccc.ddd
-datetime: 2021-12-30T21:04:39.498040-05:00
-day_of_week: 4
-day_of_year: 364
+datetime: 2022-01-23T22:10:28.428743-05:00
+day_of_week: 0
+day_of_year: 23
 dst: false
 dst_from: 
 dst_offset: 0
 dst_until: 
 raw_offset: -18000
 timezone: America/Toronto
-unixtime: 1640916279
-utc_datetime: 2021-12-31T02:04:39.498040+00:00
+unixtime: 1642993828
+utc_datetime: 2022-01-24T03:10:28.428743+00:00
 utc_offset: -05:00
-week_number: 52
-
+week_number: 3
 **************************************
 ```
 
@@ -754,6 +767,7 @@ Sometimes, the library will only work if you update the `ESP32 / ESP8266 / STM32
 Submit issues to: [AsyncHTTPSRequest_Generic issues](https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/issues)
 
 ---
+---
 
 ## TO DO
 
@@ -761,13 +775,18 @@ Submit issues to: [AsyncHTTPSRequest_Generic issues](https://github.com/khoih-pr
  2. Add support to more Ethernet / WiFi shields
  3. Add support to more boards.
  4. Add many more examples.
-
+ 5. Permit to use both HTTP and HTTPS in this library
+ 
+ ---
 
 ## DONE
 
  1. Initially add support to ESP32 using built-in WiFi
  2. Support breaking ESP32 core v2.0.0+ as well as v1.0.6-
  3. Auto detect ESP32 core v1.0.6- or v2.0.0+ to use correct settings
+ 4. Fix `multiple-definitions` linker error and weird bug related to `src_cpp`.
+ 5. Enable compatibility with old code to include only `AsyncHTTPSRequest_Generic.h`
+ 6. Modify to be compatible with [AsyncTCP_SSL releases v1.2.0+](https://github.com/khoih-prog/AsyncTCP_SSL/releases/tag/v1.2.0)
 
 ---
 ---

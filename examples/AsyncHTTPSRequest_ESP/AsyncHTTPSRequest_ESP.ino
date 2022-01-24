@@ -44,8 +44,8 @@
   #error This code is intended to run on the ESP8266 or ESP32 platform! Please check your Tools->Board setting.
 #endif
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v1.2.0"
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             1002000
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v1.3.0"
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             1003000
 
 // Level from 0-4
 #define ASYNC_HTTPS_DEBUG_PORT      Serial
@@ -70,10 +70,8 @@ const char* password    = "your_pass";
   #include <WiFi.h>
 #endif
 
-#include <AsyncHTTPSRequest_Generic.h>            // https://github.com/khoih-prog/AsyncHTTPSRequest_Generic
-
 // To be included only in main(), .ino with setup() to avoid `Multiple Definitions` Linker Error
-#include <AsyncHTTPSRequest_Impl_Generic.h>       // https://github.com/khoih-prog/AsyncHTTPSRequest_Generic
+#include <AsyncHTTPSRequest_Generic.h>            // https://github.com/khoih-prog/AsyncHTTPSRequest_Generic
 
 #include <Ticker.h>
 
@@ -81,7 +79,7 @@ AsyncHTTPSRequest request;
 Ticker ticker;
 Ticker ticker1;
 
-void heartBeatPrint(void)
+void heartBeatPrint()
 {
   static int num = 1;
 

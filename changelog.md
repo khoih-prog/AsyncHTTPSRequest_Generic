@@ -11,6 +11,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v1.3.0](#releases-v130)
   * [Releases v1.2.0](#releases-v120)
   * [Releases v1.1.1](#releases-v111)
   * [Releases v1.1.0](#releases-v110)
@@ -21,6 +22,12 @@
 
 
 ## Changelog
+
+### Releases v1.3.0
+
+1. Reduce the breaking effect of v1.2.0 by enabling compatibility with old code to include only `AsyncHTTPSRequest_Generic.h`
+2. Modify to be compatible with [AsyncTCP_SSL releases v1.2.0](https://github.com/khoih-prog/AsyncTCP_SSL/releases/tag/v1.2.0)
+3. Add example [multiFileProject](examples/multiFileProject) to demo for multiple-file project.
 
 ### Releases v1.2.0
 
