@@ -801,7 +801,10 @@ week_number: 6
 HH
 ```
 
-#### 8. AsyncHTTPSRequest_ESP_WiFiManager on ESP32_DEV
+---
+
+
+#### 8. AsyncHTTPSRequest_ESP_WiFiManager on ESP32S3_DEV
 
 Following is the debug terminal when running example [AsyncHTTPSRequest_ESP_WiFiManager](examples/AsyncHTTPSRequest_ESP_WiFiManager) on ESP32S3_DEV to demonstrate the operation of SSL Async HTTPS request, using [AsyncTCP_SSL Library](https://github.com/khoih-prog/AsyncTCP_SSL), and [ESPAsync_WiFiManager Library](https://github.com/khoih-prog/ESPAsync_WiFiManager)
 
