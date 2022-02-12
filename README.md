@@ -49,8 +49,8 @@
   * [4. AsyncHTTPSRequest_ESP_WiFiManager on ESP32_DEV](#4-AsyncHTTPSRequest_ESP_WiFiManager-on-ESP32_DEV)
   * [5. AsyncHTTPSRequest_WT32_ETH01 on WT32_ETH01 using ESP32 core v2.0.0](#5-AsyncHTTPSRequest_WT32_ETH01-on-WT32_ETH01-using-ESP32-core-v200)
   * [6. AsyncHTTPSRequest_WT32_ETH01 on WT32_ETH01 using ESP32 core v1.0.6](#6-AsyncHTTPSRequest_WT32_ETH01-on-WT32_ETH01-using-ESP32-core-v106)
-  * [7. AsyncHTTPSRequest_ESP_WiFiManager using LittleFS on ESP32C3_DEV](#7-AsyncHTTPSRequest_ESP_WiFiManager-using-LittleFS -on-ESP32C3_DEV) **New**
-  * [8. AsyncHTTPSRequest_ESP_WiFiManager using LittleFS on ESP32S3_DEV](#8-AsyncHTTPSRequest_ESP_WiFiManager-using-LittleFS -on-ESP32S3_DEV) **New**
+  * [7. AsyncHTTPSRequest_ESP_WiFiManager using LittleFS on ESP32C3_DEV](#7-AsyncHTTPSRequest_ESP_WiFiManager-using-LittleFS-on-ESP32C3_DEV) **New**
+  * [8. AsyncHTTPSRequest_ESP_WiFiManager using LittleFS on ESP32S3_DEV](#8-AsyncHTTPSRequest_ESP_WiFiManager-using-LittleFS-on-ESP32S3_DEV) **New**
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
 * [Issues](#issues)
