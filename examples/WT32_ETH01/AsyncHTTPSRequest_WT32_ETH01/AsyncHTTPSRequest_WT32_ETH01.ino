@@ -44,8 +44,8 @@
   #error This code is intended to run on the ESP32 platform! Please check your Tools->Board setting.
 #endif
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v1.3.0"
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             1003000
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v1.4.0"
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             1004000
 
 // Level from 0-4
 #define ASYNC_HTTPS_DEBUG_PORT          Serial
@@ -88,7 +88,7 @@ bool eth_connected = false;
 
 /////////////////////////////////////////////
 
-void heartBeatPrint(void)
+void heartBeatPrint()
 {
   static int num = 1;
 
@@ -124,12 +124,12 @@ void sendRequest()
     }
     else
     {
-      Serial.println("Can't send bad request");
+      Serial.println(F("Can't send bad request"));
     }
   }
   else
   {
-    Serial.println("Can't send request");
+    Serial.println(F("Can't send request"));
   }
 }
 
@@ -139,9 +139,9 @@ void requestCB(void* optParm, AsyncHTTPSRequest* request, int readyState)
   
   if (readyState == readyStateDone) 
   {
-    Serial.println("\n**************************************");
+    Serial.println(F("\n**************************************"));
     Serial.println(request->responseText());
-    Serial.println("**************************************");
+    Serial.println(F("**************************************"));
     
     request->setDebug(false);
   }
@@ -153,8 +153,10 @@ void setup()
   Serial.begin(115200);
   while (!Serial);
    
-  Serial.print("\nStarting AsyncHTTPSRequest_WT32_ETH01 using "); Serial.print(ARDUINO_BOARD);
-  Serial.print(" with "); Serial.println(SHIELD_TYPE);
+  delay(200);
+
+  Serial.print(F("\nStarting AsyncHTTPSRequest_WT32_ETH01 using ")); Serial.print(ARDUINO_BOARD);
+  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE);
   Serial.println(WEBSERVER_WT32_ETH01_VERSION);
   Serial.println(ASYNC_TCP_SSL_VERSION);
   Serial.println(ASYNC_HTTPS_REQUEST_GENERIC_VERSION);
@@ -164,7 +166,7 @@ void setup()
 #if defined(ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN)
   if (ASYNC_HTTPS_REQUEST_GENERIC_VERSION_INT < ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN)
   {
-    Serial.print("Warning. Must use this example on Version equal or later than : ");
+    Serial.print(F("Warning. Must use this example on Version equal or later than : "));
     Serial.println(ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET);
   }
 #endif

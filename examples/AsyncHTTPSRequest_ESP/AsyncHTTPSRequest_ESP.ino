@@ -44,8 +44,8 @@
   #error This code is intended to run on the ESP8266 or ESP32 platform! Please check your Tools->Board setting.
 #endif
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v1.3.0"
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             1003000
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v1.4.0"
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             1004000
 
 // Level from 0-4
 #define ASYNC_HTTPS_DEBUG_PORT      Serial
@@ -116,12 +116,12 @@ void sendRequest()
     }
     else
     {
-      Serial.println("Can't send bad request");
+      Serial.println(F("Can't send bad request"));
     }
   }
   else
   {
-    Serial.println("Can't send request");
+    Serial.println(F("Can't send request"));
   }
 }
 
@@ -131,9 +131,9 @@ void requestCB(void* optParm, AsyncHTTPSRequest* request, int readyState)
 
   if (readyState == readyStateDone)
   {
-    Serial.println("\n**************************************");
+    Serial.println(F("\n**************************************"));
     Serial.println(request->responseText());
-    Serial.println("**************************************");
+    Serial.println(F("**************************************"));
 
     request->setDebug(false);
   }
@@ -145,7 +145,9 @@ void setup()
   Serial.begin(115200);
   while (!Serial);
 
-  Serial.println("\nStarting AsyncHTTPSRequest_ESP using " + String(ARDUINO_BOARD));
+  delay(200);
+
+  Serial.print(F("\nStarting AsyncHTTPSRequest_ESP using ")); Serial.println(ARDUINO_BOARD);
 
 #if defined(ESP32)
   Serial.println(ASYNC_TCP_SSL_VERSION);
@@ -158,7 +160,7 @@ void setup()
 #if defined(ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN)
   if (ASYNC_HTTPS_REQUEST_GENERIC_VERSION_INT < ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN)
   {
-    Serial.print("Warning. Must use this example on Version equal or later than : ");
+    Serial.print(F("Warning. Must use this example on Version equal or later than : "));
     Serial.println(ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET);
   }
 #endif
@@ -167,7 +169,7 @@ void setup()
 
   WiFi.begin(ssid, password);
 
-  Serial.println("Connecting to WiFi SSID: " + String(ssid));
+  Serial.print(F("Connecting to WiFi SSID: ")); Serial.println(ssid);
 
   while (WiFi.status() != WL_CONNECTED)
   {

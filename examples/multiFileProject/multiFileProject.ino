@@ -16,8 +16,8 @@
   #error This code is intended to run on the ESP32 platform! Please check your Tools->Board setting.
 #endif
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v1.3.0"
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             1003000
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v1.4.0"
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             1004000
 
 #include "multiFileProject.h"
 
@@ -31,13 +31,13 @@ void setup()
   Serial.begin(115200);
   while (!Serial);
   
-  Serial.println("\nStart multiFileProject");
+  Serial.println(F("\nStart multiFileProject"));
   Serial.println(ASYNC_HTTPS_REQUEST_GENERIC_VERSION);
 
 #if defined(ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN)
   if (ASYNC_HTTPS_REQUEST_GENERIC_VERSION_INT < ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN)
   {
-    Serial.print("Warning. Must use this example on Version equal or later than : ");
+    Serial.print(F("Warning. Must use this example on Version equal or later than : "));
     Serial.println(ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET);
   }
 #endif

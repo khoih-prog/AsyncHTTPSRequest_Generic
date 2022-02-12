@@ -11,6 +11,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v1.4.0](#releases-v140)
   * [Releases v1.3.0](#releases-v130)
   * [Releases v1.2.0](#releases-v120)
   * [Releases v1.1.1](#releases-v111)
@@ -22,6 +23,13 @@
 
 
 ## Changelog
+
+### Releases v1.4.0
+
+1. Add support to new `ESP32-S3` 
+2. Add `LittleFS` support to `ESP32-C3`
+3. Use ESP32-core's LittleFS library instead of Lorol's LITTLEFS library for v2.0.0+
+4. Add complex example [AsyncHTTPSRequest_ESP_WiFiManager](examples/AsyncHTTPSRequest_ESP_WiFiManager)
 
 ### Releases v1.3.0
 
