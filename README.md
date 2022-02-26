@@ -5,7 +5,8 @@
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](#Contributing)
 [![GitHub issues](https://img.shields.io/github/issues/khoih-prog/AsyncHTTPSRequest_Generic.svg)](http://github.com/khoih-prog/AsyncHTTPSRequest_Generic/issues)
 
-<a href="https://www.buymeacoffee.com/khoihprog6" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 50px !important;width: 181px !important;" ></a>
+<a href="https://www.buymeacoffee.com/khoihprog6" title="Donate to my libraries using BuyMeACoffee"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Donate to my libraries using BuyMeACoffee" style="height: 50px !important;width: 181px !important;" ></a>
+<a href="https://www.buymeacoffee.com/khoihprog6" title="Donate to my libraries using BuyMeACoffee"><img src="https://img.shields.io/badge/buy%20me%20a%20coffee-donate-orange.svg?logo=buy-me-a-coffee&logoColor=FFDD00" style="height: 20px !important;width: 200px !important;" ></a>
 
 ---
 ---
@@ -35,13 +36,14 @@
 * [Examples](#examples)
   * [For ESP32](#for-esp32)
     * [1. AsyncHTTPSRequest_ESP](examples/AsyncHTTPSRequest_ESP)
-    * [2. AsyncHTTPSRequest_ESP_WiFiManager](examples/AsyncHTTPSRequest_ESP_WiFiManager) **New**
+    * [2. AsyncHTTPSRequest_ESP_WiFiManager](examples/AsyncHTTPSRequest_ESP_WiFiManager)
+    * [3. AsyncHTTPSRequest_ESP_Multi](examples/AsyncHTTPSRequest_ESP_Multi) **New**
   * [For WT32_ETH01](#for-WT32_ETH01)
     * [1. AsyncHTTPSRequest_WT32_ETH01](examples/WT32_ETH01/AsyncHTTPSRequest_WT32_ETH01)
   * [For ESP32 or WT32_ETH01](#for-esp32-or-WT32_ETH01) 
     * [1. multiFileProject](examples/multiFileProject)
-* [Example AsyncHTTPSRequest_ESP](#example-AsyncHTTPSRequest_ESP)
-  * [1. File AsyncHTTPSRequest_ESP.ino](#1-file-AsyncHTTPSRequest_ESPino)
+* [Example AsyncHTTPSRequest_ESP_Multi](#example-AsyncHTTPSRequest_ESP_Multi)
+  * [1. File AsyncHTTPSRequest_ESP_Multi.ino](#1-file-AsyncHTTPSRequest_ESP_Multi)
 * [Debug Terminal Output Samples](#debug-terminal-output-samples) 
   * [1. AsyncHTTPSRequest_ESP on ESP32_DEV](#1-AsyncHTTPSRequest_ESP-on-ESP32_DEV)
   * [2. AsyncHTTPSRequest_ESP on ESP32S2_DEV](#2-AsyncHTTPSRequest_ESP-on-ESP32S2_DEV)
@@ -49,8 +51,9 @@
   * [4. AsyncHTTPSRequest_ESP_WiFiManager on ESP32_DEV](#4-AsyncHTTPSRequest_ESP_WiFiManager-on-ESP32_DEV)
   * [5. AsyncHTTPSRequest_WT32_ETH01 on WT32_ETH01 using ESP32 core v2.0.0](#5-AsyncHTTPSRequest_WT32_ETH01-on-WT32_ETH01-using-ESP32-core-v200)
   * [6. AsyncHTTPSRequest_WT32_ETH01 on WT32_ETH01 using ESP32 core v1.0.6](#6-AsyncHTTPSRequest_WT32_ETH01-on-WT32_ETH01-using-ESP32-core-v106)
-  * [7. AsyncHTTPSRequest_ESP_WiFiManager using LittleFS on ESP32C3_DEV](#7-AsyncHTTPSRequest_ESP_WiFiManager-using-LittleFS-on-ESP32C3_DEV) **New**
-  * [8. AsyncHTTPSRequest_ESP_WiFiManager using LittleFS on ESP32S3_DEV](#8-AsyncHTTPSRequest_ESP_WiFiManager-using-LittleFS-on-ESP32S3_DEV) **New**
+  * [7. AsyncHTTPSRequest_ESP_WiFiManager using LittleFS on ESP32C3_DEV](#7-AsyncHTTPSRequest_ESP_WiFiManager-using-LittleFS-on-ESP32C3_DEV)
+  * [8. AsyncHTTPSRequest_ESP_WiFiManager using LittleFS on ESP32S3_DEV](#8-AsyncHTTPSRequest_ESP_WiFiManager-using-LittleFS-on-ESP32S3_DEV)
+  * [9. AsyncHTTPSRequest_ESP_Multi on ESP32_DEV](#9-AsyncHTTPSRequest_ESP_Multi-on-ESP32_DEV) **New**
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
 * [Issues](#issues)
@@ -295,7 +298,8 @@ Look in file [**adc_common.c**](https://github.com/espressif/esp-idf/blob/master
 #### For ESP32
 
  1. [AsyncHTTPSRequest_ESP](examples/AsyncHTTPSRequest_ESP)
- 2. [AsyncHTTPSRequest_ESP_WiFiManager](examples/AsyncHTTPSRequest_ESP_WiFiManager) **New**
+ 2. [AsyncHTTPSRequest_ESP_WiFiManager](examples/AsyncHTTPSRequest_ESP_WiFiManager)
+ 3. [AsyncHTTPSRequest_ESP_Multi](examples/AsyncHTTPSRequest_ESP_Multi) **New**
 
 #### For WT32_ETH01
 
@@ -307,168 +311,12 @@ Look in file [**adc_common.c**](https://github.com/espressif/esp-idf/blob/master
  
 ---
 
-### Example [AsyncHTTPSRequest_ESP](examples/AsyncHTTPSRequest_ESP)
+### Example [AsyncHTTPSRequest_ESP_Multi](examples/AsyncHTTPSRequest_ESP_Multi)
 
-#### 1. File [AsyncHTTPSRequest_ESP.ino](examples/AsyncHTTPSRequest_ESP/AsyncHTTPSRequest_ESP.ino)
+#### 1. File [AsyncHTTPSRequest_ESP_Multi.ino](examples/AsyncHTTPSRequest_ESP_Multi/AsyncHTTPSRequest_ESP_Multi.ino)
 
-```cpp
-#if !( defined(ESP8266) ||  defined(ESP32) )
-  #error This code is intended to run on the ESP8266 or ESP32 platform! Please check your Tools->Board setting.
-#endif
+https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/blob/b9b9bf3725887d07b358dc35cee0676ed36a5e0d/examples/AsyncHTTPSRequest_ESP_Multi/AsyncHTTPSRequest_ESP_Multi.ino#L1-L266
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v1.4.0"
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             1004000
-
-// Level from 0-4
-#define ASYNC_HTTPS_DEBUG_PORT      Serial
-
-#define _ASYNC_TCP_SSL_LOGLEVEL_    1
-#define _ASYNC_HTTPS_LOGLEVEL_      1
-
-// 300s = 5 minutes to not flooding
-#define HTTPS_REQUEST_INTERVAL      60  //300
-
-// 10s
-#define HEARTBEAT_INTERVAL          10
-
-int status;     // the Wifi radio's status
-
-const char* ssid        = "your_ssid";
-const char* password    = "your_pass";
-
-#if (ESP8266)
-  #include <ESP8266WiFi.h>
-#elif (ESP32)
-  #include <WiFi.h>
-#endif
-
-// To be included only in main(), .ino with setup() to avoid `Multiple Definitions` Linker Error
-#include <AsyncHTTPSRequest_Generic.h>            // https://github.com/khoih-prog/AsyncHTTPSRequest_Generic
-
-#include <Ticker.h>
-
-AsyncHTTPSRequest request;
-Ticker ticker;
-Ticker ticker1;
-
-void heartBeatPrint()
-{
-  static int num = 1;
-
-  if (WiFi.status() == WL_CONNECTED)
-    Serial.print(F("H"));        // H means connected to WiFi
-  else
-    Serial.print(F("F"));        // F means not connected to WiFi
-
-  if (num == 80)
-  {
-    Serial.println();
-    num = 1;
-  }
-  else if (num++ % 10 == 0)
-  {
-    Serial.print(F(" "));
-  }
-}
-
-void sendRequest()
-{
-  static bool requestOpenResult;
-
-  if (request.readyState() == readyStateUnsent || request.readyState() == readyStateDone)
-  {
-    //requestOpenResult = request.open("GET", "https://worldtimeapi.org/api/timezone/Europe/London.txt");
-    //requestOpenResult = request.open("GET", "https://worldtimeapi.org/api/timezone/America/Toronto.txt");
-    requestOpenResult = request.open("GET", "https://worldtimeapi.org/api/timezone/America/Toronto.txt");
-
-    if (requestOpenResult)
-    {
-      // Only send() if open() returns true, or crash
-      request.send();
-    }
-    else
-    {
-      Serial.println(F("Can't send bad request"));
-    }
-  }
-  else
-  {
-    Serial.println(F("Can't send request"));
-  }
-}
-
-void requestCB(void* optParm, AsyncHTTPSRequest* request, int readyState)
-{
-  (void) optParm;
-
-  if (readyState == readyStateDone)
-  {
-    Serial.println(F("\n**************************************"));
-    Serial.println(request->responseText());
-    Serial.println(F("**************************************"));
-
-    request->setDebug(false);
-  }
-}
-
-void setup()
-{
-  // put your setup code here, to run once:
-  Serial.begin(115200);
-  while (!Serial);
-
-  delay(200);
-
-  Serial.print(F("\nStarting AsyncHTTPSRequest_ESP using ")); Serial.println(ARDUINO_BOARD);
-
-#if defined(ESP32)
-  Serial.println(ASYNC_TCP_SSL_VERSION);
-#else
-  //Serial.println(ESPASYNC_TCP_SSL_VERSION);
-#endif
-
-  Serial.println(ASYNC_HTTPS_REQUEST_GENERIC_VERSION);
-
-#if defined(ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN)
-  if (ASYNC_HTTPS_REQUEST_GENERIC_VERSION_INT < ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN)
-  {
-    Serial.print(F("Warning. Must use this example on Version equal or later than : "));
-    Serial.println(ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET);
-  }
-#endif
-
-  WiFi.mode(WIFI_STA);
-
-  WiFi.begin(ssid, password);
-
-  Serial.print(F("Connecting to WiFi SSID: ")); Serial.println(ssid);
-
-  while (WiFi.status() != WL_CONNECTED)
-  {
-    delay(500);
-    Serial.print(".");
-  }
-
-  Serial.print(F("\nAsyncHTTPSRequest @ IP : "));
-  Serial.println(WiFi.localIP());
-
-  request.setDebug(false);
-
-  request.onReadyStateChange(requestCB);
-
-  ticker.attach(HTTPS_REQUEST_INTERVAL, sendRequest);
-
-  ticker1.attach(HEARTBEAT_INTERVAL, heartBeatPrint);
-
-  // Send first request now
-  sendRequest();
-}
-
-void loop()
-{
-  //delay(1);
-}
-```
 
 ---
 ---
@@ -482,7 +330,7 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_ESP](exa
 ```
 Starting AsyncHTTPSRequest_ESP using ESP32_DEV
 AsyncTCP_SSL v1.2.0
-AsyncHTTPSRequest_Generic v1.4.0
+AsyncHTTPSRequest_Generic v1.4.1
 Connecting to WiFi SSID: HueNet1
 ........
 AsyncHTTPSRequest @ IP : 192.168.2.168
@@ -530,7 +378,7 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_ESP](exa
 ```
 Starting AsyncHTTPSRequest_ESP using ESP32S2_DEV
 AsyncTCP_SSL v1.2.0
-AsyncHTTPSRequest_Generic v1.4.0
+AsyncHTTPSRequest_Generic v1.4.1
 Connecting to WiFi SSID: HueNet1
 .......
 AsyncHTTPSRequest @ IP : 192.168.2.79
@@ -603,7 +451,7 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_ESP](exa
 ```
 Starting AsyncHTTPSRequest_ESP using ESP32C3_DEV
 AsyncTCP_SSL v1.2.0
-AsyncHTTPSRequest_Generic v1.4.0
+AsyncHTTPSRequest_Generic v1.4.1
 Connecting to WiFi SSID: HueNet1
 .........
 AsyncHTTPSRequest @ IP : 192.168.2.80
@@ -654,7 +502,7 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_ESP_WiFi
 Starting AsyncHTTPSRequest_ESP_WiFiManager using LittleFS on ESP32_DEV
 ESPAsync_WiFiManager v1.12.1
 AsyncTCP_SSL v1.2.0
-AsyncHTTPSRequest_Generic v1.4.0
+AsyncHTTPSRequest_Generic v1.4.1
 Stored: SSID = HueNet1, Pass = 12345678
 Got stored Credentials. Timeout 120s
 ConnectMultiWiFi in setup
@@ -690,7 +538,7 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_WT32_ETH
 Starting AsyncHTTPSRequest_WT32_ETH01 using ESP32_DEV with ETH_PHY_LAN8720
 WebServer_WT32_ETH01 v1.4.1 for core v2.0.0+
 AsyncTCP_SSL v1.2.0
-AsyncHTTPSRequest_Generic v1.4.0
+AsyncHTTPSRequest_Generic v1.4.1
 ETH MAC: A8:03:2A:A1:61:73, IPv4: 192.168.2.82, FULL_DUPLEX, 100Mbps
 
 HTTP WebClient is @ IP : 192.168.2.82
@@ -724,7 +572,7 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_WT32_ETH
 Starting AsyncHTTPSRequest_WT32_ETH01 using ESP32_DEV with ETH_PHY_LAN8720
 WebServer_WT32_ETH01 v1.4.1 for core v1.0.6-
 AsyncTCP_SSL v1.2.0
-AsyncHTTPSRequest_Generic v1.4.0
+AsyncHTTPSRequest_Generic v1.4.1
 ETH MAC: A8:03:2A:A1:61:73, IPv4: 192.168.2.232, FULL_DUPLEX, 100Mbps
 
 HTTP WebClient is @ IP : 192.168.2.232
@@ -757,7 +605,7 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_ESP_WiFi
 ```
 Starting AsyncHTTPSRequest_ESP_WiFiManager using LittleFS on ESP32C3_DEV
 ESPAsync_WiFiManager v1.12.1
-AsyncHTTPSRequest_Generic v1.4.0
+AsyncHTTPSRequest_Generic v1.4.1
 Stored: SSID = HueNet1, Pass = password
 Got stored Credentials. Timeout 120s
 ConnectMultiWiFi in setup
@@ -811,7 +659,7 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_ESP_WiFi
 ```
 Starting AsyncHTTPSRequest_ESP_WiFiManager using LittleFS on ESP32S3_DEV
 ESPAsync_WiFiManager v1.12.1
-AsyncHTTPSRequest_Generic v1.4.0
+AsyncHTTPSRequest_Generic v1.4.1
 Stored: SSID = HueNet1, Pass = password
 Got stored Credentials. Timeout 120s
 ConnectMultiWiFi in setup
@@ -837,6 +685,114 @@ week_number: 6
 HHHH
 ```
 
+---
+
+
+#### 9. AsyncHTTPSRequest_ESP_Multi on ESP32_DEV
+
+The terminal output of [AsyncHTTPSRequest_ESP_Multi example](examples/AsyncHTTPSRequest_ESP_Multi) running on `ESP32_DEV` to demonstrate how to send requests to multiple addresses and receive responses from them. 
+
+```
+Starting AsyncHTTPSRequest_ESP_Multi on ESP32_DEV
+AsyncTCP_SSL v1.2.0
+AsyncHTTPSRequest_Generic v1.4.1
+Connecting to WiFi SSID: HueNet1
+.......
+AsyncHTTPSRequest @ IP : 192.168.2.88
+
+Sending request: https://worldtimeapi.org/api/timezone/Europe/Prague.txt
+
+Sending request: https://www.myexternalip.com/raw
+
+**************************************
+abbreviation: CET
+client_ip: aaa.bbb.ccc.ddd
+datetime: 2022-02-26T03:18:48.286150+01:00
+day_of_week: 6
+day_of_year: 57
+dst: false
+dst_from: 
+dst_offset: 0
+dst_until: 
+raw_offset: 3600
+timezone: Europe/Prague
+unixtime: 1645841928
+utc_datetime: 2022-02-26T02:18:48.286150+00:00
+utc_offset: +01:00
+week_number: 8
+**************************************
+
+Sending request: https://worldtimeapi.org/api/timezone/America/Toronto.txt
+
+**************************************
+abbreviation: EST
+client_ip: aaa.bbb.ccc.ddd
+datetime: 2022-02-25T21:18:48.405472-05:00
+day_of_week: 5
+day_of_year: 56
+dst: false
+dst_from: 
+dst_offset: 0
+dst_until: 
+raw_offset: -18000
+timezone: America/Toronto
+unixtime: 1645841928
+utc_datetime: 2022-02-26T02:18:48.405472+00:00
+utc_offset: -05:00
+week_number: 8
+**************************************
+
+**************************************
+aaa.bbb.ccc.ddd
+**************************************
+HHHHHH
+Sending request: https://worldtimeapi.org/api/timezone/Europe/Prague.txt
+
+**************************************
+abbreviation: CET
+client_ip: aaa.bbb.ccc.ddd
+datetime: 2022-02-26T03:19:46.600829+01:00
+day_of_week: 6
+day_of_year: 57
+dst: false
+dst_from: 
+dst_offset: 0
+dst_until: 
+raw_offset: 3600
+timezone: Europe/Prague
+unixtime: 1645841986
+utc_datetime: 2022-02-26T02:19:46.600829+00:00
+utc_offset: +01:00
+week_number: 8
+**************************************
+
+Sending request: https://www.myexternalip.com/raw
+
+**************************************
+aaa.bbb.ccc.ddd
+**************************************
+
+Sending request: https://worldtimeapi.org/api/timezone/America/Toronto.txt
+
+**************************************
+abbreviation: EST
+client_ip: aaa.bbb.ccc.ddd
+datetime: 2022-02-25T21:19:46.808868-05:00
+day_of_week: 5
+day_of_year: 56
+dst: false
+dst_from: 
+dst_offset: 0
+dst_until: 
+raw_offset: -18000
+timezone: America/Toronto
+unixtime: 1645841986
+utc_datetime: 2022-02-26T02:19:46.808868+00:00
+utc_offset: -05:00
+week_number: 8
+**************************************
+H
+```
 
 ---
 ---
@@ -880,6 +836,7 @@ Submit issues to: [AsyncHTTPSRequest_Generic issues](https://github.com/khoih-pr
  3. Add support to more boards.
  4. Add many more examples.
  5. Permit to use both HTTP and HTTPS in this library
+ 6. Add support to ESP8266, STM32 and mnany more boards
  
  ---
 
@@ -895,6 +852,7 @@ Submit issues to: [AsyncHTTPSRequest_Generic issues](https://github.com/khoih-pr
  8. Add support to **ESP32-S3 (ESP32S3_DEV, ESP32_S3_BOX, UM TINYS3, UM PROS3, UM FEATHERS3, etc.) using EEPROM, SPIFFS or LittleFS**
  9. Add `LittleFS` support to **ESP32-C3**
 10. Use `ESP32-core's LittleFS` library instead of `Lorol's LITTLEFS` library for ESP32 core v2.0.0+
+11. Add example [AsyncHTTPSRequest_ESP_Multi](https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/tree/master/examples/AsyncHTTPSRequest_ESP_Multi) to demonstrate how to send requests to multiple addresses and receive responses from them.
 
 ---
 ---
@@ -905,11 +863,13 @@ Submit issues to: [AsyncHTTPSRequest_Generic issues](https://github.com/khoih-pr
 This library is based on, modified, bug-fixed and improved from:
 
 1. [Bob Lemaire's **asyncHTTPrequest Library**](https://github.com/boblemaire/asyncHTTPrequest) to use the better **asynchronous** features of the following Async SSL TCP Libraries : ( [`AsyncTCP_SSL`](https://github.com/khoih-prog/AsyncTCP_SSL) ).
+2. Thanks to [DavidAntonin](https://github.com/DavidAntonin) to report [Cannot send requests to different addresses #4](https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/issues/4) leading to new release v1.4.1 to demonstrate how to send requests to multiple addresses and receive responses from them.
 
 
 <table>
   <tr>
     <td align="center"><a href="https://github.com/boblemaire"><img src="https://github.com/boblemaire.png" width="100px;" alt="boblemaire"/><br /><sub><b>⭐️ Bob Lemaire</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/DavidAntonin"><img src="https://github.com/DavidAntonin.png" width="100px;" alt="DavidAntonin"/><br /><sub><b>DavidAntonin</b></sub></a><br /></td>
   </tr> 
 </table>
 
