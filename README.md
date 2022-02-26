@@ -168,9 +168,9 @@ The best and easiest way is to use `Arduino Library Manager`. Search for `AsyncH
 ### Manual Install
 
 1. Navigate to [AsyncHTTPSRequest_Generic](https://github.com/khoih-prog/AsyncHTTPSRequest_Generic) page.
-2. Download the latest release `AsyncHTTPSRequest_Generic-master.zip`.
-3. Extract the zip file to `AsyncHTTPSRequest_Generic-master` directory 
-4. Copy the whole `AsyncHTTPSRequest_Generic-master` folder to Arduino libraries' directory such as `~/Arduino/libraries/`.
+2. Download the latest release `AsyncHTTPSRequest_Generic-main.zip`.
+3. Extract the zip file to `AsyncHTTPSRequest_Generic-main` directory 
+4. Copy the whole `AsyncHTTPSRequest_Generic-main` folder to Arduino libraries' directory such as `~/Arduino/libraries/`.
 
 ### VS Code & PlatformIO
 
@@ -852,7 +852,7 @@ Submit issues to: [AsyncHTTPSRequest_Generic issues](https://github.com/khoih-pr
  8. Add support to **ESP32-S3 (ESP32S3_DEV, ESP32_S3_BOX, UM TINYS3, UM PROS3, UM FEATHERS3, etc.) using EEPROM, SPIFFS or LittleFS**
  9. Add `LittleFS` support to **ESP32-C3**
 10. Use `ESP32-core's LittleFS` library instead of `Lorol's LITTLEFS` library for ESP32 core v2.0.0+
-11. Add example [AsyncHTTPSRequest_ESP_Multi](https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/tree/master/examples/AsyncHTTPSRequest_ESP_Multi) to demonstrate how to send requests to multiple addresses and receive responses from them.
+11. Add example [AsyncHTTPSRequest_ESP_Multi](https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/tree/main/examples/AsyncHTTPSRequest_ESP_Multi) to demonstrate how to send requests to multiple addresses and receive responses from them.
 
 ---
 ---
