@@ -44,6 +44,12 @@
     },
     {
       "owner": "khoih-prog",
+      "name": "AsyncHTTPRequest_Generic",
+      "version": ">=1.7.1",
+      "platforms": ["espressif8266", "espressif32"]
+    },
+    {
+      "owner": "khoih-prog",
       "name": "ESPAsync_WiFiManager",
       "version": ">=1.12.1",
       "platforms": ["espressif8266", "espressif32"]
