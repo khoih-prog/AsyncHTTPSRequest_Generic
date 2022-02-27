@@ -16,7 +16,7 @@
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.  
  
-  Version: 1.4.1
+  Version: 2.0.0
   
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -27,6 +27,7 @@
   1.3.0    K Hoang     23/01/2022 Enable compatibility with old code to include only AsyncHTTPSRequest_Generic.h
   1.4.0    K Hoang     11/02/2022 Add support to new ESP32-S3. Add LittleFS support to ESP32-C3. Use core LittleFS
   1.4.1    K Hoang     25/02/2022 Add example AsyncHTTPSRequest_ESP_Multi to demo connection to multiple addresses
+  2.0.0    K Hoang     27/02/2022 Breaking change to permit coexisting with AsyncHTTPRequest library. Add example to demo
  *****************************************************************************************************************************/
 
 #pragma once
@@ -38,13 +39,13 @@
   #error This AsyncHTTPSRequest library is currently supporting only ESP32
 #endif
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION             "AsyncHTTPSRequest_Generic v1.4.1"
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION             "AsyncHTTPSRequest_Generic v2.0.0"
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MAJOR       1
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MINOR       4
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_PATCH       1
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MAJOR       2
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MINOR       0
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_PATCH       0
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_INT         1004001
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_INT         2000000
 
 #include <Arduino.h>
 
@@ -121,11 +122,13 @@
 
 #include <pgmspace.h>
 
-//#include <utility/xbuf.h>
+#if !defined(ASYNC_HTTP_REQUEST_GENERIC_VERSION)
+
+// Not necessary if already defined in AsyncHTTPRequest library
 // Merge xbuf
 ////////////////////////////////////////////////////////////////////////////
 
-struct xseg 
+struct xseg
 {
   xseg    *next;
   uint8_t data[];
@@ -252,7 +255,9 @@ typedef enum
   readyStateLoading     = 3,            // receiving, partial data available
   readyStateDone        = 4             // Request complete, all data available.
 } reqStates;
-    
+  
+#endif    // #if !defined(ASYNC_HTTP_REQUEST_GENERIC_VERSION)
+   
 class AsyncHTTPSRequest
 {
     struct header
@@ -395,7 +400,7 @@ class AsyncHTTPSRequest
     URL*            _URL;                       // -> URL data structure
     char*           _connectedHost;             // Host when connected
     int             _connectedPort;             // Port when connected
-    AsyncSSLClient*    _client;                    // ESPAsyncTCP AsyncSSLClient instance
+    AsyncSSLClient* _client;                    // ESPAsyncTCP AsyncSSLClient instance
     size_t          _contentLength;             // content-length header value or sum of chunk headers
     size_t          _contentRead;               // number of bytes retrieved by user since last open()
     readyStateChangeCB  _readyStateChangeCB;    // optional callback for readyState change
@@ -442,8 +447,9 @@ class AsyncHTTPSRequest
     
     // KH New for HTTPS
     bool        _secure;
-    bool _tlsBadFingerprint = false;
+    bool        _tlsBadFingerprint = false;
     std::vector<std::array<uint8_t, SHA1_SIZE>> _secureServerFingerprints;
 };
+
 
 #endif    // ASYNC_HTTPS_REQUEST_GENERIC_HPP

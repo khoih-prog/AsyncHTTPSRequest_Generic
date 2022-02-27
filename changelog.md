@@ -11,6 +11,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v2.0.0](#releases-v200)
   * [Releases v1.4.1](#releases-v141)
   * [Releases v1.4.0](#releases-v140)
   * [Releases v1.3.0](#releases-v130)
@@ -24,6 +25,11 @@
 
 
 ## Changelog
+
+### Releases v2.0.0
+
+1. Breaking change to permit coexisting with AsyncHTTPRequest library to send and receive both HTTP and HTTPS.
+1. Add example [AsyncHTTP_HTTPSRequest_ESP](https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/tree/main/examples/AsyncHTTP_HTTPSRequest_ESP) to demonstrate how to send HTTP and HTTPS requests to multiple addresses and receive responses from them.
 
 ### Releases v1.4.1
 

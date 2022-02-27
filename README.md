@@ -13,6 +13,7 @@
 
 ## Table of Contents
 
+* [Important Change from v2.0.0](#Important-Change-from-v200)
 * [Important Change from v1.3.0](#Important-Change-from-v130)
 * [Why do we need the new Async AsyncHTTPSRequest_Generic library](#why-do-we-need-this-async-AsyncHTTPSRequest_Generic-library)
   * [Important notes for WT32_ETH01](#Important-notes-for-WT32_ETH01)
@@ -38,6 +39,7 @@
     * [1. AsyncHTTPSRequest_ESP](examples/AsyncHTTPSRequest_ESP)
     * [2. AsyncHTTPSRequest_ESP_WiFiManager](examples/AsyncHTTPSRequest_ESP_WiFiManager)
     * [3. AsyncHTTPSRequest_ESP_Multi](examples/AsyncHTTPSRequest_ESP_Multi) **New**
+    * [4. AsyncHTTP_HTTPSRequest_ESP](examples/AsyncHTTP_HTTPSRequest_ESP) **New**
   * [For WT32_ETH01](#for-WT32_ETH01)
     * [1. AsyncHTTPSRequest_WT32_ETH01](examples/WT32_ETH01/AsyncHTTPSRequest_WT32_ETH01)
   * [For ESP32 or WT32_ETH01](#for-esp32-or-WT32_ETH01) 
@@ -45,15 +47,16 @@
 * [Example AsyncHTTPSRequest_ESP_Multi](#example-AsyncHTTPSRequest_ESP_Multi)
   * [1. File AsyncHTTPSRequest_ESP_Multi.ino](#1-file-AsyncHTTPSRequest_ESP_Multi)
 * [Debug Terminal Output Samples](#debug-terminal-output-samples) 
-  * [1. AsyncHTTPSRequest_ESP on ESP32_DEV](#1-AsyncHTTPSRequest_ESP-on-ESP32_DEV)
-  * [2. AsyncHTTPSRequest_ESP on ESP32S2_DEV](#2-AsyncHTTPSRequest_ESP-on-ESP32S2_DEV)
-  * [3. AsyncHTTPSRequest_ESP on ESP32C3_DEV](#3-AsyncHTTPSRequest_ESP-on-ESP32C3_DEV)
-  * [4. AsyncHTTPSRequest_ESP_WiFiManager on ESP32_DEV](#4-AsyncHTTPSRequest_ESP_WiFiManager-on-ESP32_DEV)
-  * [5. AsyncHTTPSRequest_WT32_ETH01 on WT32_ETH01 using ESP32 core v2.0.0](#5-AsyncHTTPSRequest_WT32_ETH01-on-WT32_ETH01-using-ESP32-core-v200)
-  * [6. AsyncHTTPSRequest_WT32_ETH01 on WT32_ETH01 using ESP32 core v1.0.6](#6-AsyncHTTPSRequest_WT32_ETH01-on-WT32_ETH01-using-ESP32-core-v106)
-  * [7. AsyncHTTPSRequest_ESP_WiFiManager using LittleFS on ESP32C3_DEV](#7-AsyncHTTPSRequest_ESP_WiFiManager-using-LittleFS-on-ESP32C3_DEV)
-  * [8. AsyncHTTPSRequest_ESP_WiFiManager using LittleFS on ESP32S3_DEV](#8-AsyncHTTPSRequest_ESP_WiFiManager-using-LittleFS-on-ESP32S3_DEV)
-  * [9. AsyncHTTPSRequest_ESP_Multi on ESP32_DEV](#9-AsyncHTTPSRequest_ESP_Multi-on-ESP32_DEV) **New**
+  * [ 1. AsyncHTTPSRequest_ESP on ESP32_DEV](#1-AsyncHTTPSRequest_ESP-on-ESP32_DEV)
+  * [ 2. AsyncHTTPSRequest_ESP on ESP32S2_DEV](#2-AsyncHTTPSRequest_ESP-on-ESP32S2_DEV)
+  * [ 3. AsyncHTTPSRequest_ESP on ESP32C3_DEV](#3-AsyncHTTPSRequest_ESP-on-ESP32C3_DEV)
+  * [ 4. AsyncHTTPSRequest_ESP_WiFiManager on ESP32_DEV](#4-AsyncHTTPSRequest_ESP_WiFiManager-on-ESP32_DEV)
+  * [ 5. AsyncHTTPSRequest_WT32_ETH01 on WT32_ETH01 using ESP32 core v2.0.0](#5-AsyncHTTPSRequest_WT32_ETH01-on-WT32_ETH01-using-ESP32-core-v200)
+  * [ 6. AsyncHTTPSRequest_WT32_ETH01 on WT32_ETH01 using ESP32 core v1.0.6](#6-AsyncHTTPSRequest_WT32_ETH01-on-WT32_ETH01-using-ESP32-core-v106)
+  * [ 7. AsyncHTTPSRequest_ESP_WiFiManager using LittleFS on ESP32C3_DEV](#7-AsyncHTTPSRequest_ESP_WiFiManager-using-LittleFS-on-ESP32C3_DEV)
+  * [ 8. AsyncHTTPSRequest_ESP_WiFiManager using LittleFS on ESP32S3_DEV](#8-AsyncHTTPSRequest_ESP_WiFiManager-using-LittleFS-on-ESP32S3_DEV)
+  * [ 9. AsyncHTTPSRequest_ESP_Multi on ESP32_DEV](#9-AsyncHTTPSRequest_ESP_Multi-on-ESP32_DEV) **New**
+  * [10. AsyncHTTP_HTTPSRequest_ESP on ESP32_DEV](#10-AsyncHTTP_HTTPSRequest_ESP-on-ESP32_DEV) **New**
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
 * [Issues](#issues)
@@ -66,6 +69,10 @@
 
 ---
 ---
+
+### Important Change from v2.0.0
+
+**Breaking change to permit coexisting with AsyncHTTPRequest library. Now you can send HTTP / HTTPS requests to multiple addresses and receive responses from them.**
 
 ### Important Change from v1.3.0
 
@@ -100,10 +107,11 @@ To use with core v1.0.6-, just define in your sketch
 
 ### Features
 
-1. Asynchronous HTTPS Request library for ESP32, ESP32_S2, ESP32_C3 using built-in WiFi.
+1. Asynchronous HTTPS Request library for ESP32, ESP32_S2, ESP32_C3, ESP32_S3 using built-in WiFi.
 2. Providing a subset of HTTPS.
 3. Relying on on [`AsyncTCP_SSL`](https://github.com/khoih-prog/AsyncTCP_SSL) for ESP32
 4. Methods similar in format and usage to XmlHTTPrequest in Javascript.
+5. Coexist with AsyncHTTPRequest library to permit sending HTTP / HTTPS requests to multiple addresses and receive responses from them
 
 ### Supports
 
@@ -113,6 +121,8 @@ To use with core v1.0.6-, just define in your sketch
 4. Single String response for short (<~5K) responses (heap permitting).
 5. Optional onData callback.
 6. Optional onReadyStatechange callback.
+
+---
 
 ### Principles of operation
 
@@ -156,6 +166,7 @@ This library is based on, modified from:
  3. [`AsyncTCP_SSL v1.2.0+`](https://github.com/khoih-prog/AsyncTCP_SSL) for ESP32. [![GitHub release](https://img.shields.io/github/release/khoih-prog/AsyncTCP_SSL.svg)](https://github.com/khoih-prog/AsyncTCP_SSL/releases)
  4. [`WebServer_WT32_ETH01 v1.4.1+`](https://github.com/khoih-prog/WebServer_WT32_ETH01) for ESP32-based WT32_ETH01 using **either ESP32 core v2.0.0+ or v1.0.6-**. [![GitHub release](https://img.shields.io/github/release/khoih-prog/WebServer_WT32_ETH01.svg)](https://github.com/khoih-prog/WebServer_WT32_ETH01/releases)
  5. [`ESPAsync_WiFiManager library v1.12.1+`](https://github.com/khoih-prog/ESPAsync_WiFiManager) for ESP32/ESP8266 using some examples. [![GitHub release](https://img.shields.io/github/release/khoih-prog/ESPAsync_WiFiManager.svg)](https://github.com/khoih-prog/ESPAsync_WiFiManager/releases)
+ 6. [`AsyncHTTPRequest_Generic library v1.7.1+`](https://github.com/khoih-prog/AsyncHTTPRequest_Generic) for ESP32/ESP8266 using with [AsyncHTTP_HTTPSRequest_ESP example](https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/tree/main/examples/AsyncHTTP_HTTPSRequest_ESP). [![GitHub release](https://img.shields.io/github/release/khoih-prog/AsyncHTTPRequest_Generic.svg)](https://github.com/khoih-prog/AsyncHTTPRequest_Generic/releases)
 
 ---
 ---
@@ -300,6 +311,7 @@ Look in file [**adc_common.c**](https://github.com/espressif/esp-idf/blob/master
  1. [AsyncHTTPSRequest_ESP](examples/AsyncHTTPSRequest_ESP)
  2. [AsyncHTTPSRequest_ESP_WiFiManager](examples/AsyncHTTPSRequest_ESP_WiFiManager)
  3. [AsyncHTTPSRequest_ESP_Multi](examples/AsyncHTTPSRequest_ESP_Multi) **New**
+ 4. [AsyncHTTP_HTTPSRequest_ESP](examples/AsyncHTTP_HTTPSRequest_ESP) **New**
 
 #### For WT32_ETH01
 
@@ -311,11 +323,9 @@ Look in file [**adc_common.c**](https://github.com/espressif/esp-idf/blob/master
  
 ---
 
-### Example [AsyncHTTPSRequest_ESP_Multi](examples/AsyncHTTPSRequest_ESP_Multi)
+### Example [AsyncHTTP_HTTPSRequest_ESP](examples/AsyncHTTP_HTTPSRequest_ESP)
 
-#### 1. File [AsyncHTTPSRequest_ESP_Multi.ino](examples/AsyncHTTPSRequest_ESP_Multi/AsyncHTTPSRequest_ESP_Multi.ino)
-
-https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/blob/b9b9bf3725887d07b358dc35cee0676ed36a5e0d/examples/AsyncHTTPSRequest_ESP_Multi/AsyncHTTPSRequest_ESP_Multi.ino#L1-L266
+https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/blob/b65d32c0d83a24926fa24cec20f15389dc0eb840/examples/AsyncHTTP_HTTPSRequest_ESP/AsyncHTTP_HTTPSRequest_ESP.ino#L1-L361
 
 
 ---
@@ -330,7 +340,7 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_ESP](exa
 ```
 Starting AsyncHTTPSRequest_ESP using ESP32_DEV
 AsyncTCP_SSL v1.2.0
-AsyncHTTPSRequest_Generic v1.4.1
+AsyncHTTPSRequest_Generic v2.0.0
 Connecting to WiFi SSID: HueNet1
 ........
 AsyncHTTPSRequest @ IP : 192.168.2.168
@@ -378,7 +388,7 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_ESP](exa
 ```
 Starting AsyncHTTPSRequest_ESP using ESP32S2_DEV
 AsyncTCP_SSL v1.2.0
-AsyncHTTPSRequest_Generic v1.4.1
+AsyncHTTPSRequest_Generic v2.0.0
 Connecting to WiFi SSID: HueNet1
 .......
 AsyncHTTPSRequest @ IP : 192.168.2.79
@@ -451,7 +461,7 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_ESP](exa
 ```
 Starting AsyncHTTPSRequest_ESP using ESP32C3_DEV
 AsyncTCP_SSL v1.2.0
-AsyncHTTPSRequest_Generic v1.4.1
+AsyncHTTPSRequest_Generic v2.0.0
 Connecting to WiFi SSID: HueNet1
 .........
 AsyncHTTPSRequest @ IP : 192.168.2.80
@@ -502,7 +512,7 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_ESP_WiFi
 Starting AsyncHTTPSRequest_ESP_WiFiManager using LittleFS on ESP32_DEV
 ESPAsync_WiFiManager v1.12.1
 AsyncTCP_SSL v1.2.0
-AsyncHTTPSRequest_Generic v1.4.1
+AsyncHTTPSRequest_Generic v2.0.0
 Stored: SSID = HueNet1, Pass = 12345678
 Got stored Credentials. Timeout 120s
 ConnectMultiWiFi in setup
@@ -538,7 +548,7 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_WT32_ETH
 Starting AsyncHTTPSRequest_WT32_ETH01 using ESP32_DEV with ETH_PHY_LAN8720
 WebServer_WT32_ETH01 v1.4.1 for core v2.0.0+
 AsyncTCP_SSL v1.2.0
-AsyncHTTPSRequest_Generic v1.4.1
+AsyncHTTPSRequest_Generic v2.0.0
 ETH MAC: A8:03:2A:A1:61:73, IPv4: 192.168.2.82, FULL_DUPLEX, 100Mbps
 
 HTTP WebClient is @ IP : 192.168.2.82
@@ -572,7 +582,7 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_WT32_ETH
 Starting AsyncHTTPSRequest_WT32_ETH01 using ESP32_DEV with ETH_PHY_LAN8720
 WebServer_WT32_ETH01 v1.4.1 for core v1.0.6-
 AsyncTCP_SSL v1.2.0
-AsyncHTTPSRequest_Generic v1.4.1
+AsyncHTTPSRequest_Generic v2.0.0
 ETH MAC: A8:03:2A:A1:61:73, IPv4: 192.168.2.232, FULL_DUPLEX, 100Mbps
 
 HTTP WebClient is @ IP : 192.168.2.232
@@ -605,7 +615,7 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_ESP_WiFi
 ```
 Starting AsyncHTTPSRequest_ESP_WiFiManager using LittleFS on ESP32C3_DEV
 ESPAsync_WiFiManager v1.12.1
-AsyncHTTPSRequest_Generic v1.4.1
+AsyncHTTPSRequest_Generic v2.0.0
 Stored: SSID = HueNet1, Pass = password
 Got stored Credentials. Timeout 120s
 ConnectMultiWiFi in setup
@@ -659,7 +669,7 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_ESP_WiFi
 ```
 Starting AsyncHTTPSRequest_ESP_WiFiManager using LittleFS on ESP32S3_DEV
 ESPAsync_WiFiManager v1.12.1
-AsyncHTTPSRequest_Generic v1.4.1
+AsyncHTTPSRequest_Generic v2.0.0
 Stored: SSID = HueNet1, Pass = password
 Got stored Credentials. Timeout 120s
 ConnectMultiWiFi in setup
@@ -695,7 +705,7 @@ The terminal output of [AsyncHTTPSRequest_ESP_Multi example](examples/AsyncHTTPS
 ```
 Starting AsyncHTTPSRequest_ESP_Multi on ESP32_DEV
 AsyncTCP_SSL v1.2.0
-AsyncHTTPSRequest_Generic v1.4.1
+AsyncHTTPSRequest_Generic v2.0.0
 Connecting to WiFi SSID: HueNet1
 .......
 AsyncHTTPSRequest @ IP : 192.168.2.88
@@ -795,6 +805,110 @@ H
 ```
 
 ---
+
+
+#### 10. AsyncHTTP_HTTPSRequest_ESP on ESP32_DEV
+
+The terminal output of [AsyncHTTP_HTTPSRequest_ESP example](examples/AsyncHTTP_HTTPSRequest_ESP) running on `ESP32_DEV` to demonstrate how to send HTTP and HTTPS requests to multiple addresses and receive responses from them. 
+
+```
+Starting AsyncHTTP_HTTPSRequest_ESP on ESP32_DEV
+AsyncTCP_SSL v1.2.0
+AsyncHTTPSRequest_Generic v2.0.0
+AsyncHTTPRequest_Generic v1.7.1
+Connecting to WiFi SSID: HueNet1
+.......
+AsyncHTTPSRequest @ IP : 192.168.2.88
+
+Sending HTTPS request: https://worldtimeapi.org/api/timezone/Europe/Prague.txt
+
+Sending HTTP request: http://worldtimeapi.org/api/timezone/America/Vancouver.txt
+
+**************************************
+abbreviation: PST
+client_ip: aaa.bbb.ccc.ddd
+datetime: 2022-02-26T21:22:16.988348-08:00
+day_of_week: 6
+day_of_year: 57
+dst: false
+dst_from: 
+dst_offset: 0
+dst_until: 
+raw_offset: -28800
+timezone: America/Vancouver
+unixtime: 1645939336
+utc_datetime: 2022-02-27T05:22:16.988348+00:00
+utc_offset: -08:00
+week_number: 8
+**************************************
+
+**************************************
+abbreviation: CET
+client_ip: aaa.bbb.ccc.ddd
+datetime: 2022-02-27T06:22:17.007202+01:00
+day_of_week: 0
+day_of_year: 58
+dst: false
+dst_from: 
+dst_offset: 0
+dst_until: 
+raw_offset: 3600
+timezone: Europe/Prague
+unixtime: 1645939337
+utc_datetime: 2022-02-27T05:22:17.007202+00:00
+utc_offset: +01:00
+week_number: 8
+**************************************
+
+Sending HTTP request: http://www.myexternalip.com/raw
+
+**************************************
+aaa.bbb.ccc.ddd
+**************************************
+
+Sending HTTPS request: https://worldtimeapi.org/api/timezone/America/Toronto.txt
+
+**************************************
+abbreviation: EST
+client_ip: aaa.bbb.ccc.ddd
+datetime: 2022-02-27T00:22:17.185617-05:00
+day_of_week: 0
+day_of_year: 58
+dst: false
+dst_from: 
+dst_offset: 0
+dst_until: 
+raw_offset: -18000
+timezone: America/Toronto
+unixtime: 1645939337
+utc_datetime: 2022-02-27T05:22:17.185617+00:00
+utc_offset: -05:00
+week_number: 8
+**************************************
+
+Sending HTTP request: http://worldtimeapi.org/api/timezone/Europe/London.txt
+
+**************************************
+abbreviation: GMT
+client_ip: aaa.bbb.ccc.ddd
+datetime: 2022-02-27T05:22:17.290540+00:00
+day_of_week: 0
+day_of_year: 58
+dst: false
+dst_from: 
+dst_offset: 0
+dst_until: 
+raw_offset: 0
+timezone: Europe/London
+unixtime: 1645939337
+utc_datetime: 2022-02-27T05:22:17.290540+00:00
+utc_offset: +00:00
+week_number: 8
+**************************************
+H
+```
+
+---
 ---
 
 
@@ -853,6 +967,9 @@ Submit issues to: [AsyncHTTPSRequest_Generic issues](https://github.com/khoih-pr
  9. Add `LittleFS` support to **ESP32-C3**
 10. Use `ESP32-core's LittleFS` library instead of `Lorol's LITTLEFS` library for ESP32 core v2.0.0+
 11. Add example [AsyncHTTPSRequest_ESP_Multi](https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/tree/main/examples/AsyncHTTPSRequest_ESP_Multi) to demonstrate how to send requests to multiple addresses and receive responses from them.
+12. Permit coexisting with AsyncHTTPRequest library to send and receive both HTTP and HTTPS
+13. Add example [AsyncHTTP_HTTPSRequest_ESP](https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/tree/main/examples/AsyncHTTP_HTTPSRequest_ESP) to demonstrate how to send HTTP and HTTPS requests to multiple addresses and receive responses from them.
+
 
 ---
 ---
@@ -863,7 +980,9 @@ Submit issues to: [AsyncHTTPSRequest_Generic issues](https://github.com/khoih-pr
 This library is based on, modified, bug-fixed and improved from:
 
 1. [Bob Lemaire's **asyncHTTPrequest Library**](https://github.com/boblemaire/asyncHTTPrequest) to use the better **asynchronous** features of the following Async SSL TCP Libraries : ( [`AsyncTCP_SSL`](https://github.com/khoih-prog/AsyncTCP_SSL) ).
-2. Thanks to [DavidAntonin](https://github.com/DavidAntonin) to report [Cannot send requests to different addresses #4](https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/issues/4) leading to new release v1.4.1 to demonstrate how to send requests to multiple addresses and receive responses from them.
+2. Thanks to [DavidAntonin](https://github.com/DavidAntonin) 
+- to report [Cannot send requests to different addresses #4](https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/issues/4) leading to new release v1.4.1 to demonstrate how to send requests to multiple addresses and receive responses from them.
+- to raise the idea and request enhancement [Pushover https post request #21](https://github.com/khoih-prog/AsyncHTTPRequest_Generic/issues/21) leading to new release v2.0.0 to permit coexisting with [AsyncHTTPRequest library](https://github.com/khoih-prog/AsyncHTTPRequest_Generic) to send and receive both HTTP and HTTPS.
 
 
 <table>

@@ -16,7 +16,7 @@
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.  
  
-  Version: 1.4.1
+  Version: 2.0.0
   
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -27,6 +27,7 @@
   1.3.0    K Hoang     23/01/2022 Enable compatibility with old code to include only AsyncHTTPSRequest_Generic.h
   1.4.0    K Hoang     11/02/2022 Add support to new ESP32-S3. Add LittleFS support to ESP32-C3. Use core LittleFS
   1.4.1    K Hoang     25/02/2022 Add example AsyncHTTPSRequest_ESP_Multi to demo connection to multiple addresses
+  2.0.0    K Hoang     27/02/2022 Breaking change to permit coexisting with AsyncHTTPRequest library. Add example to demo
  *****************************************************************************************************************************/
  
 #pragma once
@@ -38,6 +39,9 @@
 
 #define CANT_SEND_BAD_REQUEST       F("Can't send() bad request")
 
+#if !defined(ASYNC_HTTP_REQUEST_GENERIC_VERSION)
+
+// Not necessary if already defined in AsyncHTTPRequest library
 // Merge xbuf
 ////////////////////////////////////////////////////////////////////////////
 
@@ -423,6 +427,8 @@ void xbuf::remSeg()
   
   _offset = 0;
 }
+
+#endif    // #if !defined(ASYNC_HTTP_REQUEST_GENERIC_VERSION)
 
 ////////////////////////////////////////////////////////////////////////////
 
@@ -865,14 +871,14 @@ String AsyncHTTPSRequest::responseText()
 //**************************************************************************************************************
 
 #if (ESP32)
-  #define GLOBAL_STR_LEN      (32 * 1024)
+  #define HTTPS_GLOBAL_STR_LEN      (32 * 1024)
 #elif (ESP8266)
-  #define GLOBAL_STR_LEN      (16 * 1024) 
+  #define HTTPS_GLOBAL_STR_LEN      (16 * 1024) 
 #else
-  #define GLOBAL_STR_LEN      (4 * 1024)
+  #define HTTPS_GLOBAL_STR_LEN      (4 * 1024)
 #endif
 
-char globalLongString[GLOBAL_STR_LEN + 1];
+char globalLongStringHTTPS[HTTPS_GLOBAL_STR_LEN + 1];
 
 char* AsyncHTTPSRequest::responseLongText()
 {
@@ -892,24 +898,24 @@ char* AsyncHTTPSRequest::responseLongText()
 
   // String localString;
   size_t avail = available();
-  size_t lenToCopy = (avail <= GLOBAL_STR_LEN) ? avail : GLOBAL_STR_LEN;
+  size_t lenToCopy = (avail <= HTTPS_GLOBAL_STR_LEN) ? avail : HTTPS_GLOBAL_STR_LEN;
 
-  strncpy(globalLongString, _response->readString(avail).c_str(), lenToCopy );
-  globalLongString[ lenToCopy + 1 ] = 0;
+  strncpy(globalLongStringHTTPS, _response->readString(avail).c_str(), lenToCopy );
+  globalLongStringHTTPS[ lenToCopy + 1 ] = 0;
   
   _contentRead += _response->readString(avail).length();
   
-  //AHTTPS_LOGDEBUG3("responseLongText(char)", globalLongString, ", avail =", avail);
+  //AHTTPS_LOGDEBUG3("responseLongText(char)", globalLongStringHTTPS, ", avail =", avail);
   
   AHTTPS_LOGDEBUG("========= responseLongText() =======");
-  AHTTPS_LOGDEBUG1("localString =", globalLongString);
+  AHTTPS_LOGDEBUG1("localString =", globalLongStringHTTPS);
   AHTTPS_LOGDEBUG("=================================");
   AHTTPS_LOGDEBUG1("avail =", avail);
   AHTTPS_LOGDEBUG("====================================");
   
   _AHTTPS_unlock;
   
-  return globalLongString;
+  return globalLongStringHTTPS;
 }
 
 //**************************************************************************************************************
@@ -2014,5 +2020,6 @@ char* AsyncHTTPSRequest::_charstar(const __FlashStringHelper * str)
 }
 
 #endif
+
 
 #endif    // ASYNC_HTTPS_REQUEST_GENERIC_IMPL_H
