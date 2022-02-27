@@ -1,5 +1,5 @@
 /****************************************************************************************************************************
-  AsyncHTTPSRequest_ESP_Multi.ino - Dead simple AsyncHTTPSRequest for ESP8266, ESP32 and currently STM32 with built-in LAN8742A Ethernet
+  AsyncHTTP_HTTPSRequest_ESP.ino - Dead simple AsyncHTTPSRequest for ESP8266, ESP32 and currently STM32 with built-in LAN8742A Ethernet
 
   For ESP8266, ESP32 and STM32 with built-in LAN8742A Ethernet (Nucleo-144, DISCOVERY, etc)
 
@@ -41,11 +41,14 @@
 //*************************************************************************************************************
 
 #if !( defined(ESP8266) ||  defined(ESP32) )
-  #error This code is intended to run on the ESP8266 or ESP32 platform! Please check your Tools->Board setting.
+#error This code is intended to run on the ESP8266 or ESP32 platform! Please check your Tools->Board setting.
 #endif
 
 #define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v2.0.0"
 #define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             2000000
+
+#define ASYNC_HTTP_REQUEST_GENERIC_VERSION_MIN_TARGET       "AsyncHTTPRequest_Generic v1.7.1"
+#define ASYNC_HTTP_REQUEST_GENERIC_VERSION_MIN              1007001
 
 // Level from 0-4
 #define ASYNC_HTTPS_DEBUG_PORT      Serial
@@ -54,7 +57,7 @@
 #define _ASYNC_HTTPS_LOGLEVEL_      1
 
 // 300s = 5 minutes to not flooding
-#define HTTPS_REQUEST_INTERVAL      60  //300
+#define HTTPS_REQUEST_INTERVAL      120
 
 // 10s
 #define HEARTBEAT_INTERVAL          10
@@ -71,37 +74,72 @@ const char* password    = "your_pass";
 #endif
 
 // To be included only in main(), .ino with setup() to avoid `Multiple Definitions` Linker Error
+// If use both AsyncHTTPRequest_Generic and AsyncHTTPSRequest_Generic, include AsyncHTTPRequest_Generic first or error
+// because many definitions of AsyncHTTPSRequest_Generic rely on those of AsyncHTTPRequest_Generic
+#include <AsyncHTTPRequest_Generic.h>             // https://github.com/khoih-prog/AsyncHTTPRequest_Generic
 #include <AsyncHTTPSRequest_Generic.h>            // https://github.com/khoih-prog/AsyncHTTPSRequest_Generic
 
 #include <Ticker.h>
 
-#define NUM_DIFFERENT_SITES     2
+#define NUM_DIFFERENT_SITES     3
 
-const char* addreses[][NUM_DIFFERENT_SITES] = 
+const char* addreses[][NUM_DIFFERENT_SITES] =
 {
   {"https://worldtimeapi.org/api/timezone/America/Toronto.txt", "https://worldtimeapi.org/api/timezone/Europe/Prague.txt"},
-  {"https://www.myexternalip.com/raw"}
+  {"http://worldtimeapi.org/api/timezone/Europe/London.txt",    "http://worldtimeapi.org/api/timezone/America/Vancouver.txt"},
+  {"http://www.myexternalip.com/raw"}
 };
 
 #define NUM_ENTRIES_SITE_0        2
-#define NUM_ENTRIES_SITE_1        1
+#define NUM_ENTRIES_SITE_1        2
+#define NUM_ENTRIES_SITE_2        1
 
-byte reqCount[NUM_DIFFERENT_SITES]  = { NUM_ENTRIES_SITE_0, NUM_ENTRIES_SITE_1 };
-bool readySend[NUM_DIFFERENT_SITES] = { true, true };
+byte reqCount[]  = { NUM_ENTRIES_SITE_0, NUM_ENTRIES_SITE_1, NUM_ENTRIES_SITE_2 };
+bool readySend[] = { true, true, true };
 
-AsyncHTTPSRequest request[NUM_DIFFERENT_SITES];
+typedef enum
+{
+  HTTP_REQUEST    = 0,
+  HTTPS_REQUEST   = 1,
+} HTTP_Type;
 
+AsyncHTTPSRequest request0;
+AsyncHTTPRequest  request1;
+AsyncHTTPRequest  request2;
+
+typedef struct _AsyncHTTPRequestData
+{
+  void*       request;      // (void*) for AsyncHTTPRequest* or AsyncHTTPSRequest*
+  HTTP_Type   httpType;
+} AsyncHTTPRequestData;
+
+AsyncHTTPRequestData myAsyncHTTPRequestData[] =
+{
+  { (void*) &request0, HTTPS_REQUEST },
+  { (void*) &request1, HTTP_REQUEST  },
+  { (void*) &request2, HTTP_REQUEST  }
+};
+
+// This is for HTTPS and must use AsyncHTTPSRequest
 void requestCB0(void* optParm, AsyncHTTPSRequest* thisRequest, int readyState);
-void requestCB1(void* optParm, AsyncHTTPSRequest* thisRequest, int readyState);
+
+// This is for HTTP and must use AsyncHTTPRequest
+void requestCB1(void* optParm, AsyncHTTPRequest*  thisRequest, int readyState);
+
+// This is for HTTP and must use AsyncHTTPRequest
+void requestCB2(void* optParm, AsyncHTTPRequest*  thisRequest, int readyState);
 
 void sendRequest0();
 void sendRequest1();
+void sendRequest2();
 
-typedef void (*requestCallback)(void* optParm, AsyncHTTPSRequest* thisRequest, int readyState);
+typedef void (*requestCallback0)(void* optParm, AsyncHTTPSRequest* thisRequest, int readyState);
+typedef void (*requestCallback1)(void* optParm, AsyncHTTPRequest*  thisRequest, int readyState);
+
 typedef void (*sendCallback)();
 
-requestCallback requestCB     [NUM_DIFFERENT_SITES] = { requestCB0,   requestCB1   };
-sendCallback    sendRequestCB [NUM_DIFFERENT_SITES] = { sendRequest0, sendRequest1 };
+void*         requestCB     [] = { (void*) requestCB0,   (void*) requestCB1, (void*) requestCB2   };
+sendCallback  sendRequestCB [] = { sendRequest0, sendRequest1, sendRequest2 };
 
 Ticker ticker;
 Ticker ticker1;
@@ -132,18 +170,36 @@ void sendRequest(uint16_t index)
 
   reqCount[index]--;
   readySend[index] = false;
-  
-  requestOpenResult = request[index].open("GET", addreses[index][reqCount[index]]);
 
-  if (requestOpenResult)
+  if ( myAsyncHTTPRequestData[index].httpType == HTTPS_REQUEST )
   {
-    // Only send() if open() returns true, or crash
-    Serial.print("\nSending request: ");
-    request[index].send();
+    requestOpenResult = ((AsyncHTTPSRequest *) myAsyncHTTPRequestData[index].request)->open("GET", addreses[index][reqCount[index]]);
+    
+    if (requestOpenResult)
+    {
+      // Only send() if open() returns true, or crash
+      Serial.print("\nSending HTTPS request: ");
+      ((AsyncHTTPSRequest *) myAsyncHTTPRequestData[index].request)->send();
+    }
+    else
+    {
+      Serial.print("\nCan't send bad HTTPS request : ");
+    }
   }
-  else
+  else if ( myAsyncHTTPRequestData[index].httpType == HTTP_REQUEST )
   {
-    Serial.print("\nCan't send bad request : ");
+    requestOpenResult = ((AsyncHTTPRequest *) myAsyncHTTPRequestData[index].request)->open("GET", addreses[index][reqCount[index]]);
+
+    if (requestOpenResult)
+    {
+      // Only send() if open() returns true, or crash
+      Serial.print("\nSending HTTP request: ");
+      ((AsyncHTTPRequest *) myAsyncHTTPRequestData[index].request)->send();
+    }
+    else
+    {
+      Serial.print("\nCan't send bad HTTP request : ");
+    }
   }
 
   Serial.println(addreses[index][reqCount[index]]);
@@ -159,17 +215,24 @@ void sendRequest1()
   sendRequest(1);
 }
 
+void sendRequest2()
+{
+  sendRequest(2);
+}
+
 void sendRequests()
 {
   for (int index = 0; index < NUM_DIFFERENT_SITES; index++)
   {
     reqCount[index] = 2;
   }
+  
   reqCount[0] = NUM_ENTRIES_SITE_0;
   reqCount[1] = NUM_ENTRIES_SITE_1;
+  reqCount[2] = NUM_ENTRIES_SITE_2;
 }
 
-
+// This is for HTTPS and must use AsyncHTTPSRequest
 void requestCB0(void* optParm, AsyncHTTPSRequest* thisRequest, int readyState)
 {
   (void) optParm;
@@ -185,7 +248,8 @@ void requestCB0(void* optParm, AsyncHTTPSRequest* thisRequest, int readyState)
   }
 }
 
-void requestCB1(void* optParm, AsyncHTTPSRequest* thisRequest, int readyState)
+// This is for HTTP and must use AsyncHTTPRequest
+void requestCB1(void* optParm, AsyncHTTPRequest* thisRequest, int readyState)
 {
   (void) optParm;
 
@@ -199,6 +263,21 @@ void requestCB1(void* optParm, AsyncHTTPSRequest* thisRequest, int readyState)
     readySend[1] = true;
   }
 }
+// This is for HTTP and must use AsyncHTTPRequest
+void requestCB2(void* optParm, AsyncHTTPRequest* thisRequest, int readyState)
+{
+  (void) optParm;
+
+  if (readyState == readyStateDone)
+  {
+    Serial.println("\n**************************************");
+    Serial.println(thisRequest->responseText());
+    Serial.println("**************************************");
+
+    thisRequest->setDebug(false);
+    readySend[2] = true;
+  }
+}
 
 void setup()
 {
@@ -206,7 +285,7 @@ void setup()
   Serial.begin(115200);
   while (!Serial);
 
-  Serial.print("\nStarting AsyncHTTPSRequest_ESP_Multi on ");  Serial.println(ARDUINO_BOARD);
+  Serial.print("\nStarting AsyncHTTP_HTTPSRequest_ESP on ");  Serial.println(ARDUINO_BOARD);
 
 #if defined(ESP32)
   Serial.println(ASYNC_TCP_SSL_VERSION);
@@ -215,12 +294,21 @@ void setup()
 #endif
 
   Serial.println(ASYNC_HTTPS_REQUEST_GENERIC_VERSION);
+  Serial.println(ASYNC_HTTP_REQUEST_GENERIC_VERSION);
 
 #if defined(ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN)
   if (ASYNC_HTTPS_REQUEST_GENERIC_VERSION_INT < ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN)
   {
     Serial.print(F("Warning. Must use this example on Version equal or later than : "));
     Serial.println(ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET);
+  }
+#endif
+
+#if defined(ASYNC_HTTP_REQUEST_GENERIC_VERSION_MIN)
+  if (ASYNC_HTTP_REQUEST_GENERIC_VERSION_INT < ASYNC_HTTP_REQUEST_GENERIC_VERSION_MIN)
+  {
+    Serial.print(F("Warning. Must use this example on Version equal or later than : "));
+    Serial.println(ASYNC_HTTP_REQUEST_GENERIC_VERSION_MIN_TARGET);
   }
 #endif
 
@@ -241,9 +329,16 @@ void setup()
 
   for (int index = 0; index < NUM_DIFFERENT_SITES; index++)
   {
-    request[index].setDebug(false);
-
-    request[index].onReadyStateChange(requestCB[index]); 
+    if ( myAsyncHTTPRequestData[index].httpType == HTTPS_REQUEST )
+    {
+      ((AsyncHTTPSRequest *) myAsyncHTTPRequestData[index].request)->setDebug(false);
+      ((AsyncHTTPSRequest *) myAsyncHTTPRequestData[index].request)->onReadyStateChange( (requestCallback0) requestCB[index]);
+    }
+    else if ( myAsyncHTTPRequestData[index].httpType == HTTP_REQUEST )
+    {
+      ((AsyncHTTPRequest *) myAsyncHTTPRequestData[index].request)->setDebug(false);
+      ((AsyncHTTPRequest *) myAsyncHTTPRequestData[index].request)->onReadyStateChange((requestCallback1) requestCB[index]);
+    }
   }
 
   ticker.attach(HTTPS_REQUEST_INTERVAL, sendRequests);

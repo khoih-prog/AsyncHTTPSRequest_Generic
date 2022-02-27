@@ -44,8 +44,8 @@
   #error This code is intended to run on the ESP32 platform! Please check your Tools->Board setting.
 #endif
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v1.4.0"
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             1004000
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v2.0.0"
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             2000000
 
 // Level from 0-4
 #define ASYNC_HTTPS_DEBUG_PORT          Serial
@@ -137,7 +137,7 @@ void requestCB(void* optParm, AsyncHTTPSRequest* request, int readyState)
 {
   (void) optParm;
   
-  if (readyState == readyStateDone) 
+  if (readyState == readyStateDone)
   {
     Serial.println(F("\n**************************************"));
     Serial.println(request->responseText());
