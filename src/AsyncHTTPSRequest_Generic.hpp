@@ -16,7 +16,7 @@
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.  
  
-  Version: 2.0.0
+  Version: 2.0.1
   
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -28,6 +28,7 @@
   1.4.0    K Hoang     11/02/2022 Add support to new ESP32-S3. Add LittleFS support to ESP32-C3. Use core LittleFS
   1.4.1    K Hoang     25/02/2022 Add example AsyncHTTPSRequest_ESP_Multi to demo connection to multiple addresses
   2.0.0    K Hoang     27/02/2022 Breaking change to permit coexisting with AsyncHTTPRequest library. Add example to demo
+  2.0.1    K Hoang     24/03/2022 Increase DEFAULT_RX_TIMEOUT to 30s from 3s for slower networks
  *****************************************************************************************************************************/
 
 #pragma once
@@ -39,13 +40,13 @@
   #error This AsyncHTTPSRequest library is currently supporting only ESP32
 #endif
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION             "AsyncHTTPSRequest_Generic v2.0.0"
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION             "AsyncHTTPSRequest_Generic v2.0.1"
 
 #define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MAJOR       2
 #define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MINOR       0
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_PATCH       0
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_PATCH       1
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_INT         2000000
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_INT         2000001
 
 #include <Arduino.h>
 
@@ -76,7 +77,7 @@
 #include <functional>
 #include <vector>
 
-#define SHA1_SIZE 20
+#define SHA1_SIZE 								20
 //////
 
 #if ESP32
@@ -233,7 +234,7 @@ class xbuf: public Print
     DEBUG_IOTA_PORT.printf("Debug(%3ld): ", millis()-_requestStartTime);\
     DEBUG_IOTA_PORT.printf_P(PSTR(format),##__VA_ARGS__);}
 
-#define DEFAULT_RX_TIMEOUT 3                    // Seconds for timeout
+#define DEFAULT_RX_TIMEOUT 						30                    // Seconds for timeout
 
 #define HTTPCODE_CONNECTION_REFUSED  (-1)
 #define HTTPCODE_SEND_HEADER_FAILED  (-2)
