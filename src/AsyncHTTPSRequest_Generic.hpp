@@ -234,7 +234,7 @@ class xbuf: public Print
     DEBUG_IOTA_PORT.printf("Debug(%3ld): ", millis()-_requestStartTime);\
     DEBUG_IOTA_PORT.printf_P(PSTR(format),##__VA_ARGS__);}
 
-#define DEFAULT_RX_TIMEOUT 						30                    // Seconds for timeout
+#define DEFAULT_RX_TIMEOUT           30                    // Seconds for timeout
 
 #define HTTPCODE_CONNECTION_REFUSED  (-1)
 #define HTTPCODE_SEND_HEADER_FAILED  (-2)
