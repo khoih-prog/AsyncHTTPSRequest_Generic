@@ -1,9 +1,9 @@
 /****************************************************************************************************************************
   AsyncHTTPSRequest_Impl_Generic.h
   
-  For ESP32, ESP8266 and STM32 with built-in LAN8742A Ethernet (Nucleo-144, DISCOVERY, etc)
+  For ESP32, future ESP8266
   
-  AsyncHTTPSRequest is a library for the ESP8266, ESP32 and currently STM32 run built-in Ethernet WebServer
+  AsyncHTTPSRequest is a library for the ESP32, ESP8266 (not-yet ready)
   
   Based on and modified from AsyncHTTPRequest Library (https://github.com/boblemaire/asyncHTTPrequest)
   
@@ -14,9 +14,10 @@
   as published bythe Free Software Foundation, either version 3 of the License, or (at your option) any later version.
   This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-  You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.  
+  You should have received a copy of the GNU General Public License along with this program. 
+  If not, see <https://www.gnu.org/licenses/>.  
  
-  Version: 2.0.1
+  Version: 2.1.0
   
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -29,6 +30,7 @@
   1.4.1    K Hoang     25/02/2022 Add example AsyncHTTPSRequest_ESP_Multi to demo connection to multiple addresses
   2.0.0    K Hoang     27/02/2022 Breaking change to permit coexisting with AsyncHTTPRequest library. Add example to demo
   2.0.1    K Hoang     24/03/2022 Increase DEFAULT_RX_TIMEOUT to 30s from 3s for slower networks
+  2.1.0    K Hoang     30/08/2022 Fix bug. Improve debug messages. Optimize code.
  *****************************************************************************************************************************/
  
 #pragma once
@@ -308,14 +310,14 @@ String xbuf::readString(int endPos)
   if ( ! result.reserve(endPos + 1)) 
   {
     // KH, to remove
-    AHTTPS_LOGDEBUG1("xbuf::readString: can't reserve size = ", endPos + 1);
+    //AHTTPS_LOGERROR1(F("xbuf::readString: can't reserve size ="), endPos + 1);
     ///////
       
     return result;
   }
   
   // KH, to remove
-  AHTTPS_LOGDEBUG1("xbuf::readString: Reserved size = ", endPos + 1);
+  //AHTTPS_LOGDEBUG1(F("xbuf::readString: Reserved size ="), endPos + 1);
   ///////
   
   if (endPos > _used) 
@@ -390,10 +392,14 @@ void xbuf::addSeg()
     _tail->next = (xseg*) new uint32_t[_segSize / 4 + 1];
     
     if (_tail->next == NULL)
-      AHTTPS_LOGERROR("xbuf::addSeg: error new 1");
-    
-    // KH, Must check NULL here
-    _tail = _tail->next;
+    {
+      AHTTPS_LOGERROR(F("xbuf::addSeg: error new 1"));
+    }  
+    else  
+    {
+      // KH, Must check NULL here
+      _tail = _tail->next;
+    }
   }
   else 
   {
@@ -401,7 +407,7 @@ void xbuf::addSeg()
     _tail = _head = (xseg*) new uint32_t[_segSize / 4 + 1];
     
     if (_tail == NULL)
-      AHTTPS_LOGERROR("xbuf::addSeg: error new 2");
+      AHTTPS_LOGERROR(F("xbuf::addSeg: error new 2"));
   }
   
   // KH, Must check NULL here
@@ -476,7 +482,7 @@ void AsyncHTTPSRequest::setDebug(bool debug)
   {
     _debug = true;
 
-    AHTTPS_LOGDEBUG3("setDebug(", debug ? "on" : "off", ") version", ASYNC_HTTPS_REQUEST_GENERIC_VERSION);
+    AHTTPS_LOGDEBUG3(F("setDebug("), debug ? F("on") : F("off"), F(") version"), ASYNC_HTTPS_REQUEST_GENERIC_VERSION);
   }
   
   _debug = debug;
@@ -510,11 +516,11 @@ AsyncHTTPSRequest& AsyncHTTPSRequest::addServerFingerprint(const uint8_t* finger
 //**************************************************************************************************************
 bool  AsyncHTTPSRequest::open(const char* method, const char* URL)
 {
-  AHTTPS_LOGDEBUG3("open(", method, ", url =", URL);
+  AHTTPS_LOGDEBUG3(F("open("), method, F(", url ="), URL);
 
   if (_readyState != readyStateUnsent && _readyState != readyStateDone)
   {
-    AHTTPS_LOGDEBUG("open: not ready");
+    AHTTPS_LOGERROR(F("open: not ready"));
     
     return false;
   }
@@ -568,7 +574,7 @@ bool  AsyncHTTPSRequest::open(const char* method, const char* URL)
   //////
   else
   {
-    AHTTPS_LOGDEBUG("open: Bad method");
+    AHTTPS_LOGERROR(F("open: Bad method"));
     
     return false;
   }
@@ -576,14 +582,14 @@ bool  AsyncHTTPSRequest::open(const char* method, const char* URL)
 
   if (!_parseURL(URL))
   {
-    AHTTPS_LOGDEBUG("open: error parsing URL");
+    AHTTPS_LOGERROR(F("open: error parsing URL"));
     
     return false;
   }
   
   if ( _client && _client->connected() && (strcmp(_URL->host, _connectedHost) != 0 || _URL->port != _connectedPort))
   {
-    AHTTPS_LOGDEBUG("open: not connected");
+    AHTTPS_LOGERROR(F("open: not connected"));
     
     return false;
   }
@@ -595,7 +601,7 @@ bool  AsyncHTTPSRequest::open(const char* method, const char* URL)
     sprintf(hostName, "%s:%d", _URL->host, _URL->port);
     _addHeader("host", hostName);
     
-    AHTTPS_LOGDEBUG1("open: connecting to hostname =", hostName);
+    AHTTPS_LOGDEBUG1(F("open: connecting to hostname ="), hostName);
     
     SAFE_DELETE_ARRAY(hostName)
     
@@ -609,7 +615,7 @@ bool  AsyncHTTPSRequest::open(const char* method, const char* URL)
   }
   else
   {
-    AHTTPS_LOGDEBUG("open: error alloc");
+    AHTTPS_LOGERROR(F("open: error alloc"));
     
     return false;
   }
@@ -624,7 +630,7 @@ void AsyncHTTPSRequest::onReadyStateChange(readyStateChangeCB cb, void* arg)
 //**************************************************************************************************************
 void  AsyncHTTPSRequest::setTimeout(int seconds) 
 {
-  AHTTPS_LOGDEBUG1("setTimeout = ", seconds);
+  AHTTPS_LOGDEBUG1(F("setTimeout ="), seconds);
 
   _timeout = seconds;
 }
@@ -632,17 +638,15 @@ void  AsyncHTTPSRequest::setTimeout(int seconds)
 //**************************************************************************************************************
 bool  AsyncHTTPSRequest::send() 
 { 
-  // New in v1.1.1
   if (_requestReadyToSend)
   {
-    AHTTPS_LOGDEBUG("send()");
+    AHTTPS_LOGDEBUG(F("send()"));
   }
   else
   {
-    AHTTPS_LOGDEBUG1("send() :", CANT_SEND_BAD_REQUEST);
+    AHTTPS_LOGERROR(CANT_SEND_BAD_REQUEST);
     return false;
   }
-  //////
 
   MUTEX_LOCK(false)
   
@@ -659,17 +663,15 @@ bool  AsyncHTTPSRequest::send()
 //**************************************************************************************************************
 bool AsyncHTTPSRequest::send(const String& body)
 {
-  // New in v1.1.1
   if (_requestReadyToSend)
   {
-    AHTTPS_LOGDEBUG3("send(String)", body.substring(0, 16).c_str(), ", length =", body.length());
+    AHTTPS_LOGDEBUG3(F("send(String)"), body.substring(0, 16).c_str(), F(", length ="), body.length());
   }
   else
   {
-    AHTTPS_LOGDEBUG1("send(String) :", CANT_SEND_BAD_REQUEST);
+    AHTTPS_LOGERROR(CANT_SEND_BAD_REQUEST);
     return false;
   }
-  //////
 
   MUTEX_LOCK(false)
   
@@ -693,14 +695,13 @@ bool AsyncHTTPSRequest::send(const String& body)
 //**************************************************************************************************************
 bool  AsyncHTTPSRequest::send(const char* body) 
 {
-  // New in v1.1.1
   if (_requestReadyToSend)
   {
-    AHTTPS_LOGDEBUG3("send(char)", body, ", length =", strlen(body));
+    AHTTPS_LOGDEBUG3(F("send(char)"), body, F(", length ="), strlen(body));
   }
   else
   {
-    AHTTPS_LOGDEBUG1("send(char) :", CANT_SEND_BAD_REQUEST);
+    AHTTPS_LOGERROR(CANT_SEND_BAD_REQUEST);
     return false;
   }
   //////
@@ -727,14 +728,13 @@ bool  AsyncHTTPSRequest::send(const char* body)
 //**************************************************************************************************************
 bool  AsyncHTTPSRequest::send(const uint8_t* body, size_t len)
 {
-  // New in v1.1.1
   if (_requestReadyToSend)
   {
-    AHTTPS_LOGDEBUG3("send(char, len)", (char*) body, ", length =", len);
+    AHTTPS_LOGDEBUG3(F("send(char)"), (char*) body, F(", length ="), len);
   }
   else
   {
-    AHTTPS_LOGDEBUG1("send(char, len) :", CANT_SEND_BAD_REQUEST);
+    AHTTPS_LOGERROR(CANT_SEND_BAD_REQUEST);
     return false;
   }
   //////
@@ -761,14 +761,13 @@ bool  AsyncHTTPSRequest::send(const uint8_t* body, size_t len)
 //**************************************************************************************************************
 bool AsyncHTTPSRequest::send(xbuf* body, size_t len)
 {
-  // New in v1.1.1
   if (_requestReadyToSend)
   {
-    AHTTPS_LOGDEBUG3("send(xbuf)", body->peekString(16).c_str(), ", length =", len);
+    AHTTPS_LOGDEBUG3(F("send(xbuf)"), body->peekString(16).c_str(), F(", length ="), len);
   }
   else
   {
-    AHTTPS_LOGDEBUG1("send(xbuf, len) :", CANT_SEND_BAD_REQUEST);
+    AHTTPS_LOGERROR(CANT_SEND_BAD_REQUEST);
     return false;
   }
   //////
@@ -795,7 +794,7 @@ bool AsyncHTTPSRequest::send(xbuf* body, size_t len)
 //**************************************************************************************************************
 void AsyncHTTPSRequest::abort()
 {
-  AHTTPS_LOGDEBUG("abort()");
+  AHTTPS_LOGERROR(F("abort()"));
 
   if (! _client)
   {
@@ -821,49 +820,120 @@ int AsyncHTTPSRequest::responseHTTPcode()
 }
 
 //**************************************************************************************************************
+String AsyncHTTPSRequest::responseHTTPString()
+{
+	switch(_HTTPcode)
+	{
+		case 0: 						
+		  return F("OK");
+		case HTTPCODE_CONNECTION_REFUSED: 
+		  return F("CONNECTION_REFUSED");
+		case HTTPCODE_SEND_HEADER_FAILED: 
+		  return F("SEND_HEADER_FAILED");
+		case HTTPCODE_SEND_PAYLOAD_FAILED: 
+		  return F("SEND_PAYLOAD_FAILED");
+		case HTTPCODE_NOT_CONNECTED: 
+		  return F("NOT_CONNECTED");
+		case HTTPCODE_CONNECTION_LOST: 
+		  return F("CONNECTION_LOST");
+		case HTTPCODE_NO_STREAM: 
+		  return F("NO_STREAM");
+		case HTTPCODE_NO_HTTP_SERVER: 
+		  return F("NO_HTTP_SERVER");
+		case HTTPCODE_TOO_LESS_RAM: 
+		  return F("TOO_LESS_RAM");
+		case HTTPCODE_ENCODING: 
+		  return F("ENCODING");
+		case HTTPCODE_STREAM_WRITE: 
+		  return F("STREAM_WRITE");
+		case HTTPCODE_TIMEOUT: 
+		  return F("TIMEOUT");
+		  
+		// HTTP positive code  
+		case 100: return F("Continue");
+    case 101: return F("Switching Protocols");
+    case 200: return F("HTTP OK");
+    case 201: return F("Created");
+    case 202: return F("Accepted");
+    case 203: return F("Non-Authoritative Information");
+    case 204: return F("No Content");
+    case 205: return F("Reset Content");
+    case 206: return F("Partial Content");
+    case 300: return F("Multiple Choices");
+    case 301: return F("Moved Permanently");
+    case 302: return F("Found");
+    case 303: return F("See Other");
+    case 304: return F("Not Modified");
+    case 305: return F("Use Proxy");
+    case 307: return F("Temporary Redirect");
+    case 400: return F("Bad Request");
+    case 401: return F("Unauthorized");
+    case 402: return F("Payment Required");
+    case 403: return F("Forbidden");
+    case 404: return F("Not Found");
+    case 405: return F("Method Not Allowed");
+    case 406: return F("Not Acceptable");
+    case 407: return F("Proxy Authentication Required");
+    case 408: return F("Request Time-out");
+    case 409: return F("Conflict");
+    case 410: return F("Gone");
+    case 411: return F("Length Required");
+    case 412: return F("Precondition Failed");
+    case 413: return F("Request Entity Too Large");
+    case 414: return F("Request-URI Too Large");
+    case 415: return F("Unsupported Media Type");
+    case 416: return F("Requested range not satisfiable");
+    case 417: return F("Expectation Failed");
+    case 500: return F("Internal Server Error");
+    case 501: return F("Not Implemented");
+    case 502: return F("Bad Gateway");
+    case 503: return F("Service Unavailable");
+    case 504: return F("Gateway Time-out");
+    case 505: return F("HTTP Version not supported");  
+		default: return "UNKNOWN";
+	}
+}
+
+//**************************************************************************************************************
 String AsyncHTTPSRequest::responseText()
 {
-  AHTTPS_LOGDEBUG("responseText()");
+  AHTTPS_LOGDEBUG(F("responseText()"));
 
   MUTEX_LOCK(String())
   
   if ( ! _response || _readyState < readyStateLoading || ! available())
   {
-    AHTTPS_LOGDEBUG("responseText() no data");
+    AHTTPS_LOGERROR(F("responseText() no data"));
 
     _AHTTPS_unlock;
     
     return String();
   }
 
-  String localString;
   size_t avail = available();
-
-  if ( ! localString.reserve(avail))
+ 
+  String localString = _response->readString(avail);
+  
+  if (localString.length() < avail) 
   {
-    AHTTPS_LOGDEBUG("responseText() no buffer");
-
+    AHTTPS_LOGERROR(F("!responseText() no buffer"))
     _HTTPcode = HTTPCODE_TOO_LESS_RAM;
     _client->abort();
-    
     _AHTTPS_unlock;
     
     return String();
   }
   
-  localString   = _response->readString(avail);
   _contentRead += localString.length();
-
-  //AHTTPS_LOGDEBUG3("responseText(char)", localString.substring(0, 16).c_str(), ", avail =", avail);
-  //AHTTPS_LOGDEBUG3("responseText(char)", localString, ", avail =", avail);
   
-  AHTTPS_LOGDEBUG("========= responseText(char) =======");
-  AHTTPS_LOGDEBUG1("localString =", localString);
-  AHTTPS_LOGDEBUG("=================================");
-  AHTTPS_LOGDEBUG1("avail =", avail);
-  AHTTPS_LOGDEBUG("====================================");
+  AHTTPS_LOGDEBUG3(F("responseText() ="), localString.substring(0,16), F(", size ="), avail);
+   
+  //AHTTPS_LOGDEBUG("========= responseText(char) =======");
+  //AHTTPS_LOGDEBUG1("localString =", localString);
+  //AHTTPS_LOGDEBUG("=================================");
+  //AHTTPS_LOGDEBUG1("avail =", avail);
+  //AHTTPS_LOGDEBUG("====================================");
   
-
   _AHTTPS_unlock;
   
   return localString;
@@ -883,21 +953,19 @@ char globalLongStringHTTPS[HTTPS_GLOBAL_STR_LEN + 1];
 
 char* AsyncHTTPSRequest::responseLongText()
 {
-  AHTTPS_LOGDEBUG("responseLongText()");
+  AHTTPS_LOGDEBUG(F("responseLongText()"));
 
   MUTEX_LOCK(NULL)
   
   if ( ! _response || _readyState < readyStateLoading || ! available())
   {
-    AHTTPS_LOGDEBUG("responseText() no data");
+    AHTTPS_LOGERROR(F("responseText() no data"));
 
     _AHTTPS_unlock;
     
-    //return String();
     return NULL;
   }
 
-  // String localString;
   size_t avail = available();
   size_t lenToCopy = (avail <= HTTPS_GLOBAL_STR_LEN) ? avail : HTTPS_GLOBAL_STR_LEN;
 
@@ -906,13 +974,13 @@ char* AsyncHTTPSRequest::responseLongText()
   
   _contentRead += _response->readString(avail).length();
   
-  //AHTTPS_LOGDEBUG3("responseLongText(char)", globalLongStringHTTPS, ", avail =", avail);
+  //AHTTPS_LOGDEBUG3(F("responseLongText(char)"), globalLongStringHTTPS, F(", avail ="), avail);
   
-  AHTTPS_LOGDEBUG("========= responseLongText() =======");
-  AHTTPS_LOGDEBUG1("localString =", globalLongStringHTTPS);
-  AHTTPS_LOGDEBUG("=================================");
-  AHTTPS_LOGDEBUG1("avail =", avail);
-  AHTTPS_LOGDEBUG("====================================");
+  AHTTPS_LOGDEBUG(F("========= responseLongText() ======="));
+  AHTTPS_LOGDEBUG1(F("localString ="), globalLongStringHTTPS);
+  AHTTPS_LOGDEBUG(F("================================="));
+  AHTTPS_LOGDEBUG1(F("avail ="), avail);
+  AHTTPS_LOGDEBUG(F("===================================="));
   
   _AHTTPS_unlock;
   
@@ -924,7 +992,7 @@ size_t AsyncHTTPSRequest::responseRead(uint8_t* buf, size_t len)
 {
   if ( ! _response || _readyState < readyStateLoading || ! available())
   {
-    AHTTPS_LOGDEBUG("responseRead() no data");
+    AHTTPS_LOGERROR(F("responseRead() no data"));
 
     return 0;
   }
@@ -934,7 +1002,7 @@ size_t AsyncHTTPSRequest::responseRead(uint8_t* buf, size_t len)
   size_t avail = available() > len ? len : available();
   _response->read(buf, avail);
 
-  AHTTPS_LOGDEBUG3("responseRead(char)", (char*) buf, ", avail =", avail);
+  AHTTPS_LOGDEBUG3(F("responseRead(char)"), (char*) buf, F(", avail ="), avail);
 
   _contentRead += avail;
   
@@ -969,7 +1037,7 @@ size_t  AsyncHTTPSRequest::responseLength()
 //**************************************************************************************************************
 void  AsyncHTTPSRequest::onData(onDataCB cb, void* arg)
 {
-  AHTTPS_LOGDEBUG("onData() CB set");
+  AHTTPS_LOGDEBUG(F("onData() CB set"));
 
   _onDataCB = cb;
   _onDataCBarg = arg;
@@ -1084,8 +1152,8 @@ bool  AsyncHTTPSRequest::_parseURL(const String& url)
   
   strcpy(_URL->query, url.substring(queryBeg).c_str());
 
-  AHTTPS_LOGDEBUG2("_parseURL(): scheme+host", _URL->scheme, _URL->host);
-  AHTTPS_LOGDEBUG3("_parseURL(): port+path+query", _URL->port, _URL->path, _URL->query);
+  AHTTPS_LOGDEBUG2(F("_parseURL(): scheme+host"), _URL->scheme, _URL->host);
+  AHTTPS_LOGDEBUG3(F("_parseURL(): port+path+query"), _URL->port, _URL->path, _URL->query);
 
   return true;
 }
@@ -1093,7 +1161,7 @@ bool  AsyncHTTPSRequest::_parseURL(const String& url)
 //**************************************************************************************************************
 bool  AsyncHTTPSRequest::_connect()
 {
-  AHTTPS_LOGDEBUG("_connect()");
+  AHTTPS_LOGDEBUG(F("_connect()"));
 
   if ( ! _client)
   {
@@ -1135,18 +1203,22 @@ bool  AsyncHTTPSRequest::_connect()
 
   if ( ! _client->connected())
   {
+    AHTTPS_LOGDEBUG3(F("_client->connecting to"), _URL->host, F(","), _URL->port);
+    
     // KH, for HTTPS
-    //if ( ! _client->connect(_URL->host, _URL->port))
-    //if ( ! _client->connect(_URL->host, _URL->port, false))
     if ( ! _client->connect(_URL->host, _URL->port, true))
     //////
     {
-      AHTTPS_LOGDEBUG3("client.connect failed:", _URL->host, ",", _URL->port);
+      AHTTPS_LOGERROR3(F("client.connect failed:"), _URL->host, F(","), _URL->port);
 
       _HTTPcode = HTTPCODE_NOT_CONNECTED;
       _setReadyState(readyStateDone);
 
       return false;
+    }
+    else
+    {
+      AHTTPS_LOGDEBUG3(F("client.connect OK to"), _URL->host, F(","), _URL->port);
     }
   }
   else
@@ -1155,6 +1227,8 @@ bool  AsyncHTTPSRequest::_connect()
   }
 
   _lastActivity = millis();
+  
+  AHTTPS_LOGDEBUG(F("_connect() true"));
 
   return true;
 }
@@ -1162,7 +1236,7 @@ bool  AsyncHTTPSRequest::_connect()
 //**************************************************************************************************************
 bool   AsyncHTTPSRequest::_buildRequest()
 {
-  AHTTPS_LOGDEBUG("_buildRequest()");
+  AHTTPS_LOGDEBUG(F("_buildRequest()"));
 
   // Build the header.
   if ( ! _request)
@@ -1173,56 +1247,52 @@ bool   AsyncHTTPSRequest::_buildRequest()
       return false;
   }
 
-  // New in v1.1.1
-  AHTTPS_LOGDEBUG1("_HTTPmethod =", _HTTPmethod);
-  AHTTPS_LOGDEBUG3(_HTTPmethodStringwithSpace[_HTTPmethod], _URL->path, _URL->query, "HTTP/1.1\r\n" );
-  //////
+  AHTTPS_LOGDEBUG1(F("_HTTPmethod ="), _HTTPmethod);
+  AHTTPS_LOGDEBUG3(_HTTPmethodStringwithSpace[_HTTPmethod], _URL->path, _URL->query, F("HTTP/1.1\r\n") );
   
-   AHTTPS_LOGDEBUG1("write _HTTPmethodStringwithSpace : ", _HTTPmethodStringwithSpace[_HTTPmethod]);
-  // New in v1.1.0
+  AHTTPS_LOGDEBUG1(F("write _HTTPmethodStringwithSpace :"), _HTTPmethodStringwithSpace[_HTTPmethod]);
   _request->write(_HTTPmethodStringwithSpace[_HTTPmethod]);
-  //////
   
-  AHTTPS_LOGDEBUG1("write path : ", _URL->path);
+  AHTTPS_LOGDEBUG1(F("write path :"), _URL->path);
   _request->write(_URL->path);
   
-  AHTTPS_LOGDEBUG1("write query", _URL->query);
+  AHTTPS_LOGDEBUG1(F("write query"), _URL->query);
   _request->write(_URL->query);
   
-  AHTTPS_LOGDEBUG("write HTTP/1.1");
+  AHTTPS_LOGDEBUG(F("write HTTP/1.1"));
   _request->write(" HTTP/1.1\r\n");
      
-  // KH, comment out or crash, why ??? To check   
+  // KH, comment out or crash, why ??? To check for possible memory leak
   //SAFE_DELETE(_URL)
   //////
 
   _URL = nullptr;
   header* hdr = _headers;
 
-  AHTTPS_LOGDEBUG("To write hdr");
+  AHTTPS_LOGDEBUG(F("To write hdr"));
   
   while (hdr)
   {
-    AHTTPS_LOGDEBUG("hdr->name");
+    AHTTPS_LOGDEBUG(F("hdr->name"));
     _request->write(hdr->name);
     _request->write(':');
-    AHTTPS_LOGDEBUG("hdr->value");
+    AHTTPS_LOGDEBUG(F("hdr->value"));
     _request->write(hdr->value);
     _request->write("\r\n");
     
-    AHTTPS_LOGDEBUG3(hdr->name, ":", hdr->value, "\r\n" );
+    AHTTPS_LOGDEBUG3(hdr->name, F(":"), hdr->value, F("\r\n"));
     
     hdr = hdr->next;
   }
   
-  AHTTPS_LOGDEBUG("Write hdr done");
+  AHTTPS_LOGDEBUG(F("Write hdr done"));
 
   SAFE_DELETE(_headers)
   
   _headers = nullptr;
   _request->write("\r\n");
   
-  AHTTPS_LOGDEBUG("_buildRequest() done");
+  AHTTPS_LOGDEBUG(F("_buildRequest() done"));
 
   return true;
 }
@@ -1233,24 +1303,22 @@ size_t  AsyncHTTPSRequest::_send()
   if ( ! _request)
     return 0;
 
-  //AHTTPS_LOGDEBUG1("_send(), _request->available =", _request->available());
-
-  //if ( ! _client->connected() || ! _client->canSend())
-  //{
-  //  AHTTPS_LOGDEBUG("*can't send");
-
-  //  return 0;
-  //}
+  AHTTPS_LOGDEBUG1(F("_send(), _request->available ="), _request->available());
   
-  if ( ! _client->connected() )
+  if ( ! _client->connected())
   {
-    //AHTTPS_LOGDEBUG("_send: !_client->connected()");
+    AHTTPS_LOGDEBUG(F("!connected yet"));
+    
+    // KH fix bug https://github.com/khoih-prog/AsyncHTTPRequest_Generic/issues/38
+    _HTTPcode = HTTPCODE_NOT_CONNECTED;
+    _setReadyState(readyStateUnsent);
+    ///////////////////////////
 
     return 0;
   }
-  else if ( ! _client->canSend() )
+  else if ( ! _client->canSend())
   {
-    //AHTTPS_LOGDEBUG("_send: !_client->canSend()");
+    AHTTPS_LOGDEBUG(F("*can't send"));
 
     return 0;
   }
@@ -1264,7 +1332,7 @@ size_t  AsyncHTTPSRequest::_send()
   size_t sent = 0;
   
   #define TEMP_SIZE       256
-  //uint8_t* temp = new uint8_t[100];
+
   uint8_t* temp = new uint8_t[TEMP_SIZE + 1];
   
   if (!temp)
@@ -1272,38 +1340,36 @@ size_t  AsyncHTTPSRequest::_send()
 
   while (supply)
   {
-    //size_t chunk = supply < 100 ? supply : 100;
     size_t chunk = supply < TEMP_SIZE ? supply : TEMP_SIZE;
     
-    //AHTTPS_LOGDEBUG3("supply =", supply, ", chunk =", chunk);
+    //AHTTPS_LOGDEBUG3(F("supply ="), supply, F(", chunk ="), chunk);
     
     memset(temp, 0, sizeof(temp));
     
     supply  -= _request->read(temp, chunk);
     
-    //AHTTPS_LOGDEBUG1("temp =", (char*)temp);
+    //AHTTPS_LOGDEBUG1(F("temp ="), (char*)temp);
     
     sent    += _client->add((char*)temp, chunk);
   }
   
-  AHTTPS_LOGDEBUG("Done supply");
+  AHTTPS_LOGDEBUG(F("Done supply"));
 
   // KH, Must be delete [] temp;
   SAFE_DELETE_ARRAY(temp)
 
   if (_request->available() == 0)
   {
-    //delete _request;
     SAFE_DELETE(_request)
     
     _request = nullptr;
   }
   
-  AHTTPS_LOGDEBUG("To send()");
+  //AHTTPS_LOGDEBUG(F("To send()"));
 
   _client->send();
 
-  AHTTPS_LOGDEBUG1("send", sent);
+  AHTTPS_LOGDEBUG1(F("*send"), sent);
 
   _lastActivity = millis();
 
@@ -1317,7 +1383,7 @@ void  AsyncHTTPSRequest::_setReadyState(reqStates newState)
   {
     _readyState = newState;
 
-    AHTTPS_LOGDEBUG1("_setReadyState :", _readyState);
+    AHTTPS_LOGDEBUG1(F("_setReadyState :"), _readyState);
 
     if (_readyStateChangeCB)
     {
@@ -1331,7 +1397,7 @@ void  AsyncHTTPSRequest::_processChunks()
 {
   while (_chunks->available())
   {
-    AHTTPS_LOGDEBUG3("_processChunks()", _chunks->peekString(16).c_str(), ", chunks available =", _chunks->available());
+    AHTTPS_LOGDEBUG3(F("_processChunks()"), _chunks->peekString(16).c_str(), F(", chunks available ="), _chunks->available());
 
     size_t _chunkRemaining = _contentLength - _contentRead - _response->available();
     _chunkRemaining -= _response->write(_chunks, _chunkRemaining);
@@ -1343,7 +1409,7 @@ void  AsyncHTTPSRequest::_processChunks()
 
     String chunkHeader = _chunks->readStringUntil("\r\n");
 
-    AHTTPS_LOGDEBUG3("*getChunkHeader", chunkHeader.c_str(), ", chunkHeader length =", chunkHeader.length());
+    AHTTPS_LOGDEBUG3(F("*getChunkHeader"), chunkHeader.c_str(), F(", chunkHeader length ="), chunkHeader.length());
 
     size_t chunkLength = strtol(chunkHeader.c_str(), nullptr, 16);
     _contentLength += chunkLength;
@@ -1354,13 +1420,13 @@ void  AsyncHTTPSRequest::_processChunks()
 
       if (connectionHdr && (strcasecmp_P(connectionHdr, PSTR("close")) == 0))
       {
-        AHTTPS_LOGDEBUG("*all chunks received - closing TCP");
+        AHTTPS_LOGDEBUG(F("*all chunks received - closing TCP"));
 
         _client->close();
       }
       else
       {
-        AHTTPS_LOGDEBUG("*all chunks received - no disconnect");
+        AHTTPS_LOGDEBUG(F("*all chunks received - no disconnect"));
       }
 
       _requestEndTime = millis();
@@ -1385,7 +1451,7 @@ void  AsyncHTTPSRequest::_processChunks()
 //**************************************************************************************************************
 void  AsyncHTTPSRequest::_onConnect(AsyncSSLClient* client)
 {
-  AHTTPS_LOGDEBUG("_onConnect handler");
+  AHTTPS_LOGDEBUG(F("_onConnect handler"));
 
   MUTEX_LOCK_NR
   
@@ -1429,7 +1495,7 @@ void  AsyncHTTPSRequest::_onConnect(AsyncSSLClient* client)
     _AHTTPS_unlock;
     
     // KH, to remove
-    AHTTPS_LOGDEBUG("_onConnect: Can't new _responser");
+    AHTTPS_LOGERROR(F("_onConnect: Can't new _response"));
     ///////
     
     return;
@@ -1477,7 +1543,7 @@ void  AsyncHTTPSRequest::_onPoll(AsyncSSLClient* client)
     _client->close();
     _HTTPcode = HTTPCODE_TIMEOUT;
 
-    AHTTPS_LOGDEBUG("_onPoll timeout");
+    AHTTPS_LOGDEBUG(F("_onPoll timeout"));
   }
 
   if (_onDataCB && available())
@@ -1493,7 +1559,11 @@ void  AsyncHTTPSRequest::_onError(AsyncSSLClient* client, int8_t error)
 {
   (void) client;
   
-  AHTTPS_LOGDEBUG1("_onError handler error =", error);
+  // SSL_error = (Non_SSL_error + 64)
+  // Check void AsyncSSLClient::_ssl_error(int8_t err) => _error_cb(_error_cb_arg, this, err + 64);
+
+  AHTTPS_LOGDEBUG1(F("_onError handler SSL error ="), error - 64);
+  AHTTPS_LOGERROR1(F("_onError handler SSL error ="), client->errorToString(error - 64));
 
   _HTTPcode = error;
 }
@@ -1503,23 +1573,27 @@ void  AsyncHTTPSRequest::_onDisconnect(AsyncSSLClient* client)
 {
   (void) client;
   
-  AHTTPS_LOGDEBUG("\n_onDisconnect handler");
+  AHTTPS_LOGDEBUG(F("\n_onDisconnect handler"));
 
   MUTEX_LOCK_NR
   
   if (_readyState < readyStateOpened)
   {
+    AHTTPS_LOGERROR(F("HTTPCODE_NOT_CONNECTED"));
     _HTTPcode = HTTPCODE_NOT_CONNECTED;
   }
   else if (_HTTPcode > 0 &&
            (_readyState < readyStateHdrsRecvd || (_contentRead + _response->available()) < _contentLength))
   {
+    AHTTPS_LOGDEBUG(F("_onDisconnect: HTTPCODE_CONNECTION_LOST"));
     _HTTPcode = HTTPCODE_CONNECTION_LOST;
   }
 
+  // KH, Not in AsyncHTTPRequest
   SAFE_DELETE(_client)
   
   _client = nullptr;
+  //////
   
   SAFE_DELETE_ARRAY(_connectedHost)
   
@@ -1536,11 +1610,11 @@ void  AsyncHTTPSRequest::_onDisconnect(AsyncSSLClient* client)
 //**************************************************************************************************************
 void  AsyncHTTPSRequest::_onData(void* Vbuf, size_t len)
 {
-  AHTTPS_LOGDEBUG("========= _onData handler =======");
-  AHTTPS_LOGDEBUG1("Vbuf =", (char*) Vbuf);
-  AHTTPS_LOGDEBUG("=================================");
-  AHTTPS_LOGDEBUG1("Vbuf len =", len);
-  AHTTPS_LOGDEBUG("=================================");
+  AHTTPS_LOGDEBUG(F("========= _onData handler ======="));
+  AHTTPS_LOGDEBUG1(F("Vbuf ="), (char*) Vbuf);
+  AHTTPS_LOGDEBUG(F("================================="));
+  AHTTPS_LOGDEBUG1(F("Vbuf len ="), len);
+  AHTTPS_LOGDEBUG(F("================================="));
    
   MUTEX_LOCK_NR
   
@@ -1552,7 +1626,7 @@ void  AsyncHTTPSRequest::_onData(void* Vbuf, size_t len)
     _chunks->write((uint8_t*)Vbuf, len);
     
     // KH, to remove
-    AHTTPS_LOGDEBUG("_onData: _processChunks");
+    //AHTTPS_LOGDEBUG(F("_onData: _processChunks"));
     ///////
     
     _processChunks();
@@ -1570,7 +1644,7 @@ void  AsyncHTTPSRequest::_onData(void* Vbuf, size_t len)
       _AHTTPS_unlock;
       
       // KH, to remove
-      AHTTPS_LOGDEBUG("_onData: headers not complete");
+      //AHTTPS_LOGDEBUG(F("_onData: headers not complete"));
       ///////
       
       return;
@@ -1590,13 +1664,13 @@ void  AsyncHTTPSRequest::_onData(void* Vbuf, size_t len)
 
     if (connectionHdr && (strcasecmp_P(connectionHdr, PSTR("close")) == 0))
     {
-      AHTTPS_LOGDEBUG("*all data received - closing TCP");
+      AHTTPS_LOGDEBUG(F("*all data received - closing TCP"));
 
       _client->close();
     }
     else
     {
-      AHTTPS_LOGDEBUG("*all data received - no disconnect");
+      AHTTPS_LOGDEBUG(F("*all data received - no disconnect"));
     }
 
     _requestEndTime = millis();
@@ -1618,7 +1692,7 @@ void  AsyncHTTPSRequest::_onData(void* Vbuf, size_t len)
 //**************************************************************************************************************
 bool  AsyncHTTPSRequest::_collectHeaders()
 {
-  AHTTPS_LOGDEBUG("_collectHeaders()");
+  AHTTPS_LOGDEBUG(F("_collectHeaders()"));
 
   // Loop to parse off each header line. Drop out and return false if no \r\n (incomplete)
   do
@@ -1670,7 +1744,7 @@ bool  AsyncHTTPSRequest::_collectHeaders()
 
   if (hdr && strcasecmp_P(hdr->value, PSTR("chunked")) == 0)
   {
-    AHTTPS_LOGDEBUG("*transfer-encoding: chunked");
+    AHTTPS_LOGDEBUG(F("*transfer-encoding: chunked"));
 
     _chunked = true;
     _contentLength = 0;

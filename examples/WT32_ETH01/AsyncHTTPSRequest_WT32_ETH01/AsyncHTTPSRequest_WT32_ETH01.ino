@@ -5,7 +5,7 @@
   
   AsyncHTTPSRequest_Generic is a library for the ESP8266, ESP32 and currently STM32 run built-in Ethernet WebServer
   
-  Based on and modified from AsyncHTTPSRequest Library (https://github.com/boblemaire/AsyncHTTPSRequest)
+  Based on and modified from AsyncHTTPRequest Library (https://github.com/boblemaire/AsyncHTTPRequest)
   
   Built by Khoi Hoang https://github.com/khoih-prog/AsyncHTTPSRequest_Generic
   Licensed under MIT license
@@ -44,14 +44,14 @@
   #error This code is intended to run on the ESP32 platform! Please check your Tools->Board setting.
 #endif
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v2.0.0"
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             2000000
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v2.1.0"
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             2001000
 
 // Level from 0-4
 #define ASYNC_HTTPS_DEBUG_PORT          Serial
 
 #define _ASYNC_TCP_SSL_LOGLEVEL_        1
-#define _ASYNC_HTTPS_LOGLEVEL_          1
+#define _ASYNC_HTTPS_LOGLEVEL_          2
 #define _ETHERNET_WEBSERVER_LOGLEVEL_   1
 
 // 300s = 5 minutes to not flooding
@@ -131,16 +131,22 @@ void sendRequest()
   }
 }
 
-void requestCB(void* optParm, AsyncHTTPSRequest* request, int readyState) 
+void requestCB(void *optParm, AsyncHTTPSRequest *request, int readyState)
 {
   (void) optParm;
-  
+
   if (readyState == readyStateDone)
   {
-    Serial.println(F("\n**************************************"));
-    Serial.println(request->responseText());
-    Serial.println(F("**************************************"));
-    
+    AHTTPS_LOGWARN0(F("\n**************************************\n"));
+    AHTTPS_LOGWARN1(F("Response Code = "), request->responseHTTPString());
+
+    if (request->responseHTTPcode() == 200)
+    {
+      Serial.println(F("\n**************************************"));
+      Serial.println(request->responseText());
+      Serial.println(F("**************************************"));
+    }
+
     request->setDebug(false);
   }
 }
@@ -149,9 +155,7 @@ void setup()
 {
   // put your setup code here, to run once:
   Serial.begin(115200);
-  while (!Serial);
-   
-  delay(200);
+  while (!Serial && millis() < 5000);
 
   Serial.print(F("\nStarting AsyncHTTPSRequest_WT32_ETH01 using ")); Serial.print(ARDUINO_BOARD);
   Serial.print(F(" with ")); Serial.println(SHIELD_TYPE);

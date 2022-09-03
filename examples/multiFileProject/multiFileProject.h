@@ -4,7 +4,7 @@
 
   AsyncHTTPSRequest_Generic is a library for the ESP8266, ESP32 and currently STM32 run built-in Ethernet WebServer
 
-  Based on and modified from AsyncHTTPSRequest Library (https://github.com/boblemaire/AsyncHTTPSRequest)
+  Based on and modified from AsyncHTTPRequest Library (https://github.com/boblemaire/AsyncHTTPRequest)
 
   Built by Khoi Hoang https://github.com/khoih-prog/AsyncHTTPSRequest_Generic
   Licensed under MIT license

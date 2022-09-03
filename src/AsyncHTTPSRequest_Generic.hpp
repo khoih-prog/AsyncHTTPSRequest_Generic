@@ -1,9 +1,9 @@
 /****************************************************************************************************************************
   AsyncHTTPSRequest_Generic.hpp
   
-  For ESP32, ESP8266 and STM32 with built-in LAN8742A Ethernet (Nucleo-144, DISCOVERY, etc)
+  For ESP32, future ESP8266
   
-  AsyncHTTPSRequest is a library for the ESP8266, ESP32 and currently STM32 run built-in Ethernet WebServer
+  AsyncHTTPSRequest is a library for the ESP32, ESP8266 (not-yet ready)
   
   Based on and modified from AsyncHTTPRequest Library (https://github.com/boblemaire/asyncHTTPrequest)
   
@@ -14,9 +14,10 @@
   as published bythe Free Software Foundation, either version 3 of the License, or (at your option) any later version.
   This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-  You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.  
+  You should have received a copy of the GNU General Public License along with this program. 
+  If not, see <https://www.gnu.org/licenses/>.  
  
-  Version: 2.0.1
+  Version: 2.1.0
   
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -29,6 +30,7 @@
   1.4.1    K Hoang     25/02/2022 Add example AsyncHTTPSRequest_ESP_Multi to demo connection to multiple addresses
   2.0.0    K Hoang     27/02/2022 Breaking change to permit coexisting with AsyncHTTPRequest library. Add example to demo
   2.0.1    K Hoang     24/03/2022 Increase DEFAULT_RX_TIMEOUT to 30s from 3s for slower networks
+  2.1.0    K Hoang     30/08/2022 Fix bug. Improve debug messages. Optimize code.
  *****************************************************************************************************************************/
 
 #pragma once
@@ -40,13 +42,13 @@
   #error This AsyncHTTPSRequest library is currently supporting only ESP32
 #endif
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION             "AsyncHTTPSRequest_Generic v2.0.1"
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION             "AsyncHTTPSRequest_Generic v2.1.0"
 
 #define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MAJOR       2
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MINOR       0
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_PATCH       1
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MINOR       1
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_PATCH       0
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_INT         2000001
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_INT         2001000
 
 #include <Arduino.h>
 
@@ -280,28 +282,24 @@ class AsyncHTTPSRequest
 
     struct  URL 
     {
-      char*   scheme;
-      char*   user;
-      char*   pwd;
-      char*   host;
-      int     port;
-      char*   path;
-      char*   query;
-      char*   fragment;
+      char 		*buffer;
+      char 		*scheme;
+      char 		*host;
+      int 		port;
+      char 		*path;
+      char 		*query;
       
-      URL():  scheme(nullptr), user(nullptr), pwd(nullptr), host(nullptr),
-              port(80), path(nullptr), query(nullptr), fragment(nullptr)
+      URL():	buffer(nullptr), scheme(nullptr), host(nullptr),
+        			port(80), path(nullptr), query(nullptr)
       {};
-      
-      ~URL() 
+        
+      ~URL()
       {
+        SAFE_DELETE_ARRAY(buffer)
         SAFE_DELETE_ARRAY(scheme)
-        SAFE_DELETE_ARRAY(user)
-        SAFE_DELETE_ARRAY(pwd)
         SAFE_DELETE_ARRAY(host)
         SAFE_DELETE_ARRAY(path)
         SAFE_DELETE_ARRAY(query)
-        SAFE_DELETE_ARRAY(fragment)
       }
     };
 
@@ -360,6 +358,7 @@ class AsyncHTTPSRequest
     size_t      available();                                            // response available
     size_t      responseLength();                                       // indicated response length or sum of chunks to date
     int         responseHTTPcode();                                     // HTTP response code or (negative) error code
+    String      responseHTTPString();
     String      responseText();                                         // response (whole* or partial* as string)
     
     char*       responseLongText();                                     // response long (whole* or partial* as string)

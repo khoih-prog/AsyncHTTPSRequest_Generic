@@ -5,7 +5,7 @@
 
   AsyncHTTPSRequest_Generic is a library for the ESP8266, ESP32 and currently STM32 run built-in Ethernet WebServer
 
-  Based on and modified from AsyncHTTPSRequest Library (https://github.com/boblemaire/AsyncHTTPSRequest)
+  Based on and modified from AsyncHTTPRequest Library (https://github.com/boblemaire/AsyncHTTPRequest)
 
   Built by Khoi Hoang https://github.com/khoih-prog/AsyncHTTPSRequest_Generic
   Licensed under MIT license
@@ -46,17 +46,17 @@
   #error This code is intended to run on the ESP8266 or ESP32 platform! Please check your Tools->Board setting.
 #endif
 
-#define ESP_ASYNC_WIFIMANAGER_VERSION_MIN_TARGET          "ESPAsync_WiFiManager v1.12.1"
+#define ESP_ASYNC_WIFIMANAGER_VERSION_MIN_TARGET          "ESPAsync_WiFiManager v1.13.0"
 #define ESP_ASYNC_WIFIMANAGER_VERSION_MIN                 1012001
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v2.0.0"
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             2000000
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v2.1.0"
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             2001000
 
 // Level from 0-4
 #define ASYNC_HTTPS_DEBUG_PORT     Serial
 
 #define _ASYNC_TCP_SSL_LOGLEVEL_    1
-#define _ASYNC_HTTPS_LOGLEVEL_      1
+#define _ASYNC_HTTPS_LOGLEVEL_      2
 #define _WIFIMGR_LOGLEVEL_          1
 
 // 300s = 5 minutes to not flooding, 60s in testing
@@ -556,16 +556,22 @@ void sendRequest()
   }
 }
 
-void requestCB(void* optParm, AsyncHTTPSRequest* request, int readyState) 
+void requestCB(void *optParm, AsyncHTTPSRequest *request, int readyState)
 {
   (void) optParm;
-  
-  if (readyState == readyStateDone) 
+
+  if (readyState == readyStateDone)
   {
-    Serial.println(F("\n**************************************"));
-    Serial.println(request->responseText());
-    Serial.println(F("**************************************"));
-    
+    AHTTPS_LOGWARN0(F("\n**************************************\n"));
+    AHTTPS_LOGWARN1(F("Response Code = "), request->responseHTTPString());
+
+    if (request->responseHTTPcode() == 200)
+    {
+      Serial.println(F("\n**************************************"));
+      Serial.println(request->responseText());
+      Serial.println(F("**************************************"));
+    }
+
     request->setDebug(false);
   }
 }
@@ -574,9 +580,7 @@ void setup()
 {
   // put your setup code here, to run once:
   Serial.begin(115200);
-  while (!Serial);
-
-  delay(200);
+  while (!Serial && millis() < 5000);
   
   Serial.print(F("\nStarting AsyncHTTPSRequest_ESP_WiFiManager using ")); Serial.print(FS_Name);
   Serial.print(F(" on ")); Serial.println(ARDUINO_BOARD);
@@ -634,7 +638,7 @@ void setup()
 #if ( USING_ESP32_S2 || USING_ESP32_C3 )
   ESPAsync_WiFiManager ESPAsync_wifiManager(&webServer, NULL, "AutoConnectAP");
 #else
-  DNSServer dnsServer;
+  AsyncDNSServer dnsServer;
 
   ESPAsync_WiFiManager ESPAsync_wifiManager(&webServer, &dnsServer, "AutoConnectAP");
 #endif  
