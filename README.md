@@ -528,7 +528,7 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_ESP_WiFi
 
 ```
 Starting AsyncHTTPSRequest_ESP_WiFiManager using LittleFS on ESP32_DEV
-ESPAsync_WiFiManager v1.12.1
+ESPAsync_WiFiManager v1.13.0
 AsyncTCP_SSL v1.2.0
 AsyncHTTPSRequest_Generic v2.1.0
 Stored: SSID = HueNet1, Pass = 12345678
@@ -564,7 +564,7 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_WT32_ETH
 
 ```
 Starting AsyncHTTPSRequest_WT32_ETH01 using ESP32_DEV with ETH_PHY_LAN8720
-WebServer_WT32_ETH01 v1.4.1 for core v2.0.0+
+WebServer_WT32_ETH01 v1.5.0 for core v2.0.0+
 AsyncTCP_SSL v1.2.0
 AsyncHTTPSRequest_Generic v2.1.0
 ETH MAC: A8:03:2A:A1:61:73, IPv4: 192.168.2.82, FULL_DUPLEX, 100Mbps
@@ -598,7 +598,7 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_WT32_ETH
 
 ```
 Starting AsyncHTTPSRequest_WT32_ETH01 using ESP32_DEV with ETH_PHY_LAN8720
-WebServer_WT32_ETH01 v1.4.1 for core v1.0.6-
+WebServer_WT32_ETH01 v1.5.0 for core v1.0.6-
 AsyncTCP_SSL v1.2.0
 AsyncHTTPSRequest_Generic v2.1.0
 ETH MAC: A8:03:2A:A1:61:73, IPv4: 192.168.2.232, FULL_DUPLEX, 100Mbps
@@ -632,7 +632,7 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_ESP_WiFi
 
 ```
 Starting AsyncHTTPSRequest_ESP_WiFiManager using LittleFS on ESP32C3_DEV
-ESPAsync_WiFiManager v1.12.1
+ESPAsync_WiFiManager v1.13.0
 AsyncHTTPSRequest_Generic v2.1.0
 Stored: SSID = HueNet1, Pass = password
 Got stored Credentials. Timeout 120s
@@ -686,7 +686,7 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_ESP_WiFi
 
 ```
 Starting AsyncHTTPSRequest_ESP_WiFiManager using LittleFS on ESP32S3_DEV
-ESPAsync_WiFiManager v1.12.1
+ESPAsync_WiFiManager v1.13.0
 AsyncHTTPSRequest_Generic v2.1.0
 Stored: SSID = HueNet1, Pass = password
 Got stored Credentials. Timeout 120s
@@ -913,7 +913,7 @@ You can also change the debugging level from 0 to 4
 
 // Use from 0 to 4. Higher number, more debugging messages and memory usage.
 #define _ASYNC_TCP_SSL_LOGLEVEL_        1
-#define _ASYNC_HTTPS_LOGLEVEL_          1
+#define _ASYNC_HTTPS_LOGLEVEL_          2
 ```
 
 ---
@@ -937,7 +937,7 @@ Submit issues to: [AsyncHTTPSRequest_Generic issues](https://github.com/khoih-pr
 
  1. Fix bug. Add enhancement
  2. Add support to more Ethernet / WiFi shields
- 3. Add support to RP2040W, ESP8266, STM32 and many more boards
+ 3. Add support to RP2040W, ESP8266, Portenta_H7, STM32 and many more boards
  4. Add many more examples.
  
  ---
