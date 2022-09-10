@@ -334,7 +334,7 @@ Look in file [**adc_common.c**](https://github.com/espressif/esp-idf/blob/master
 
 ### Example [AsyncHTTP_HTTPSRequest_ESP](examples/AsyncHTTP_HTTPSRequest_ESP)
 
-https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/blob/053554d15437de037438c1955c94d4f98ac7b7f0/examples/AsyncHTTP_HTTPSRequest_ESP/AsyncHTTP_HTTPSRequest_ESP.ino#L43-L381
+https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/blob/68b9ddb9590d79fbd01687fd4b8dcc7d46bdfae0/examples/AsyncHTTP_HTTPSRequest_ESP/AsyncHTTP_HTTPSRequest_ESP.ino#L43-L383
 
 
 ---
