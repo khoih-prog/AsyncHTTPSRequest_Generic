@@ -16,20 +16,22 @@
   #error This code is intended to run on the ESP32 platform! Please check your Tools->Board setting.
 #endif
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v2.1.0"
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             2001000
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v2.1.1"
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             2001001
 
 #include "multiFileProject.h"
 
 #include <WiFi.h>
 
-// Can be included as many times as necessary, without `Multiple Definitions` Linker Error
+// To be included only in main(), .ino with setup() to avoid `Multiple Definitions` Linker Error
 #include "AsyncHTTPSRequest_Generic.h"
 
 void setup() 
 {
   Serial.begin(115200);
   while (!Serial && millis() < 5000);
+
+  delay(200);
   
   Serial.println(F("\nStart multiFileProject"));
   Serial.println(ASYNC_HTTPS_REQUEST_GENERIC_VERSION);

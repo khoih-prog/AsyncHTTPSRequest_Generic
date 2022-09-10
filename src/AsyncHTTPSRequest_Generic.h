@@ -17,7 +17,7 @@
   You should have received a copy of the GNU General Public License along with this program. 
   If not, see <https://www.gnu.org/licenses/>.  
  
-  Version: 2.1.0
+  Version: 2.1.1
   
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -30,7 +30,8 @@
   1.4.1    K Hoang     25/02/2022 Add example AsyncHTTPSRequest_ESP_Multi to demo connection to multiple addresses
   2.0.0    K Hoang     27/02/2022 Breaking change to permit coexisting with AsyncHTTPRequest library. Add example to demo
   2.0.1    K Hoang     24/03/2022 Increase DEFAULT_RX_TIMEOUT to 30s from 3s for slower networks
-  2.1.0    K Hoang     30/08/2022 Fix bug. Improve debug messages. Optimize code.
+  2.1.0    K Hoang     30/08/2022 Fix bug. Improve debug messages. Optimize code
+  2.1.1    K Hoang     09/09/2022 Fix ESP32 chipID for example `AsyncHTTPSRequest_ESP_WiFiManager`
  *****************************************************************************************************************************/
 
 #pragma once

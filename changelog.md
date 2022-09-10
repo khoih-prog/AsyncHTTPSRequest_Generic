@@ -11,6 +11,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v2.1.1](#releases-v211)
   * [Releases v2.1.0](#releases-v210)
   * [Releases v2.0.1](#releases-v201)
   * [Releases v2.0.0](#releases-v200)
@@ -27,6 +28,10 @@
 
 
 ## Changelog
+
+### Releases v2.1.1
+
+1. Fix ESP32 chipID for example `AsyncHTTPSRequest_ESP_WiFiManager`
 
 ### Releases v2.1.0
 

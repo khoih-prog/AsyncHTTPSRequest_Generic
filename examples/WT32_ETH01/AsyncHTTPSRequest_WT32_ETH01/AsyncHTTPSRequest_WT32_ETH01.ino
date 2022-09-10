@@ -44,8 +44,8 @@
   #error This code is intended to run on the ESP32 platform! Please check your Tools->Board setting.
 #endif
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v2.1.0"
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             2001000
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v2.1.1"
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             2001001
 
 // Level from 0-4
 #define ASYNC_HTTPS_DEBUG_PORT          Serial
@@ -156,6 +156,8 @@ void setup()
   // put your setup code here, to run once:
   Serial.begin(115200);
   while (!Serial && millis() < 5000);
+
+  delay(200);
 
   Serial.print(F("\nStarting AsyncHTTPSRequest_WT32_ETH01 using ")); Serial.print(ARDUINO_BOARD);
   Serial.print(F(" with ")); Serial.println(SHIELD_TYPE);
