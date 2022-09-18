@@ -17,7 +17,7 @@
   You should have received a copy of the GNU General Public License along with this program. 
   If not, see <https://www.gnu.org/licenses/>.  
  
-  Version: 2.1.1
+  Version: 2.1.2
   
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -32,6 +32,7 @@
   2.0.1    K Hoang     24/03/2022 Increase DEFAULT_RX_TIMEOUT to 30s from 3s for slower networks
   2.1.0    K Hoang     30/08/2022 Fix bug. Improve debug messages. Optimize code
   2.1.1    K Hoang     09/09/2022 Fix ESP32 chipID for example `AsyncHTTPSRequest_ESP_WiFiManager`
+  2.1.2    K Hoang     18/09/2022 Fix bug and compiler error in some cases
  *****************************************************************************************************************************/
 
 #pragma once
@@ -39,17 +40,17 @@
 #ifndef ASYNC_HTTPS_REQUEST_GENERIC_HPP
 #define ASYNC_HTTPS_REQUEST_GENERIC_HPP
 
-#if !(ESP32)
+#if !defined(ESP32)
   #error This AsyncHTTPSRequest library is currently supporting only ESP32
 #endif
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION             "AsyncHTTPSRequest_Generic v2.1.1"
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION             "AsyncHTTPSRequest_Generic v2.1.2"
 
 #define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MAJOR       2
 #define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MINOR       1
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_PATCH       1
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_PATCH       2
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_INT         2001001
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_INT         2001002
 
 #include <Arduino.h>
 
@@ -83,7 +84,7 @@
 #define SHA1_SIZE 								20
 //////
 
-#if ESP32
+#if defined(ESP32)
 
   //#define ASYNC_TCP_SSL_ENABLED     true
   
@@ -96,7 +97,7 @@
   #define _AHTTPS_lock       xSemaphoreTakeRecursive(threadLock,portMAX_DELAY)
   #define _AHTTPS_unlock     xSemaphoreGiveRecursive(threadLock)
   
-#elif ESP8266
+#elif defined(ESP8266)
 
   //#include <ESPAsyncTCP.h>
   #error Not ready for ESP8266 yet
@@ -325,7 +326,7 @@ class AsyncHTTPSRequest
     void        setReqHeader(const char* name, const char* value);      // add a request header
     void        setReqHeader(const char* name, int32_t value);          // overload to use integer value
     
-#if (ESP32 || ESP8266)
+#if ( defined(ESP32) || defined(ESP8266) )
     void        setReqHeader(const char* name, const __FlashStringHelper* value);
     void        setReqHeader(const __FlashStringHelper *name, const char* value);
     void        setReqHeader(const __FlashStringHelper *name, const __FlashStringHelper* value);
@@ -348,7 +349,7 @@ class AsyncHTTPSRequest
     
     bool        respHeaderExists(const char* name);                     // Does header exist by name?
     
-#if (ESP32 || ESP8266)
+#if ( defined(ESP32) || defined(ESP8266) )
     char*       respHeaderValue(const __FlashStringHelper *name);
     bool        respHeaderExists(const __FlashStringHelper *name);
 #endif
@@ -433,7 +434,7 @@ class AsyncHTTPSRequest
     size_t      _send();
     void        _setReadyState(reqStates);
     
-#if (ESP32 || ESP8266)    
+#if ( defined(ESP32) || defined(ESP8266) ) 
     char*       _charstar(const __FlashStringHelper *str);
 #endif
 

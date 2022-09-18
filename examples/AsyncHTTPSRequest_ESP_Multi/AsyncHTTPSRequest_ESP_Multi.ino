@@ -44,8 +44,8 @@
   #error This code is intended to run on the ESP8266 or ESP32 platform! Please check your Tools->Board setting.
 #endif
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v2.1.1"
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             2001001
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v2.1.2"
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             2001002
 
 // Level from 0-4
 #define ASYNC_HTTPS_DEBUG_PORT      Serial
@@ -69,6 +69,12 @@ const char* password    = "your_pass";
 #elif (ESP32)
   #include <WiFi.h>
 #endif
+
+// Use larger queue size if necessary for large data transfer. Default is 512 bytes if not defined here
+//#define ASYNC_QUEUE_LENGTH     512
+
+// Use larger priority if necessary. Default is 10 if not defined here. Must be > 4 or adjusted to 4
+//#define CONFIG_ASYNC_TCP_PRIORITY   (12)
 
 // To be included only in main(), .ino with setup() to avoid `Multiple Definitions` Linker Error
 #include <AsyncHTTPSRequest_Generic.h>            // https://github.com/khoih-prog/AsyncHTTPSRequest_Generic

@@ -11,6 +11,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v2.1.2](#releases-v212)
   * [Releases v2.1.1](#releases-v211)
   * [Releases v2.1.0](#releases-v210)
   * [Releases v2.0.1](#releases-v201)
@@ -28,6 +29,11 @@
 
 
 ## Changelog
+
+### Releases v2.1.2
+
+1. Fix bug
+2. Fix compiler error in some cases
 
 ### Releases v2.1.1
 

@@ -17,7 +17,7 @@
   You should have received a copy of the GNU General Public License along with this program. 
   If not, see <https://www.gnu.org/licenses/>.  
  
-  Version: 2.1.1
+  Version: 2.1.2
   
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -32,6 +32,7 @@
   2.0.1    K Hoang     24/03/2022 Increase DEFAULT_RX_TIMEOUT to 30s from 3s for slower networks
   2.1.0    K Hoang     30/08/2022 Fix bug. Improve debug messages. Optimize code
   2.1.1    K Hoang     09/09/2022 Fix ESP32 chipID for example `AsyncHTTPSRequest_ESP_WiFiManager`
+  2.1.2    K Hoang     18/09/2022 Fix bug and compiler error in some cases
  *****************************************************************************************************************************/
  
 #pragma once
@@ -942,9 +943,9 @@ String AsyncHTTPSRequest::responseText()
 
 //**************************************************************************************************************
 
-#if (ESP32)
+#if defined(ESP32)
   #define HTTPS_GLOBAL_STR_LEN      (32 * 1024)
-#elif (ESP8266)
+#elif defined(ESP8266)
   #define HTTPS_GLOBAL_STR_LEN      (16 * 1024) 
 #else
   #define HTTPS_GLOBAL_STR_LEN      (4 * 1024)
@@ -1332,7 +1333,7 @@ size_t  AsyncHTTPSRequest::_send()
 
   size_t sent = 0;
   
-  #define TEMP_SIZE       256
+  #define TEMP_SIZE       255
 
   uint8_t* temp = new uint8_t[TEMP_SIZE + 1];
   
@@ -1345,7 +1346,7 @@ size_t  AsyncHTTPSRequest::_send()
     
     //AHTTPS_LOGDEBUG3(F("supply ="), supply, F(", chunk ="), chunk);
     
-    memset(temp, 0, sizeof(temp));
+    memset(temp, 0, TEMP_SIZE + 1);
     
     supply  -= _request->read(temp, chunk);
     
@@ -1460,16 +1461,19 @@ void  AsyncHTTPSRequest::_onConnect(AsyncSSLClient* client)
   _setReadyState(readyStateOpened);
   
   // KH Add HTTPS, not tested yet !!!
-#if 1   //(ESP8266)
+#if 0   //(ESP8266)
   if (_secure && _secureServerFingerprints.size() > 0) 
   {
     //SSL* clientSsl = _client.getSSL();
 
     bool sslFoundFingerprint = false;
+    
     for (std::array<uint8_t, SHA1_SIZE> fingerprint : _secureServerFingerprints) 
     {
       //if (ssl_match_fingerprint(clientSsl, fingerprint.data()) == SSL_OK) 
       {
+        AHTTPS_LOGDEBUG(F("_onConnect handler: sslFoundFingerprint"));
+        
         sslFoundFingerprint = true;
         break;
       }
@@ -1477,6 +1481,8 @@ void  AsyncHTTPSRequest::_onConnect(AsyncSSLClient* client)
 
     if (!sslFoundFingerprint) 
     {
+      AHTTPS_LOGDEBUG(F("_onConnect handler: _tlsBadFingerprint"));
+      
       _tlsBadFingerprint = true;
       _client->close(true);
       return;
@@ -1785,7 +1791,7 @@ void AsyncHTTPSRequest::setReqHeader(const char* name, int32_t value)
   }
 }
 
-#if (ESP32 || ESP8266)
+#if ( defined(ESP32) || defined(ESP8266) )
 
 //**************************************************************************************************************
 void AsyncHTTPSRequest::setReqHeader(const char* name, const __FlashStringHelper* value)
@@ -1914,7 +1920,7 @@ bool AsyncHTTPSRequest::respHeaderExists(const char* name)
 }
 
 
-#if (ESP32 || ESP8266)
+#if ( defined(ESP32) || defined(ESP8266) )
 
 //**************************************************************************************************************
 char* AsyncHTTPSRequest::respHeaderValue(const __FlashStringHelper *name)
@@ -1957,23 +1963,23 @@ String AsyncHTTPSRequest::headers()
 {
   MUTEX_LOCK(String())
   
-  String _response = "";
+  String response = "";
   header* hdr = _headers;
 
   while (hdr)
   {
-    _response += hdr->name;
-    _response += ':';
-    _response += hdr->value;
-    _response += "\r\n";
+    response += hdr->name;
+    response += ':';
+    response += hdr->value;
+    response += "\r\n";
     hdr = hdr->next;
   }
 
-  _response += "\r\n";
+  response += "\r\n";
   
   _AHTTPS_unlock;
 
-  return _response;
+  return response;
 }
 
 //**************************************************************************************************************
@@ -2076,7 +2082,7 @@ AsyncHTTPSRequest::header* AsyncHTTPSRequest::_getHeader(int ndx)
   return hdr;
 }
 
-#if (ESP32 || ESP8266)
+#if ( defined(ESP32) || defined(ESP8266) )
 
 //**************************************************************************************************************
 char* AsyncHTTPSRequest::_charstar(const __FlashStringHelper * str)

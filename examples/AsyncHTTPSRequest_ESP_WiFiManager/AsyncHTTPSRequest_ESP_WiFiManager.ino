@@ -46,11 +46,21 @@
   #error This code is intended to run on the ESP8266 or ESP32 platform! Please check your Tools->Board setting.
 #endif
 
-#define ESP_ASYNC_WIFIMANAGER_VERSION_MIN_TARGET          "ESPAsync_WiFiManager v1.14.0"
-#define ESP_ASYNC_WIFIMANAGER_VERSION_MIN                 1014000
+#define ESP_ASYNC_WIFIMANAGER_VERSION_MIN_TARGET          "ESPAsync_WiFiManager v1.14.1"
+#define ESP_ASYNC_WIFIMANAGER_VERSION_MIN                 1014001
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v2.1.1"
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             2001001
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v2.1.2"
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             2001002
+
+/////////////////////////////////////////////////////////
+
+// Use larger queue size if necessary for large data transfer. Default is 512 bytes if not defined here
+//#define ASYNC_QUEUE_LENGTH     512
+
+// Use larger priority if necessary. Default is 10 if not defined here. Must be > 4 or adjusted to 4
+//#define CONFIG_ASYNC_TCP_PRIORITY   (12)
+
+/////////////////////////////////////////////////////////
 
 // Level from 0-4
 #define ASYNC_HTTPS_DEBUG_PORT     Serial
@@ -116,7 +126,10 @@
   #endif
   //////
 
-  #define LED_BUILTIN       2
+  #if !defined(LED_BUILTIN)
+    #define LED_BUILTIN       2
+  #endif
+  
   #define LED_ON            HIGH
   #define LED_OFF           LOW
 
@@ -482,7 +495,8 @@ void loadConfigData()
   memset(&WM_config,       0, sizeof(WM_config));
 
   // New in v1.4.0
-  memset(&WM_STA_IPconfig, 0, sizeof(WM_STA_IPconfig));
+  //memset(&WM_STA_IPconfig, 0, sizeof(WM_STA_IPconfig));
+  WM_STA_IPconfig = {};
   //////
     
   if (file)

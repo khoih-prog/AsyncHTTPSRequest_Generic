@@ -17,7 +17,7 @@
   You should have received a copy of the GNU General Public License along with this program. 
   If not, see <https://www.gnu.org/licenses/>.  
  
-  Version: 2.1.1
+  Version: 2.1.2
   
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -32,6 +32,7 @@
   2.0.1    K Hoang     24/03/2022 Increase DEFAULT_RX_TIMEOUT to 30s from 3s for slower networks
   2.1.0    K Hoang     30/08/2022 Fix bug. Improve debug messages. Optimize code
   2.1.1    K Hoang     09/09/2022 Fix ESP32 chipID for example `AsyncHTTPSRequest_ESP_WiFiManager`
+  2.1.2    K Hoang     18/09/2022 Fix bug and compiler error in some cases
  *****************************************************************************************************************************/
 
 #pragma once
