@@ -171,10 +171,10 @@ This library is based on, modified from:
 ## Prerequisites
 
  1. [`Arduino IDE 1.8.19+` for Arduino](https://github.com/arduino/Arduino). [![GitHub release](https://img.shields.io/github/release/arduino/Arduino.svg)](https://github.com/arduino/Arduino/releases/latest)
- 2. [`ESP32 Core 2.0.4+`](https://github.com/espressif/arduino-esp32) for ESP32-based boards. [Latest stable release ![Release Version](https://img.shields.io/github/release/espressif/arduino-esp32.svg?style=plastic)
- 3. [`AsyncTCP_SSL v1.3.0+`](https://github.com/khoih-prog/AsyncTCP_SSL) for ESP32. [![GitHub release](https://img.shields.io/github/release/khoih-prog/AsyncTCP_SSL.svg)](https://github.com/khoih-prog/AsyncTCP_SSL/releases)
- 4. [`WebServer_WT32_ETH01 v1.5.0+`](https://github.com/khoih-prog/WebServer_WT32_ETH01) for ESP32-based WT32_ETH01 using **either ESP32 core v2.0.0+ or v1.0.6-**. [![GitHub release](https://img.shields.io/github/release/khoih-prog/WebServer_WT32_ETH01.svg)](https://github.com/khoih-prog/WebServer_WT32_ETH01/releases)
- 5. [`ESPAsync_WiFiManager library v1.14.0+`](https://github.com/khoih-prog/ESPAsync_WiFiManager) for ESP32/ESP8266 using some examples. [![GitHub release](https://img.shields.io/github/release/khoih-prog/ESPAsync_WiFiManager.svg)](https://github.com/khoih-prog/ESPAsync_WiFiManager/releases)
+ 2. [`ESP32 Core 2.0.5+`](https://github.com/espressif/arduino-esp32) for ESP32-based boards. [Latest stable release ![Release Version](https://img.shields.io/github/release/espressif/arduino-esp32.svg?style=plastic)
+ 3. [`AsyncTCP_SSL v1.3.1+`](https://github.com/khoih-prog/AsyncTCP_SSL) for ESP32. [![GitHub release](https://img.shields.io/github/release/khoih-prog/AsyncTCP_SSL.svg)](https://github.com/khoih-prog/AsyncTCP_SSL/releases)
+ 4. [`WebServer_WT32_ETH01 v1.5.1+`](https://github.com/khoih-prog/WebServer_WT32_ETH01) for ESP32-based WT32_ETH01 using **either ESP32 core v2.0.0+ or v1.0.6-**. [![GitHub release](https://img.shields.io/github/release/khoih-prog/WebServer_WT32_ETH01.svg)](https://github.com/khoih-prog/WebServer_WT32_ETH01/releases)
+ 5. [`ESPAsync_WiFiManager library v1.14.1+`](https://github.com/khoih-prog/ESPAsync_WiFiManager) for ESP32/ESP8266 using some examples. [![GitHub release](https://img.shields.io/github/release/khoih-prog/ESPAsync_WiFiManager.svg)](https://github.com/khoih-prog/ESPAsync_WiFiManager/releases)
  6. [`AsyncHTTPRequest_Generic library v1.9.1+`](https://github.com/khoih-prog/AsyncHTTPRequest_Generic) for ESP32/ESP8266 using with [AsyncHTTP_HTTPSRequest_ESP example](https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/tree/main/examples/AsyncHTTP_HTTPSRequest_ESP). [![GitHub release](https://img.shields.io/github/release/khoih-prog/AsyncHTTPRequest_Generic.svg)](https://github.com/khoih-prog/AsyncHTTPRequest_Generic/releases)
 
 ---
@@ -334,7 +334,7 @@ Look in file [**adc_common.c**](https://github.com/espressif/esp-idf/blob/master
 
 ### Example [AsyncHTTP_HTTPSRequest_ESP](examples/AsyncHTTP_HTTPSRequest_ESP)
 
-https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/blob/68b9ddb9590d79fbd01687fd4b8dcc7d46bdfae0/examples/AsyncHTTP_HTTPSRequest_ESP/AsyncHTTP_HTTPSRequest_ESP.ino#L43-L383
+https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/blob/9555df1c9a015c0abab525f3b802a9fc79d22800/examples/AsyncHTTP_HTTPSRequest_ESP/AsyncHTTP_HTTPSRequest_ESP.ino#L43-L389
 
 
 ---
@@ -347,53 +347,53 @@ https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/blob/68b9ddb9590d79fbd01
 Following is the debug terminal when running example [AsyncHTTPSRequest_ESP](examples/AsyncHTTPSRequest_ESP) on ESP32_DEV to demonstrate the operation of SSL Async HTTPS request, using [AsyncTCP_SSL Library](https://github.com/khoih-prog/AsyncTCP_SSL).
 
 ```
-21:38:45.215 -> Starting AsyncHTTPSRequest_ESP using ESP32_DEV
-21:38:45.215 -> AsyncTCP_SSL v1.3.0
-21:38:45.215 -> AsyncHTTPSRequest_Generic v2.1.1
-21:38:45.348 -> Connecting to WiFi SSID: HueNet1
-21:38:45.844 -> ....
-21:38:47.335 -> AsyncHTTPSRequest @ IP : 192.168.2.186
-21:38:48.727 -> [AHTTPS] _onError handler SSL error = OK
+AsyncTCP_SSL v1.3.1
+AsyncHTTPSRequest_Generic v2.1.1
+Connecting to WiFi SSID: HueNet1
+...
+AsyncHTTPSRequest @ IP : 192.168.2.187
+[AHTTPS] _onError handler SSL error = OK
+
 **************************************
 [AHTTPS] Response Code =  HTTP OK
 
 **************************************
 abbreviation: EDT
 client_ip: aaa.bbb.ccc.ddd
-datetime: 2022-09-02T21:38:48.720807-04:00
-day_of_week: 5
-day_of_year: 245
+datetime: 2022-09-18T01:35:32.451975-04:00
+day_of_week: 0
+day_of_year: 261
 dst: true
 dst_from: 2022-03-13T07:00:00+00:00
 dst_offset: 3600
 dst_until: 2022-11-06T06:00:00+00:00
 raw_offset: -18000
 timezone: America/Toronto
-unixtime: 1662169128
-utc_datetime: 2022-09-03T01:38:48.720807+00:00
+unixtime: 1663479332
+utc_datetime: 2022-09-18T05:35:32.451975+00:00
 utc_offset: -04:00
-week_number: 35
+week_number: 37
 **************************************
-21:38:57.347 -> HHHHHH
+HHHHHH
 **************************************
 [AHTTPS] Response Code =  HTTP OK
 
 **************************************
 abbreviation: EDT
 client_ip: aaa.bbb.ccc.ddd
-datetime: 2022-09-02T21:39:47.331884-04:00
-day_of_week: 5
-day_of_year: 245
+datetime: 2022-09-18T01:36:31.992595-04:00
+day_of_week: 0
+day_of_year: 261
 dst: true
 dst_from: 2022-03-13T07:00:00+00:00
 dst_offset: 3600
 dst_until: 2022-11-06T06:00:00+00:00
 raw_offset: -18000
 timezone: America/Toronto
-unixtime: 1662169187
-utc_datetime: 2022-09-03T01:39:47.331884+00:00
+unixtime: 1663479391
+utc_datetime: 2022-09-18T05:36:31.992595+00:00
 utc_offset: -04:00
-week_number: 35
+week_number: 37
 **************************************
 ```
 ---
@@ -404,8 +404,8 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_ESP](exa
 
 ```
 Starting AsyncHTTPSRequest_ESP using ESP32S2_DEV
-AsyncTCP_SSL v1.3.0
-AsyncHTTPSRequest_Generic v2.1.1
+AsyncTCP_SSL v1.3.1
+AsyncHTTPSRequest_Generic v2.1.2
 Connecting to WiFi SSID: HueNet1
 .......
 AsyncHTTPSRequest @ IP : 192.168.2.79
@@ -436,37 +436,40 @@ AsyncHTTPSRequest @ IP : 192.168.2.79
 **************************************
 abbreviation: EDT
 client_ip: aaa.bbb.ccc.ddd
-datetime: 2022-09-02T21:38:48.720807-04:00
-day_of_week: 5
-day_of_year: 245
+datetime: 2022-09-18T01:35:32.451975-04:00
+day_of_week: 0
+day_of_year: 261
 dst: true
 dst_from: 2022-03-13T07:00:00+00:00
 dst_offset: 3600
 dst_until: 2022-11-06T06:00:00+00:00
 raw_offset: -18000
 timezone: America/Toronto
-unixtime: 1662169128
-utc_datetime: 2022-09-03T01:38:48.720807+00:00
+unixtime: 1663479332
+utc_datetime: 2022-09-18T05:35:32.451975+00:00
 utc_offset: -04:00
-week_number: 35
+week_number: 37
 **************************************
 HHHHHH
 **************************************
+[AHTTPS] Response Code =  HTTP OK
+
+**************************************
 abbreviation: EDT
 client_ip: aaa.bbb.ccc.ddd
-datetime: 2022-09-02T21:39:47.331884-04:00
-day_of_week: 5
-day_of_year: 245
+datetime: 2022-09-18T01:36:31.992595-04:00
+day_of_week: 0
+day_of_year: 261
 dst: true
 dst_from: 2022-03-13T07:00:00+00:00
 dst_offset: 3600
 dst_until: 2022-11-06T06:00:00+00:00
 raw_offset: -18000
 timezone: America/Toronto
-unixtime: 1662169187
-utc_datetime: 2022-09-03T01:39:47.331884+00:00
+unixtime: 1663479391
+utc_datetime: 2022-09-18T05:36:31.992595+00:00
 utc_offset: -04:00
-week_number: 35
+week_number: 37
 **************************************
 ```
 
@@ -478,45 +481,48 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_ESP](exa
 
 ```
 Starting AsyncHTTPSRequest_ESP using ESP32C3_DEV
-AsyncTCP_SSL v1.3.0
-AsyncHTTPSRequest_Generic v2.1.1
+AsyncTCP_SSL v1.3.1
+AsyncHTTPSRequest_Generic v2.1.2
 Connecting to WiFi SSID: HueNet1
 .........
 AsyncHTTPSRequest @ IP : 192.168.2.80
 **************************************
 abbreviation: EDT
 client_ip: aaa.bbb.ccc.ddd
-datetime: 2022-09-02T21:38:48.720807-04:00
-day_of_week: 5
-day_of_year: 245
+datetime: 2022-09-18T01:35:32.451975-04:00
+day_of_week: 0
+day_of_year: 261
 dst: true
 dst_from: 2022-03-13T07:00:00+00:00
 dst_offset: 3600
 dst_until: 2022-11-06T06:00:00+00:00
 raw_offset: -18000
 timezone: America/Toronto
-unixtime: 1662169128
-utc_datetime: 2022-09-03T01:38:48.720807+00:00
+unixtime: 1663479332
+utc_datetime: 2022-09-18T05:35:32.451975+00:00
 utc_offset: -04:00
-week_number: 35
+week_number: 37
 **************************************
 HHHHHH
 **************************************
+[AHTTPS] Response Code =  HTTP OK
+
+**************************************
 abbreviation: EDT
 client_ip: aaa.bbb.ccc.ddd
-datetime: 2022-09-02T21:39:47.331884-04:00
-day_of_week: 5
-day_of_year: 245
+datetime: 2022-09-18T01:36:31.992595-04:00
+day_of_week: 0
+day_of_year: 261
 dst: true
 dst_from: 2022-03-13T07:00:00+00:00
 dst_offset: 3600
 dst_until: 2022-11-06T06:00:00+00:00
 raw_offset: -18000
 timezone: America/Toronto
-unixtime: 1662169187
-utc_datetime: 2022-09-03T01:39:47.331884+00:00
+unixtime: 1663479391
+utc_datetime: 2022-09-18T05:36:31.992595+00:00
 utc_offset: -04:00
-week_number: 35
+week_number: 37
 **************************************
 ```
 
@@ -529,8 +535,8 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_ESP_WiFi
 ```
 Starting AsyncHTTPSRequest_ESP_WiFiManager using LittleFS on ESP32_DEV
 ESPAsync_WiFiManager v1.14.0
-AsyncTCP_SSL v1.3.0
-AsyncHTTPSRequest_Generic v2.1.1
+AsyncTCP_SSL v1.3.1
+AsyncHTTPSRequest_Generic v2.1.2
 Stored: SSID = HueNet1, Pass = 12345678
 Got stored Credentials. Timeout 120s
 ConnectMultiWiFi in setup
@@ -539,19 +545,19 @@ H
 **************************************
 abbreviation: EDT
 client_ip: aaa.bbb.ccc.ddd
-datetime: 2022-09-02T22:15:12.862161-04:00
-day_of_week: 5
-day_of_year: 245
+datetime: 2022-09-18T01:38:31.571698-04:00
+day_of_week: 0
+day_of_year: 261
 dst: true
 dst_from: 2022-03-13T07:00:00+00:00
 dst_offset: 3600
 dst_until: 2022-11-06T06:00:00+00:00
 raw_offset: -18000
 timezone: America/Toronto
-unixtime: 1662171312
-utc_datetime: 2022-09-03T02:15:12.862161+00:00
+unixtime: 1663479511
+utc_datetime: 2022-09-18T05:38:31.571698+00:00
 utc_offset: -04:00
-week_number: 35
+week_number: 37
 **************************************
 H
 ```
@@ -565,8 +571,8 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_WT32_ETH
 ```
 Starting AsyncHTTPSRequest_WT32_ETH01 using ESP32_DEV with ETH_PHY_LAN8720
 WebServer_WT32_ETH01 v1.5.0 for core v2.0.0+
-AsyncTCP_SSL v1.3.0
-AsyncHTTPSRequest_Generic v2.1.1
+AsyncTCP_SSL v1.3.1
+AsyncHTTPSRequest_Generic v2.1.2
 ETH MAC: A8:03:2A:A1:61:73, IPv4: 192.168.2.82, FULL_DUPLEX, 100Mbps
 
 HTTP WebClient is @ IP : 192.168.2.82
@@ -574,19 +580,19 @@ HTTP WebClient is @ IP : 192.168.2.82
 **************************************
 abbreviation: EDT
 client_ip: aaa.bbb.ccc.ddd
-datetime: 2022-09-02T22:15:12.862161-04:00
-day_of_week: 5
-day_of_year: 245
+datetime: 2022-09-18T01:39:31.717889-04:00
+day_of_week: 0
+day_of_year: 261
 dst: true
 dst_from: 2022-03-13T07:00:00+00:00
 dst_offset: 3600
 dst_until: 2022-11-06T06:00:00+00:00
 raw_offset: -18000
 timezone: America/Toronto
-unixtime: 1662171312
-utc_datetime: 2022-09-03T02:15:12.862161+00:00
+unixtime: 1663479571
+utc_datetime: 2022-09-18T05:39:31.717889+00:00
 utc_offset: -04:00
-week_number: 35
+week_number: 37
 **************************************
 ```
 
@@ -599,27 +605,27 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_WT32_ETH
 ```
 Starting AsyncHTTPSRequest_WT32_ETH01 using ESP32_DEV with ETH_PHY_LAN8720
 WebServer_WT32_ETH01 v1.5.0 for core v1.0.6-
-AsyncTCP_SSL v1.3.0
-AsyncHTTPSRequest_Generic v2.1.1
+AsyncTCP_SSL v1.3.1
+AsyncHTTPSRequest_Generic v2.1.2
 ETH MAC: A8:03:2A:A1:61:73, IPv4: 192.168.2.232, FULL_DUPLEX, 100Mbps
 
 HTTP WebClient is @ IP : 192.168.2.232
 **************************************
 abbreviation: EDT
 client_ip: aaa.bbb.ccc.ddd
-datetime: 2022-09-02T22:15:12.862161-04:00
-day_of_week: 5
-day_of_year: 245
+datetime: 2022-09-18T01:41:32.014336-04:00
+day_of_week: 0
+day_of_year: 261
 dst: true
 dst_from: 2022-03-13T07:00:00+00:00
 dst_offset: 3600
 dst_until: 2022-11-06T06:00:00+00:00
 raw_offset: -18000
 timezone: America/Toronto
-unixtime: 1662171312
-utc_datetime: 2022-09-03T02:15:12.862161+00:00
+unixtime: 1663479692
+utc_datetime: 2022-09-18T05:41:32.014336+00:00
 utc_offset: -04:00
-week_number: 35
+week_number: 37
 **************************************
 ```
 
@@ -633,7 +639,7 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_ESP_WiFi
 ```
 Starting AsyncHTTPSRequest_ESP_WiFiManager using LittleFS on ESP32C3_DEV
 ESPAsync_WiFiManager v1.14.0
-AsyncHTTPSRequest_Generic v2.1.1
+AsyncHTTPSRequest_Generic v2.1.2
 Stored: SSID = HueNet1, Pass = password
 Got stored Credentials. Timeout 120s
 ConnectMultiWiFi in setup
@@ -642,37 +648,40 @@ H
 **************************************
 abbreviation: EDT
 client_ip: aaa.bbb.ccc.ddd
-datetime: 2022-09-02T21:38:48.720807-04:00
-day_of_week: 5
-day_of_year: 245
+datetime: 2022-09-18T01:42:31.838322-04:00
+day_of_week: 0
+day_of_year: 261
 dst: true
 dst_from: 2022-03-13T07:00:00+00:00
 dst_offset: 3600
 dst_until: 2022-11-06T06:00:00+00:00
 raw_offset: -18000
 timezone: America/Toronto
-unixtime: 1662169128
-utc_datetime: 2022-09-03T01:38:48.720807+00:00
+unixtime: 1663479751
+utc_datetime: 2022-09-18T05:42:31.838322+00:00
 utc_offset: -04:00
-week_number: 35
+week_number: 37
 **************************************
 HHHHHH
 **************************************
+[AHTTPS] Response Code =  HTTP OK
+
+**************************************
 abbreviation: EDT
 client_ip: aaa.bbb.ccc.ddd
-datetime: 2022-09-02T21:39:47.331884-04:00
-day_of_week: 5
-day_of_year: 245
+datetime: 2022-09-18T01:43:31.847679-04:00
+day_of_week: 0
+day_of_year: 261
 dst: true
 dst_from: 2022-03-13T07:00:00+00:00
 dst_offset: 3600
 dst_until: 2022-11-06T06:00:00+00:00
 raw_offset: -18000
 timezone: America/Toronto
-unixtime: 1662169187
-utc_datetime: 2022-09-03T01:39:47.331884+00:00
+unixtime: 1663479811
+utc_datetime: 2022-09-18T05:43:31.847679+00:00
 utc_offset: -04:00
-week_number: 35
+week_number: 37
 **************************************
 HH
 ```
@@ -687,7 +696,7 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_ESP_WiFi
 ```
 Starting AsyncHTTPSRequest_ESP_WiFiManager using LittleFS on ESP32S3_DEV
 ESPAsync_WiFiManager v1.14.0
-AsyncHTTPSRequest_Generic v2.1.1
+AsyncHTTPSRequest_Generic v2.1.2
 Stored: SSID = HueNet1, Pass = password
 Got stored Credentials. Timeout 120s
 ConnectMultiWiFi in setup
@@ -696,19 +705,19 @@ H
 **************************************
 abbreviation: EDT
 client_ip: aaa.bbb.ccc.ddd
-datetime: 2022-09-02T22:15:12.862161-04:00
-day_of_week: 5
-day_of_year: 245
+datetime: 2022-09-18T01:45:31.779638-04:00
+day_of_week: 0
+day_of_year: 261
 dst: true
 dst_from: 2022-03-13T07:00:00+00:00
 dst_offset: 3600
 dst_until: 2022-11-06T06:00:00+00:00
 raw_offset: -18000
 timezone: America/Toronto
-unixtime: 1662171312
-utc_datetime: 2022-09-03T02:15:12.862161+00:00
+unixtime: 1663479931
+utc_datetime: 2022-09-18T05:45:31.779638+00:00
 utc_offset: -04:00
-week_number: 35
+week_number: 37
 **************************************
 HHHH
 ```
@@ -722,16 +731,24 @@ The terminal output of [AsyncHTTPSRequest_ESP_Multi example](examples/AsyncHTTPS
 
 ```
 Starting AsyncHTTPSRequest_ESP_Multi on ESP32_DEV
-AsyncTCP_SSL v1.3.0
-AsyncHTTPSRequest_Generic v2.1.1
+AsyncTCP_SSL v1.3.1
+AsyncHTTPSRequest_Generic v2.1.2
 Connecting to WiFi SSID: HueNet1
 ...
-AsyncHTTPSRequest @ IP : 192.168.2.186
+AsyncHTTPSRequest @ IP : 192.168.2.187
 
 Sending request: https://worldtimeapi.org/api/timezone/Europe/Prague.txt
 
 Sending request: https://www.myexternalip.com/raw
 [AHTTPS] _onError handler SSL error = OK
+[AHTTPS] _onError handler SSL error = OK
+
+**************************************
+[AHTTPS] Response Code =  HTTP OK
+
+**************************************
+aaa.bbb.ccc.ddd
+**************************************
 
 **************************************
 [AHTTPS] Response Code =  HTTP OK
@@ -739,19 +756,19 @@ Sending request: https://www.myexternalip.com/raw
 **************************************
 abbreviation: CEST
 client_ip: aaa.bbb.ccc.ddd
-datetime: 2022-09-03T04:15:12.762149+02:00
-day_of_week: 6
-day_of_year: 246
+datetime: 2022-09-18T07:50:04.395849+02:00
+day_of_week: 0
+day_of_year: 261
 dst: true
 dst_from: 2022-03-27T01:00:00+00:00
 dst_offset: 3600
 dst_until: 2022-10-30T01:00:00+00:00
 raw_offset: 3600
 timezone: Europe/Prague
-unixtime: 1662171312
-utc_datetime: 2022-09-03T02:15:12.762149+00:00
+unixtime: 1663480204
+utc_datetime: 2022-09-18T05:50:04.395849+00:00
 utc_offset: +02:00
-week_number: 35
+week_number: 37
 **************************************
 
 Sending request: https://worldtimeapi.org/api/timezone/America/Toronto.txt
@@ -762,27 +779,19 @@ Sending request: https://worldtimeapi.org/api/timezone/America/Toronto.txt
 **************************************
 abbreviation: EDT
 client_ip: aaa.bbb.ccc.ddd
-datetime: 2022-09-02T22:15:12.862161-04:00
-day_of_week: 5
-day_of_year: 245
+datetime: 2022-09-18T01:50:05.382100-04:00
+day_of_week: 0
+day_of_year: 261
 dst: true
 dst_from: 2022-03-13T07:00:00+00:00
 dst_offset: 3600
 dst_until: 2022-11-06T06:00:00+00:00
 raw_offset: -18000
 timezone: America/Toronto
-unixtime: 1662171312
-utc_datetime: 2022-09-03T02:15:12.862161+00:00
+unixtime: 1663480205
+utc_datetime: 2022-09-18T05:50:05.382100+00:00
 utc_offset: -04:00
-week_number: 35
-**************************************
-[AHTTPS] _onError handler SSL error = OK
-
-**************************************
-[AHTTPS] Response Code =  HTTP OK
-
-**************************************
-aaa.bbb.ccc.ddd
+week_number: 37
 **************************************
 H
 ```
@@ -796,8 +805,8 @@ The terminal output of [AsyncHTTP_HTTPSRequest_ESP example](examples/AsyncHTTP_H
 
 ```
 21:49:19.090 -> Starting AsyncHTTP_HTTPSRequest_ESP on ESP32_DEV
-21:49:19.090 -> AsyncTCP_SSL v1.3.0
-21:49:19.090 -> AsyncHTTPSRequest_Generic v2.1.1
+21:49:19.090 -> AsyncTCP_SSL v1.3.1
+21:49:19.090 -> AsyncHTTPSRequest_Generic v2.1.2
 21:49:19.090 -> AsyncHTTPRequest_Generic v1.9.1
 21:49:19.190 -> Connecting to WiFi SSID: HueNet1
 21:49:19.686 -> ...
