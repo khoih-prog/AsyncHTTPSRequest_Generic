@@ -44,14 +44,14 @@
   #error This code is intended to run on the ESP8266 or ESP32 platform! Please check your Tools->Board setting.
 #endif
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v2.1.2"
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             2001002
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v2.1.3"
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             2001003
 
 // Level from 0-4
 #define ASYNC_HTTPS_DEBUG_PORT      Serial
 
 #define _ASYNC_TCP_SSL_LOGLEVEL_    1
-#define _ASYNC_HTTPS_LOGLEVEL_      2
+#define _ASYNC_HTTPS_LOGLEVEL_      3
 
 // 300s = 5 minutes to not flooding
 #define HTTPS_REQUEST_INTERVAL      60  //300

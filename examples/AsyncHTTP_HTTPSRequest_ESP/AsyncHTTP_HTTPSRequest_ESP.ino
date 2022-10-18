@@ -44,8 +44,8 @@
 #error This code is intended to run on the ESP8266 or ESP32 platform! Please check your Tools->Board setting.
 #endif
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v2.1.2"
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             2001002
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v2.1.3"
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             2001003
 
 #define ASYNC_HTTP_REQUEST_GENERIC_VERSION_MIN_TARGET       "AsyncHTTPRequest_Generic v1.9.1"
 #define ASYNC_HTTP_REQUEST_GENERIC_VERSION_MIN              1009001
@@ -64,8 +64,10 @@
 
 int status;     // the Wifi radio's status
 
-const char* ssid        = "your_ssid";
-const char* password    = "your_pass";
+const char* ssid        = "HueNet1";
+const char* password    = "jenniqqs";
+//const char* ssid        = "your_ssid";
+//const char* password    = "your_pass";
 
 #if (ESP8266)
   #include <ESP8266WiFi.h>

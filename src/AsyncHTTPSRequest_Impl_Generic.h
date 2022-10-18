@@ -17,7 +17,7 @@
   You should have received a copy of the GNU General Public License along with this program. 
   If not, see <https://www.gnu.org/licenses/>.  
  
-  Version: 2.1.2
+  Version: 2.1.3
   
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -33,6 +33,7 @@
   2.1.0    K Hoang     30/08/2022 Fix bug. Improve debug messages. Optimize code
   2.1.1    K Hoang     09/09/2022 Fix ESP32 chipID for example `AsyncHTTPSRequest_ESP_WiFiManager`
   2.1.2    K Hoang     18/09/2022 Fix bug and compiler error in some cases
+  2.1.3    K Hoang     18/10/2022 Not try to reconnect to the same host:port after connected
  *****************************************************************************************************************************/
  
 #pragma once
@@ -581,19 +582,31 @@ bool  AsyncHTTPSRequest::open(const char* method, const char* URL)
     return false;
   }
 
-
   if (!_parseURL(URL))
   {
     AHTTPS_LOGERROR(F("open: error parsing URL"));
     
     return false;
   }
-  
-  if ( _client && _client->connected() && (strcmp(_URL->host, _connectedHost) != 0 || _URL->port != _connectedPort))
+
+  if ( _client && _client->connected() )
   {
-    AHTTPS_LOGERROR(F("open: not connected"));
+    if ( (strcmp(_URL->host, _connectedHost) == 0) && (_URL->port == _connectedPort) )
+    {
+      AHTTPS_LOGINFO(F("open: already connected"));
+      
+      _lastActivity = millis();
     
-    return false;
+      _requestReadyToSend = true;
+        
+      return _connect();
+    }
+    else
+    { 
+      AHTTPS_LOGINFO(F("open: not connected: different host or port"));
+      
+      return false;
+    }
   }
 
   char* hostName = new char[strlen(_URL->host) + 10];
@@ -604,14 +617,13 @@ bool  AsyncHTTPSRequest::open(const char* method, const char* URL)
     _addHeader("host", hostName);
     
     AHTTPS_LOGDEBUG1(F("open: connecting to hostname ="), hostName);
+    AHTTPS_LOGINFO1(F("open: connecting to hostname ="), hostName);
     
     SAFE_DELETE_ARRAY(hostName)
     
     _lastActivity = millis();
     
-    // New in v1.1.1
     _requestReadyToSend = true;
-    //////
     
     return _connect();
   }
@@ -824,35 +836,35 @@ int AsyncHTTPSRequest::responseHTTPcode()
 //**************************************************************************************************************
 String AsyncHTTPSRequest::responseHTTPString()
 {
-	switch(_HTTPcode)
-	{
-		case 0: 						
-		  return F("OK");
-		case HTTPCODE_CONNECTION_REFUSED: 
-		  return F("CONNECTION_REFUSED");
-		case HTTPCODE_SEND_HEADER_FAILED: 
-		  return F("SEND_HEADER_FAILED");
-		case HTTPCODE_SEND_PAYLOAD_FAILED: 
-		  return F("SEND_PAYLOAD_FAILED");
-		case HTTPCODE_NOT_CONNECTED: 
-		  return F("NOT_CONNECTED");
-		case HTTPCODE_CONNECTION_LOST: 
-		  return F("CONNECTION_LOST");
-		case HTTPCODE_NO_STREAM: 
-		  return F("NO_STREAM");
-		case HTTPCODE_NO_HTTP_SERVER: 
-		  return F("NO_HTTP_SERVER");
-		case HTTPCODE_TOO_LESS_RAM: 
-		  return F("TOO_LESS_RAM");
-		case HTTPCODE_ENCODING: 
-		  return F("ENCODING");
-		case HTTPCODE_STREAM_WRITE: 
-		  return F("STREAM_WRITE");
-		case HTTPCODE_TIMEOUT: 
-		  return F("TIMEOUT");
-		  
-		// HTTP positive code  
-		case 100: return F("Continue");
+  switch(_HTTPcode)
+  {
+    case 0:             
+      return F("OK");
+    case HTTPCODE_CONNECTION_REFUSED: 
+      return F("CONNECTION_REFUSED");
+    case HTTPCODE_SEND_HEADER_FAILED: 
+      return F("SEND_HEADER_FAILED");
+    case HTTPCODE_SEND_PAYLOAD_FAILED: 
+      return F("SEND_PAYLOAD_FAILED");
+    case HTTPCODE_NOT_CONNECTED: 
+      return F("NOT_CONNECTED");
+    case HTTPCODE_CONNECTION_LOST: 
+      return F("CONNECTION_LOST");
+    case HTTPCODE_NO_STREAM: 
+      return F("NO_STREAM");
+    case HTTPCODE_NO_HTTP_SERVER: 
+      return F("NO_HTTP_SERVER");
+    case HTTPCODE_TOO_LESS_RAM: 
+      return F("TOO_LESS_RAM");
+    case HTTPCODE_ENCODING: 
+      return F("ENCODING");
+    case HTTPCODE_STREAM_WRITE: 
+      return F("STREAM_WRITE");
+    case HTTPCODE_TIMEOUT: 
+      return F("TIMEOUT");
+      
+    // HTTP positive code  
+    case 100: return F("Continue");
     case 101: return F("Switching Protocols");
     case 200: return F("HTTP OK");
     case 201: return F("Created");
@@ -892,8 +904,8 @@ String AsyncHTTPSRequest::responseHTTPString()
     case 503: return F("Service Unavailable");
     case 504: return F("Gateway Time-out");
     case 505: return F("HTTP Version not supported");  
-		default: return "UNKNOWN";
-	}
+    default: return "UNKNOWN";
+  }
 }
 
 //**************************************************************************************************************
@@ -1205,7 +1217,7 @@ bool  AsyncHTTPSRequest::_connect()
 
   if ( ! _client->connected())
   {
-    AHTTPS_LOGDEBUG3(F("_client->connecting to"), _URL->host, F(","), _URL->port);
+    AHTTPS_LOGINFO3(F("_client->connecting to"), _URL->host, F(","), _URL->port);
     
     // KH, for HTTPS
     if ( ! _client->connect(_URL->host, _URL->port, true))
@@ -1220,7 +1232,7 @@ bool  AsyncHTTPSRequest::_connect()
     }
     else
     {
-      AHTTPS_LOGDEBUG3(F("client.connect OK to"), _URL->host, F(","), _URL->port);
+      AHTTPS_LOGINFO3(F("client.connect OK to"), _URL->host, F(","), _URL->port);
     }
   }
   else
@@ -1569,8 +1581,8 @@ void  AsyncHTTPSRequest::_onError(AsyncSSLClient* client, int8_t error)
   // SSL_error = (Non_SSL_error + 64)
   // Check void AsyncSSLClient::_ssl_error(int8_t err) => _error_cb(_error_cb_arg, this, err + 64);
 
-  AHTTPS_LOGDEBUG1(F("_onError handler SSL error ="), error - 64);
-  AHTTPS_LOGERROR1(F("_onError handler SSL error ="), client->errorToString(error - 64));
+  //AHTTPS_LOGDEBUG1(F("_onError handler SSL error ="), error - 64);
+  AHTTPS_LOGDEBUG1(F("_onError handler SSL error ="), client->errorToString(error - 64));
 
   _HTTPcode = error;
 }

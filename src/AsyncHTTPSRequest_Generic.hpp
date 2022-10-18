@@ -17,7 +17,7 @@
   You should have received a copy of the GNU General Public License along with this program. 
   If not, see <https://www.gnu.org/licenses/>.  
  
-  Version: 2.1.2
+  Version: 2.1.3
   
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -33,6 +33,7 @@
   2.1.0    K Hoang     30/08/2022 Fix bug. Improve debug messages. Optimize code
   2.1.1    K Hoang     09/09/2022 Fix ESP32 chipID for example `AsyncHTTPSRequest_ESP_WiFiManager`
   2.1.2    K Hoang     18/09/2022 Fix bug and compiler error in some cases
+  2.1.3    K Hoang     18/10/2022 Not try to reconnect to the same host:port after connected
  *****************************************************************************************************************************/
 
 #pragma once
@@ -44,13 +45,13 @@
   #error This AsyncHTTPSRequest library is currently supporting only ESP32
 #endif
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION             "AsyncHTTPSRequest_Generic v2.1.2"
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION             "AsyncHTTPSRequest_Generic v2.1.3"
 
 #define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MAJOR       2
 #define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MINOR       1
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_PATCH       2
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_PATCH       3
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_INT         2001002
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_INT         2001003
 
 #include <Arduino.h>
 

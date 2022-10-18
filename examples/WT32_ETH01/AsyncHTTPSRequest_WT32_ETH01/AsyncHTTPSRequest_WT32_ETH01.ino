@@ -44,8 +44,8 @@
   #error This code is intended to run on the ESP32 platform! Please check your Tools->Board setting.
 #endif
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v2.1.2"
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             2001002
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v2.1.3"
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             2001003
 /////////////////////////////////////////////////////////
 
 // Use larger queue size if necessary for large data transfer. Default is 512 bytes if not defined here
