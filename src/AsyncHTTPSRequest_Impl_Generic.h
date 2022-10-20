@@ -1103,7 +1103,8 @@ bool  AsyncHTTPSRequest::_parseURL(const String& url)
   
   if (_URL)
   {
-    _URL->scheme = new char[8];
+    //HTTPS scheme is 8 chars + NULL
+    _URL->scheme = new char[9];
     
     if (! (_URL->scheme) )
       return false;
@@ -1277,8 +1278,8 @@ bool   AsyncHTTPSRequest::_buildRequest()
   _request->write(" HTTP/1.1\r\n");
      
   // KH, comment out or crash, why ??? To check for possible memory leak
-  //SAFE_DELETE(_URL)
-  //////
+  // RK, incorrect string allocation (bufferoverflow) fixed that was cousing the crash.
+  SAFE_DELETE(_URL)  
 
   _URL = nullptr;
   header* hdr = _headers;
