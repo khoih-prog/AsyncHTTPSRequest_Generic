@@ -175,7 +175,7 @@ This library is based on, modified from:
  3. [`AsyncTCP_SSL v1.3.1+`](https://github.com/khoih-prog/AsyncTCP_SSL) for ESP32. [![GitHub release](https://img.shields.io/github/release/khoih-prog/AsyncTCP_SSL.svg)](https://github.com/khoih-prog/AsyncTCP_SSL/releases)
  4. [`WebServer_WT32_ETH01 v1.5.1+`](https://github.com/khoih-prog/WebServer_WT32_ETH01) for ESP32-based WT32_ETH01 using **either ESP32 core v2.0.0+ or v1.0.6-**. [![GitHub release](https://img.shields.io/github/release/khoih-prog/WebServer_WT32_ETH01.svg)](https://github.com/khoih-prog/WebServer_WT32_ETH01/releases)
  5. [`ESPAsync_WiFiManager library v1.15.0+`](https://github.com/khoih-prog/ESPAsync_WiFiManager) for ESP32/ESP8266 using some examples. [![GitHub release](https://img.shields.io/github/release/khoih-prog/ESPAsync_WiFiManager.svg)](https://github.com/khoih-prog/ESPAsync_WiFiManager/releases)
- 6. [`AsyncHTTPRequest_Generic library v1.9.1+`](https://github.com/khoih-prog/AsyncHTTPRequest_Generic) for ESP32/ESP8266 using with [AsyncHTTP_HTTPSRequest_ESP example](https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/tree/main/examples/AsyncHTTP_HTTPSRequest_ESP). [![GitHub release](https://img.shields.io/github/release/khoih-prog/AsyncHTTPRequest_Generic.svg)](https://github.com/khoih-prog/AsyncHTTPRequest_Generic/releases)
+ 6. [`AsyncHTTPRequest_Generic library v1.9.2+`](https://github.com/khoih-prog/AsyncHTTPRequest_Generic) for ESP32/ESP8266 using with [AsyncHTTP_HTTPSRequest_ESP example](https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/tree/main/examples/AsyncHTTP_HTTPSRequest_ESP). [![GitHub release](https://img.shields.io/github/release/khoih-prog/AsyncHTTPRequest_Generic.svg)](https://github.com/khoih-prog/AsyncHTTPRequest_Generic/releases)
 
 ---
 ---
@@ -334,7 +334,7 @@ Look in file [**adc_common.c**](https://github.com/espressif/esp-idf/blob/master
 
 ### Example [AsyncHTTP_HTTPSRequest_ESP](examples/AsyncHTTP_HTTPSRequest_ESP)
 
-https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/blob/2fb7c67c63be2a5a33aa20653cc1221b0ff1102a/examples/AsyncHTTP_HTTPSRequest_ESP/AsyncHTTP_HTTPSRequest_ESP.ino#L43-L389
+https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/blob/90104d2405d75542d4996633193738434af64523/examples/AsyncHTTP_HTTPSRequest_ESP/AsyncHTTP_HTTPSRequest_ESP.ino#L43-L389
 
 
 ---
@@ -349,7 +349,7 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_ESP](exa
 ```
 Starting AsyncHTTPSRequest_ESP using ESP32_DEV
 AsyncTCP_SSL v1.3.1
-AsyncHTTPSRequest_Generic v2.1.3
+AsyncHTTPSRequest_Generic v2.2.0
 Connecting to WiFi SSID: HueNet1
 ...
 AsyncHTTPSRequest @ IP : 192.168.2.80
@@ -408,7 +408,7 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_ESP](exa
 ```
 Starting AsyncHTTPSRequest_ESP using ESP32S2_DEV
 AsyncTCP_SSL v1.3.1
-AsyncHTTPSRequest_Generic v2.1.3
+AsyncHTTPSRequest_Generic v2.2.0
 Connecting to WiFi SSID: HueNet1
 .......
 AsyncHTTPSRequest @ IP : 192.168.2.79
@@ -485,7 +485,7 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_ESP](exa
 ```
 Starting AsyncHTTPSRequest_ESP using ESP32C3_DEV
 AsyncTCP_SSL v1.3.1
-AsyncHTTPSRequest_Generic v2.1.3
+AsyncHTTPSRequest_Generic v2.2.0
 Connecting to WiFi SSID: HueNet1
 .........
 AsyncHTTPSRequest @ IP : 192.168.2.80
@@ -539,7 +539,7 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_ESP_WiFi
 Starting AsyncHTTPSRequest_ESP_WiFiManager using LittleFS on ESP32_DEV
 ESPAsync_WiFiManager v1.15.0
 AsyncTCP_SSL v1.3.1
-AsyncHTTPSRequest_Generic v2.1.3
+AsyncHTTPSRequest_Generic v2.2.0
 Stored: SSID = HueNet1, Pass = 12345678
 Got stored Credentials. Timeout 120s
 ConnectMultiWiFi in setup
@@ -575,7 +575,7 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_WT32_ETH
 Starting AsyncHTTPSRequest_WT32_ETH01 using ESP32_DEV with ETH_PHY_LAN8720
 WebServer_WT32_ETH01 v1.5.0 for core v2.0.0+
 AsyncTCP_SSL v1.3.1
-AsyncHTTPSRequest_Generic v2.1.3
+AsyncHTTPSRequest_Generic v2.2.0
 ETH MAC: A8:03:2A:A1:61:73, IPv4: 192.168.2.82, FULL_DUPLEX, 100Mbps
 
 HTTP WebClient is @ IP : 192.168.2.82
@@ -609,7 +609,7 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_WT32_ETH
 Starting AsyncHTTPSRequest_WT32_ETH01 using ESP32_DEV with ETH_PHY_LAN8720
 WebServer_WT32_ETH01 v1.5.0 for core v1.0.6-
 AsyncTCP_SSL v1.3.1
-AsyncHTTPSRequest_Generic v2.1.3
+AsyncHTTPSRequest_Generic v2.2.0
 ETH MAC: A8:03:2A:A1:61:73, IPv4: 192.168.2.232, FULL_DUPLEX, 100Mbps
 
 HTTP WebClient is @ IP : 192.168.2.232
@@ -642,7 +642,7 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_ESP_WiFi
 ```
 Starting AsyncHTTPSRequest_ESP_WiFiManager using LittleFS on ESP32C3_DEV
 ESPAsync_WiFiManager v1.15.0
-AsyncHTTPSRequest_Generic v2.1.3
+AsyncHTTPSRequest_Generic v2.2.0
 Stored: SSID = HueNet1, Pass = password
 Got stored Credentials. Timeout 120s
 ConnectMultiWiFi in setup
@@ -699,7 +699,7 @@ Following is the debug terminal when running example [AsyncHTTPSRequest_ESP_WiFi
 ```
 Starting AsyncHTTPSRequest_ESP_WiFiManager using LittleFS on ESP32S3_DEV
 ESPAsync_WiFiManager v1.15.0
-AsyncHTTPSRequest_Generic v2.1.3
+AsyncHTTPSRequest_Generic v2.2.0
 Stored: SSID = HueNet1, Pass = password
 Got stored Credentials. Timeout 120s
 ConnectMultiWiFi in setup
@@ -735,7 +735,7 @@ The terminal output of [AsyncHTTPSRequest_ESP_Multi example](examples/AsyncHTTPS
 ```
 Starting AsyncHTTPSRequest_ESP_Multi on ESP32_DEV
 AsyncTCP_SSL v1.3.1
-AsyncHTTPSRequest_Generic v2.1.3
+AsyncHTTPSRequest_Generic v2.2.0
 Connecting to WiFi SSID: HueNet1
 ...
 AsyncHTTPSRequest @ IP : 192.168.2.187
@@ -809,7 +809,7 @@ The terminal output of [AsyncHTTP_HTTPSRequest_ESP example](examples/AsyncHTTP_H
 ```
 Starting AsyncHTTP_HTTPSRequest_ESP on ESP32_DEV
 AsyncTCP_SSL v1.3.1
-AsyncHTTPSRequest_Generic v2.1.3
+AsyncHTTPSRequest_Generic v2.2.0
 AsyncHTTPRequest_Generic v1.9.1
 Connecting to WiFi SSID: HueNet1
 ...
@@ -886,7 +886,6 @@ utc_datetime: 2022-10-18T17:43:54.508325+00:00
 utc_offset: -04:00
 week_number: 42
 **************************************
-H
 ```
 
 ---
@@ -954,6 +953,7 @@ Submit issues to: [AsyncHTTPSRequest_Generic issues](https://github.com/khoih-pr
 17. Improve debug messages by adding functions to display `error messages` instead of `cryptic error number`
 18. Fix ESP32 chipID for example`AsyncHTTPSRequest_ESP_WiFiManager`
 19. Not try to reconnect to the same `host:port` after connected.
+20. Fix crash and memory leak
 
 ---
 ---
@@ -971,6 +971,11 @@ This library is based on, modified, bug-fixed and improved from:
 - to report and propose a fix in [No result from github https query #8](https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/issues/8) leading to new release v2.0.1 to increase `DEFAULT_RX_TIMEOUT` to `30s` from `3s` for slower networks
 4. Thanks to [rjjrbatarao](https://github.com/rjjrbatarao) 
 - to request enhancement in [setReuse feature #12](https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/issues/12) leading to new release v2.1.3 to not try to reconnect to the same `host:port` after connected
+5. Thanks to [Roeland Kluit](https://github.com/roel80) 
+- to report the issue in [Having problemen with AsyncHTTPS memory leak #11](https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/issues/11) 
+- to make a terrific PR in [Update for memleak in AsyncHTTPSRequest_Impl_Generic.h #13](https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/pull/13)
+leading to new release v2.2.0 to fix crash and memory leak
+
 
 <table>
   <tr>
@@ -978,6 +983,7 @@ This library is based on, modified, bug-fixed and improved from:
     <td align="center"><a href="https://github.com/DavidAntonin"><img src="https://github.com/DavidAntonin.png" width="100px;" alt="DavidAntonin"/><br /><sub><b>David Antonin</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/glennswest"><img src="https://github.com/glennswest.png" width="100px;" alt="glennswest"/><br /><sub><b>Glenn West</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/rjjrbatarao"><img src="https://github.com/rjjrbatarao.png" width="100px;" alt="rjjrbatarao"/><br /><sub><b>rjjrbatarao</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/roel80"><img src="https://github.com/roel80.png" width="100px;" alt="roel80"/><br /><sub><b>Roeland Kluit</b></sub></a><br /></td>
   </tr> 
 </table>
 
