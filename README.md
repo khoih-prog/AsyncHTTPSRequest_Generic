@@ -810,7 +810,7 @@ The terminal output of [AsyncHTTP_HTTPSRequest_ESP example](examples/AsyncHTTP_H
 Starting AsyncHTTP_HTTPSRequest_ESP on ESP32_DEV
 AsyncTCP_SSL v1.3.1
 AsyncHTTPSRequest_Generic v2.2.0
-AsyncHTTPRequest_Generic v1.9.1
+AsyncHTTPRequest_Generic v1.9.2
 Connecting to WiFi SSID: HueNet1
 ...
 AsyncHTTPSRequest @ IP : 192.168.2.80
