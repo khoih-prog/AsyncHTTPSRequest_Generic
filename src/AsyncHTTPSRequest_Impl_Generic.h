@@ -17,7 +17,7 @@
   You should have received a copy of the GNU General Public License along with this program. 
   If not, see <https://www.gnu.org/licenses/>.  
  
-  Version: 2.1.3
+  Version: 2.2.0
   
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -34,6 +34,7 @@
   2.1.1    K Hoang     09/09/2022 Fix ESP32 chipID for example `AsyncHTTPSRequest_ESP_WiFiManager`
   2.1.2    K Hoang     18/09/2022 Fix bug and compiler error in some cases
   2.1.3    K Hoang     18/10/2022 Not try to reconnect to the same host:port after connected
+  2.2.0    K Hoang     20/10/2022 Fix crash and memory leak
  *****************************************************************************************************************************/
  
 #pragma once
@@ -49,38 +50,43 @@
 
 // Not necessary if already defined in AsyncHTTPRequest library
 // Merge xbuf
-////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 xbuf::xbuf(const uint16_t segSize) : _head(nullptr), _tail(nullptr), _used(0), _free(0), _offset(0) 
 {
   _segSize = (segSize + 3) & -4;//((segSize + 3) >> 2) << 2;
 }
 
-//*******************************************************************************************************************
+////////////////////////////////////////
+
 xbuf::~xbuf() 
 {
   flush();
 }
 
-//*******************************************************************************************************************
+////////////////////////////////////////
+
 size_t xbuf::write(const uint8_t byte) 
 {
   return write((uint8_t*) &byte, 1);
 }
 
-//*******************************************************************************************************************
+////////////////////////////////////////
+
 size_t xbuf::write(const char* buf) 
 {
   return write((uint8_t*)buf, strlen(buf));
 }
 
-//*******************************************************************************************************************
+////////////////////////////////////////
+
 size_t xbuf::write(const String& string) 
 {
   return write((uint8_t*)string.c_str(), string.length());
 }
 
-//*******************************************************************************************************************
+////////////////////////////////////////
+
 size_t xbuf::write(const uint8_t* buf, const size_t len) 
 {
   size_t supply = len;
@@ -102,7 +108,8 @@ size_t xbuf::write(const uint8_t* buf, const size_t len)
   return len;
 }
 
-//*******************************************************************************************************************
+////////////////////////////////////////
+
 size_t xbuf::write(xbuf* buf, const size_t len) 
 {
   size_t supply = len;
@@ -131,7 +138,8 @@ size_t xbuf::write(xbuf* buf, const size_t len)
   return read;
 }
 
-//*******************************************************************************************************************
+////////////////////////////////////////
+
 uint8_t xbuf::read() 
 {
   uint8_t byte = 0;
@@ -140,7 +148,8 @@ uint8_t xbuf::read()
   return byte;
 }
 
-//*******************************************************************************************************************
+////////////////////////////////////////
+
 uint8_t xbuf::peek() 
 {
   uint8_t byte = 0;
@@ -149,7 +158,8 @@ uint8_t xbuf::peek()
   return byte;
 }
 
-//*******************************************************************************************************************
+////////////////////////////////////////
+
 size_t xbuf::read(uint8_t* buf, const size_t len) 
 {
   size_t read = 0;
@@ -179,7 +189,8 @@ size_t xbuf::read(uint8_t* buf, const size_t len)
   return read;
 }
 
-//*******************************************************************************************************************
+////////////////////////////////////////
+
 size_t xbuf::peek(uint8_t* buf, const size_t len) 
 {
   size_t read   = 0;
@@ -209,13 +220,15 @@ size_t xbuf::peek(uint8_t* buf, const size_t len)
   return read;
 }
 
-//*******************************************************************************************************************
+////////////////////////////////////////
+
 size_t xbuf::available() 
 {
   return _used;
 }
 
-//*******************************************************************************************************************
+////////////////////////////////////////
+
 int xbuf::indexOf(const char target, const size_t begin) 
 {
   char targetstr[2] = " ";
@@ -224,7 +237,8 @@ int xbuf::indexOf(const char target, const size_t begin)
   return indexOf(targetstr, begin);
 }
 
-//*******************************************************************************************************************
+////////////////////////////////////////
+
 int xbuf::indexOf(const char* target, const size_t begin) 
 {
   size_t targetLen = strlen(target);
@@ -288,13 +302,15 @@ int xbuf::indexOf(const char* target, const size_t begin)
   return -1;
 }
 
-//*******************************************************************************************************************
+////////////////////////////////////////
+
 String xbuf::readStringUntil(const char target) 
 {
   return readString(indexOf(target) + 1);
 }
 
-//*******************************************************************************************************************
+////////////////////////////////////////
+
 String xbuf::readStringUntil(const char* target) 
 {
   int index = indexOf(target);
@@ -305,24 +321,17 @@ String xbuf::readStringUntil(const char* target)
   return readString(index + strlen(target));
 }
 
-//*******************************************************************************************************************
+////////////////////////////////////////
+
 String xbuf::readString(int endPos) 
 {
   String result;
   
   if ( ! result.reserve(endPos + 1)) 
-  {
-    // KH, to remove
-    //AHTTPS_LOGERROR1(F("xbuf::readString: can't reserve size ="), endPos + 1);
-    ///////
-      
+  {     
     return result;
   }
-  
-  // KH, to remove
-  //AHTTPS_LOGDEBUG1(F("xbuf::readString: Reserved size ="), endPos + 1);
-  ///////
-  
+   
   if (endPos > _used) 
   {
     endPos = _used;
@@ -345,7 +354,8 @@ String xbuf::readString(int endPos)
   return result;
 }
 
-//*******************************************************************************************************************
+////////////////////////////////////////
+
 String xbuf::peekString(int endPos) 
 {
   String result;
@@ -375,7 +385,8 @@ String xbuf::peekString(int endPos)
   return result;
 }
 
-//*******************************************************************************************************************
+////////////////////////////////////////
+
 void xbuf::flush() 
 {
   while (_head) 
@@ -387,7 +398,7 @@ void xbuf::flush()
   _free = 0;
 }
 
-//*******************************************************************************************************************
+////////////////////////////////////////
 void xbuf::addSeg() 
 {
   if (_tail) 
@@ -420,7 +431,8 @@ void xbuf::addSeg()
   _free += _segSize;
 }
 
-//*******************************************************************************************************************
+////////////////////////////////////////
+
 void xbuf::remSeg() 
 {
   if (_head) 
@@ -440,9 +452,9 @@ void xbuf::remSeg()
 
 #endif    // #if !defined(ASYNC_HTTP_REQUEST_GENERIC_VERSION)
 
-////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
+////////////////////////////////////////
 
-//**************************************************************************************************************
 AsyncHTTPSRequest::AsyncHTTPSRequest(): _readyState(readyStateUnsent), _HTTPcode(0), _chunked(false), _debug(DEBUG_IOTA_HTTP_SET)
   , _timeout(DEFAULT_RX_TIMEOUT), _lastActivity(0), _requestStartTime(0), _requestEndTime(0), _URL(nullptr)
   , _connectedHost(nullptr), _connectedPort(-1), _client(nullptr), _contentLength(0), _contentRead(0)
@@ -455,7 +467,8 @@ AsyncHTTPSRequest::AsyncHTTPSRequest(): _readyState(readyStateUnsent), _HTTPcode
 #endif
 }
 
-//**************************************************************************************************************
+////////////////////////////////////////
+
 AsyncHTTPSRequest::~AsyncHTTPSRequest()
 {
   if (_client)
@@ -478,45 +491,49 @@ AsyncHTTPSRequest::~AsyncHTTPSRequest()
 #endif
 }
 
-//**************************************************************************************************************
+////////////////////////////////////////
+
 void AsyncHTTPSRequest::setDebug(bool debug)
 {
   if (_debug || debug)
   {
     _debug = true;
-
-    AHTTPS_LOGDEBUG3(F("setDebug("), debug ? F("on") : F("off"), F(") version"), ASYNC_HTTPS_REQUEST_GENERIC_VERSION);
   }
   
   _debug = debug;
 }
 
-//**************************************************************************************************************
+////////////////////////////////////////
+
 bool AsyncHTTPSRequest::debug()
 {
   return (_debug);
 }
 
+////////////////////////////////////////
 
 // KH Add for HTTPS
 
 AsyncHTTPSRequest& AsyncHTTPSRequest::setSecure(bool secure) 
 {
   _secure = secure;
+  
   return *this;
 }
+
+////////////////////////////////////////
 
 AsyncHTTPSRequest& AsyncHTTPSRequest::addServerFingerprint(const uint8_t* fingerprint) 
 {
   std::array<uint8_t, SHA1_SIZE> newFingerprint;
   memcpy(newFingerprint.data(), fingerprint, SHA1_SIZE);
   _secureServerFingerprints.push_back(newFingerprint);
+  
   return *this;
 }
 
-//////
+////////////////////////////////////////
 
-//**************************************************************************************************************
 bool  AsyncHTTPSRequest::open(const char* method, const char* URL)
 {
   AHTTPS_LOGDEBUG3(F("open("), method, F(", url ="), URL);
@@ -616,7 +633,6 @@ bool  AsyncHTTPSRequest::open(const char* method, const char* URL)
     sprintf(hostName, "%s:%d", _URL->host, _URL->port);
     _addHeader("host", hostName);
     
-    AHTTPS_LOGDEBUG1(F("open: connecting to hostname ="), hostName);
     AHTTPS_LOGINFO1(F("open: connecting to hostname ="), hostName);
     
     SAFE_DELETE_ARRAY(hostName)
@@ -634,31 +650,32 @@ bool  AsyncHTTPSRequest::open(const char* method, const char* URL)
     return false;
   }
 }
-//**************************************************************************************************************
+
+////////////////////////////////////////
+
 void AsyncHTTPSRequest::onReadyStateChange(readyStateChangeCB cb, void* arg) 
 {
   _readyStateChangeCB = cb;
   _readyStateChangeCBarg = arg;
 }
 
-//**************************************************************************************************************
+
+////////////////////////////////////////
+
 void  AsyncHTTPSRequest::setTimeout(int seconds) 
 {
-  AHTTPS_LOGDEBUG1(F("setTimeout ="), seconds);
-
   _timeout = seconds;
 }
 
-//**************************************************************************************************************
+
+////////////////////////////////////////
+
 bool  AsyncHTTPSRequest::send() 
 { 
-  if (_requestReadyToSend)
-  {
-    AHTTPS_LOGDEBUG(F("send()"));
-  }
-  else
+  if (!_requestReadyToSend)
   {
     AHTTPS_LOGERROR(CANT_SEND_BAD_REQUEST);
+    
     return false;
   }
 
@@ -674,16 +691,15 @@ bool  AsyncHTTPSRequest::send()
   return true;
 }
 
-//**************************************************************************************************************
+
+////////////////////////////////////////
+
 bool AsyncHTTPSRequest::send(const String& body)
 {
-  if (_requestReadyToSend)
-  {
-    AHTTPS_LOGDEBUG3(F("send(String)"), body.substring(0, 16).c_str(), F(", length ="), body.length());
-  }
-  else
+  if (!_requestReadyToSend)
   {
     AHTTPS_LOGERROR(CANT_SEND_BAD_REQUEST);
+    
     return false;
   }
 
@@ -706,19 +722,16 @@ bool AsyncHTTPSRequest::send(const String& body)
   return true;
 }
 
-//**************************************************************************************************************
+////////////////////////////////////////
+
 bool  AsyncHTTPSRequest::send(const char* body) 
 {
-  if (_requestReadyToSend)
-  {
-    AHTTPS_LOGDEBUG3(F("send(char)"), body, F(", length ="), strlen(body));
-  }
-  else
+  if (!_requestReadyToSend)
   {
     AHTTPS_LOGERROR(CANT_SEND_BAD_REQUEST);
+    
     return false;
   }
-  //////
 
   MUTEX_LOCK(false)
   
@@ -739,19 +752,16 @@ bool  AsyncHTTPSRequest::send(const char* body)
   return true;
 }
 
-//**************************************************************************************************************
+
+////////////////////////////////////////
+
 bool  AsyncHTTPSRequest::send(const uint8_t* body, size_t len)
 {
-  if (_requestReadyToSend)
-  {
-    AHTTPS_LOGDEBUG3(F("send(char)"), (char*) body, F(", length ="), len);
-  }
-  else
+  if (!_requestReadyToSend)
   {
     AHTTPS_LOGERROR(CANT_SEND_BAD_REQUEST);
     return false;
   }
-  //////
 
   MUTEX_LOCK(false)
   
@@ -772,19 +782,16 @@ bool  AsyncHTTPSRequest::send(const uint8_t* body, size_t len)
   return true;
 }
 
-//**************************************************************************************************************
+
+////////////////////////////////////////
+
 bool AsyncHTTPSRequest::send(xbuf* body, size_t len)
 {
-  if (_requestReadyToSend)
-  {
-    AHTTPS_LOGDEBUG3(F("send(xbuf)"), body->peekString(16).c_str(), F(", length ="), len);
-  }
-  else
+  if (!_requestReadyToSend)
   {
     AHTTPS_LOGERROR(CANT_SEND_BAD_REQUEST);
     return false;
   }
-  //////
 
   MUTEX_LOCK(false)
   
@@ -805,7 +812,9 @@ bool AsyncHTTPSRequest::send(xbuf* body, size_t len)
   return true;
 }
 
-//**************************************************************************************************************
+
+////////////////////////////////////////
+
 void AsyncHTTPSRequest::abort()
 {
   AHTTPS_LOGERROR(F("abort()"));
@@ -821,19 +830,26 @@ void AsyncHTTPSRequest::abort()
   
   _AHTTPS_unlock;
 }
-//**************************************************************************************************************
+
+
+////////////////////////////////////////
+
 reqStates   AsyncHTTPSRequest::readyState()
 {
   return _readyState;
 }
 
-//**************************************************************************************************************
+
+////////////////////////////////////////
+
 int AsyncHTTPSRequest::responseHTTPcode()
 {
   return _HTTPcode;
 }
 
-//**************************************************************************************************************
+
+////////////////////////////////////////
+
 String AsyncHTTPSRequest::responseHTTPString()
 {
   switch(_HTTPcode)
@@ -904,15 +920,15 @@ String AsyncHTTPSRequest::responseHTTPString()
     case 503: return F("Service Unavailable");
     case 504: return F("Gateway Time-out");
     case 505: return F("HTTP Version not supported");  
-    default: return "UNKNOWN";
+    default:  return "UNKNOWN";
   }
 }
 
-//**************************************************************************************************************
+
+////////////////////////////////////////
+
 String AsyncHTTPSRequest::responseText()
 {
-  AHTTPS_LOGDEBUG(F("responseText()"));
-
   MUTEX_LOCK(String())
   
   if ( ! _response || _readyState < readyStateLoading || ! available())
@@ -939,21 +955,14 @@ String AsyncHTTPSRequest::responseText()
   }
   
   _contentRead += localString.length();
-  
-  AHTTPS_LOGDEBUG3(F("responseText() ="), localString.substring(0,16), F(", size ="), avail);
    
-  //AHTTPS_LOGDEBUG("========= responseText(char) =======");
-  //AHTTPS_LOGDEBUG1("localString =", localString);
-  //AHTTPS_LOGDEBUG("=================================");
-  //AHTTPS_LOGDEBUG1("avail =", avail);
-  //AHTTPS_LOGDEBUG("====================================");
-  
   _AHTTPS_unlock;
   
   return localString;
 }
 
-//**************************************************************************************************************
+
+////////////////////////////////////////
 
 #if defined(ESP32)
   #define HTTPS_GLOBAL_STR_LEN      (32 * 1024)
@@ -963,12 +972,14 @@ String AsyncHTTPSRequest::responseText()
   #define HTTPS_GLOBAL_STR_LEN      (4 * 1024)
 #endif
 
+////////////////////////////////////////
+
 char globalLongStringHTTPS[HTTPS_GLOBAL_STR_LEN + 1];
+
+////////////////////////////////////////
 
 char* AsyncHTTPSRequest::responseLongText()
 {
-  AHTTPS_LOGDEBUG(F("responseLongText()"));
-
   MUTEX_LOCK(NULL)
   
   if ( ! _response || _readyState < readyStateLoading || ! available())
@@ -987,21 +998,14 @@ char* AsyncHTTPSRequest::responseLongText()
   globalLongStringHTTPS[ lenToCopy + 1 ] = 0;
   
   _contentRead += _response->readString(avail).length();
-  
-  //AHTTPS_LOGDEBUG3(F("responseLongText(char)"), globalLongStringHTTPS, F(", avail ="), avail);
-  
-  AHTTPS_LOGDEBUG(F("========= responseLongText() ======="));
-  AHTTPS_LOGDEBUG1(F("localString ="), globalLongStringHTTPS);
-  AHTTPS_LOGDEBUG(F("================================="));
-  AHTTPS_LOGDEBUG1(F("avail ="), avail);
-  AHTTPS_LOGDEBUG(F("===================================="));
-  
+   
   _AHTTPS_unlock;
   
   return globalLongStringHTTPS;
 }
 
-//**************************************************************************************************************
+////////////////////////////////////////
+
 size_t AsyncHTTPSRequest::responseRead(uint8_t* buf, size_t len)
 {
   if ( ! _response || _readyState < readyStateLoading || ! available())
@@ -1016,8 +1020,6 @@ size_t AsyncHTTPSRequest::responseRead(uint8_t* buf, size_t len)
   size_t avail = available() > len ? len : available();
   _response->read(buf, avail);
 
-  AHTTPS_LOGDEBUG3(F("responseRead(char)"), (char*) buf, F(", avail ="), avail);
-
   _contentRead += avail;
   
   _AHTTPS_unlock;
@@ -1025,7 +1027,8 @@ size_t AsyncHTTPSRequest::responseRead(uint8_t* buf, size_t len)
   return avail;
 }
 
-//**************************************************************************************************************
+////////////////////////////////////////
+
 size_t  AsyncHTTPSRequest::available()
 {
   if (_readyState < readyStateLoading)
@@ -1039,7 +1042,8 @@ size_t  AsyncHTTPSRequest::available()
   return _response->available();
 }
 
-//**************************************************************************************************************
+////////////////////////////////////////
+
 size_t  AsyncHTTPSRequest::responseLength()
 {
   if (_readyState < readyStateLoading)
@@ -1048,16 +1052,16 @@ size_t  AsyncHTTPSRequest::responseLength()
   return _contentLength;
 }
 
-//**************************************************************************************************************
+////////////////////////////////////////
+
 void  AsyncHTTPSRequest::onData(onDataCB cb, void* arg)
 {
-  AHTTPS_LOGDEBUG(F("onData() CB set"));
-
   _onDataCB = cb;
   _onDataCBarg = arg;
 }
 
-//**************************************************************************************************************
+////////////////////////////////////////
+
 uint32_t AsyncHTTPSRequest::elapsedTime()
 {
   if (_readyState <= readyStateOpened)
@@ -1071,7 +1075,8 @@ uint32_t AsyncHTTPSRequest::elapsedTime()
   return _requestEndTime - _requestStartTime;
 }
 
-//**************************************************************************************************************
+////////////////////////////////////////
+
 String AsyncHTTPSRequest::version()
 {
   return String(ASYNC_HTTPS_REQUEST_GENERIC_VERSION);
@@ -1086,13 +1091,15 @@ String AsyncHTTPSRequest::version()
                P       R   R    OOO      T     EEEEE    CCC      T     EEEEE   DDDD
   _______________________________________________________________________________________________________________*/
 
-//**************************************************************************************************************
+////////////////////////////////////////
+
 bool  AsyncHTTPSRequest::_parseURL(const char* url)
 {
   return _parseURL(String(url));
 }
 
-//**************************************************************************************************************
+////////////////////////////////////////
+
 bool  AsyncHTTPSRequest::_parseURL(const String& url)
 {
   SAFE_DELETE(_URL)
@@ -1166,17 +1173,13 @@ bool  AsyncHTTPSRequest::_parseURL(const String& url)
   
   strcpy(_URL->query, url.substring(queryBeg).c_str());
 
-  AHTTPS_LOGDEBUG2(F("_parseURL(): scheme+host"), _URL->scheme, _URL->host);
-  AHTTPS_LOGDEBUG3(F("_parseURL(): port+path+query"), _URL->port, _URL->path, _URL->query);
-
   return true;
 }
 
-//**************************************************************************************************************
+////////////////////////////////////////
+
 bool  AsyncHTTPSRequest::_connect()
 {
-  AHTTPS_LOGDEBUG(F("_connect()"));
-
   if ( ! _client)
   {
     _client = new AsyncSSLClient();
@@ -1242,16 +1245,13 @@ bool  AsyncHTTPSRequest::_connect()
 
   _lastActivity = millis();
   
-  AHTTPS_LOGDEBUG(F("_connect() true"));
-
   return true;
 }
 
-//**************************************************************************************************************
+////////////////////////////////////////
+
 bool   AsyncHTTPSRequest::_buildRequest()
 {
-  AHTTPS_LOGDEBUG(F("_buildRequest()"));
-
   // Build the header.
   if ( ! _request)
   {
@@ -1261,67 +1261,44 @@ bool   AsyncHTTPSRequest::_buildRequest()
       return false;
   }
 
-  AHTTPS_LOGDEBUG1(F("_HTTPmethod ="), _HTTPmethod);
-  AHTTPS_LOGDEBUG3(_HTTPmethodStringwithSpace[_HTTPmethod], _URL->path, _URL->query, F("HTTP/1.1\r\n") );
-  
-  AHTTPS_LOGDEBUG1(F("write _HTTPmethodStringwithSpace :"), _HTTPmethodStringwithSpace[_HTTPmethod]);
   _request->write(_HTTPmethodStringwithSpace[_HTTPmethod]);
-  
-  AHTTPS_LOGDEBUG1(F("write path :"), _URL->path);
   _request->write(_URL->path);
-  
-  AHTTPS_LOGDEBUG1(F("write query"), _URL->query);
   _request->write(_URL->query);
   
-  AHTTPS_LOGDEBUG(F("write HTTP/1.1"));
   _request->write(" HTTP/1.1\r\n");
      
-  // RK, incorrect string allocation (bufferoverflow) fixed that was cousing the crash.
-  SAFE_DELETE(_URL)  
+  SAFE_DELETE(_URL)
 
   _URL = nullptr;
   header* hdr = _headers;
-
-  AHTTPS_LOGDEBUG(F("To write hdr"));
-  
+ 
   while (hdr)
   {
-    AHTTPS_LOGDEBUG(F("hdr->name"));
     _request->write(hdr->name);
     _request->write(':');
-    AHTTPS_LOGDEBUG(F("hdr->value"));
     _request->write(hdr->value);
     _request->write("\r\n");
-    
-    AHTTPS_LOGDEBUG3(hdr->name, F(":"), hdr->value, F("\r\n"));
     
     hdr = hdr->next;
   }
   
-  AHTTPS_LOGDEBUG(F("Write hdr done"));
-
   SAFE_DELETE(_headers)
   
   _headers = nullptr;
   _request->write("\r\n");
   
-  AHTTPS_LOGDEBUG(F("_buildRequest() done"));
-
   return true;
 }
 
-//**************************************************************************************************************
+////////////////////////////////////////
+
 size_t  AsyncHTTPSRequest::_send()
 {
   if ( ! _request)
     return 0;
-
-  AHTTPS_LOGDEBUG1(F("_send(), _request->available ="), _request->available());
-  
+ 
   if ( ! _client->connected())
-  {
-    AHTTPS_LOGDEBUG(F("!connected yet"));
-    
+  {   
     // KH fix bug https://github.com/khoih-prog/AsyncHTTPRequest_Generic/issues/38
     _HTTPcode = HTTPCODE_NOT_CONNECTED;
     _setReadyState(readyStateUnsent);
@@ -1331,8 +1308,6 @@ size_t  AsyncHTTPSRequest::_send()
   }
   else if ( ! _client->canSend())
   {
-    AHTTPS_LOGDEBUG(F("*can't send"));
-
     return 0;
   }
 
@@ -1354,20 +1329,12 @@ size_t  AsyncHTTPSRequest::_send()
   while (supply)
   {
     size_t chunk = supply < TEMP_SIZE ? supply : TEMP_SIZE;
-    
-    //AHTTPS_LOGDEBUG3(F("supply ="), supply, F(", chunk ="), chunk);
-    
-    memset(temp, 0, TEMP_SIZE + 1);
-    
-    supply  -= _request->read(temp, chunk);
-    
-    //AHTTPS_LOGDEBUG1(F("temp ="), (char*)temp);
-    
+       
+    memset(temp, 0, TEMP_SIZE + 1);    
+    supply  -= _request->read(temp, chunk);       
     sent    += _client->add((char*)temp, chunk);
   }
   
-  AHTTPS_LOGDEBUG(F("Done supply"));
-
   // KH, Must be delete [] temp;
   SAFE_DELETE_ARRAY(temp)
 
@@ -1376,27 +1343,25 @@ size_t  AsyncHTTPSRequest::_send()
     SAFE_DELETE(_request)
     
     _request = nullptr;
+    
+    // KH fix crash bug
+    return 0;
   }
   
-  //AHTTPS_LOGDEBUG(F("To send()"));
-
   _client->send();
-
-  AHTTPS_LOGDEBUG1(F("*send"), sent);
 
   _lastActivity = millis();
 
   return sent;
 }
 
-//**************************************************************************************************************
+////////////////////////////////////////
+
 void  AsyncHTTPSRequest::_setReadyState(reqStates newState) 
 {
   if (_readyState != newState)
   {
     _readyState = newState;
-
-    AHTTPS_LOGDEBUG1(F("_setReadyState :"), _readyState);
 
     if (_readyStateChangeCB)
     {
@@ -1405,13 +1370,12 @@ void  AsyncHTTPSRequest::_setReadyState(reqStates newState)
   }
 }
 
-//**************************************************************************************************************
+////////////////////////////////////////
+
 void  AsyncHTTPSRequest::_processChunks()
 {
   while (_chunks->available())
   {
-    AHTTPS_LOGDEBUG3(F("_processChunks()"), _chunks->peekString(16).c_str(), F(", chunks available ="), _chunks->available());
-
     size_t _chunkRemaining = _contentLength - _contentRead - _response->available();
     _chunkRemaining -= _response->write(_chunks, _chunkRemaining);
 
@@ -1422,8 +1386,6 @@ void  AsyncHTTPSRequest::_processChunks()
 
     String chunkHeader = _chunks->readStringUntil("\r\n");
 
-    AHTTPS_LOGDEBUG3(F("*getChunkHeader"), chunkHeader.c_str(), F(", chunkHeader length ="), chunkHeader.length());
-
     size_t chunkLength = strtol(chunkHeader.c_str(), nullptr, 16);
     _contentLength += chunkLength;
 
@@ -1433,13 +1395,7 @@ void  AsyncHTTPSRequest::_processChunks()
 
       if (connectionHdr && (strcasecmp_P(connectionHdr, PSTR("close")) == 0))
       {
-        AHTTPS_LOGDEBUG(F("*all chunks received - closing TCP"));
-
         _client->close();
-      }
-      else
-      {
-        AHTTPS_LOGDEBUG(F("*all chunks received - no disconnect"));
       }
 
       _requestEndTime = millis();
@@ -1461,11 +1417,10 @@ void  AsyncHTTPSRequest::_processChunks()
   EEEEE     V     EEEEE   N   N     T           H   H   A   A   N   N   DDDD    LLLLL   EEEEE   R   R    SSS
   _______________________________________________________________________________________________________________*/
 
-//**************************************************************************************************************
+////////////////////////////////////////
+
 void  AsyncHTTPSRequest::_onConnect(AsyncSSLClient* client)
 {
-  AHTTPS_LOGDEBUG(F("_onConnect handler"));
-
   MUTEX_LOCK_NR
   
   _client = client;
@@ -1500,9 +1455,7 @@ void  AsyncHTTPSRequest::_onConnect(AsyncSSLClient* client)
     }
   }
 #endif  
-  
-  //////
-  
+   
   // KH test
   _response = new xbuf;
   //_response = new xbuf(256);
@@ -1549,7 +1502,8 @@ void  AsyncHTTPSRequest::_onConnect(AsyncSSLClient* client)
   _AHTTPS_unlock;
 }
 
-//**************************************************************************************************************
+////////////////////////////////////////
+
 void  AsyncHTTPSRequest::_onPoll(AsyncSSLClient* client)
 {
   (void) client;
@@ -1560,8 +1514,6 @@ void  AsyncHTTPSRequest::_onPoll(AsyncSSLClient* client)
   {
     _client->close();
     _HTTPcode = HTTPCODE_TIMEOUT;
-
-    AHTTPS_LOGDEBUG(F("_onPoll timeout"));
   }
 
   if (_onDataCB && available())
@@ -1572,36 +1524,37 @@ void  AsyncHTTPSRequest::_onPoll(AsyncSSLClient* client)
   _AHTTPS_unlock;
 }
 
-//**************************************************************************************************************
+////////////////////////////////////////
+
 void  AsyncHTTPSRequest::_onError(AsyncSSLClient* client, int8_t error)
 {
   (void) client;
   
   // SSL_error = (Non_SSL_error + 64)
   // Check void AsyncSSLClient::_ssl_error(int8_t err) => _error_cb(_error_cb_arg, this, err + 64);
-
-  //AHTTPS_LOGDEBUG1(F("_onError handler SSL error ="), error - 64);
-  AHTTPS_LOGDEBUG1(F("_onError handler SSL error ="), client->errorToString(error - 64));
+  if (error >= 64)
+  {
+    AHTTPS_LOGDEBUG1(F("_onError handler SSL error ="), client->errorToString(error - 64));
+  }
 
   _HTTPcode = error;
 }
 
-//**************************************************************************************************************
+////////////////////////////////////////
+
 void  AsyncHTTPSRequest::_onDisconnect(AsyncSSLClient* client)
 {
   (void) client;
   
-  AHTTPS_LOGDEBUG(F("\n_onDisconnect handler"));
-
   MUTEX_LOCK_NR
   
   if (_readyState < readyStateOpened)
   {
-    AHTTPS_LOGERROR(F("HTTPCODE_NOT_CONNECTED"));
+    AHTTPS_LOGDEBUG(F("HTTPCODE_NOT_CONNECTED"));
     _HTTPcode = HTTPCODE_NOT_CONNECTED;
   }
   else if (_HTTPcode > 0 &&
-           (_readyState < readyStateHdrsRecvd || (_contentRead + _response->available()) < _contentLength))
+          (_readyState < readyStateHdrsRecvd || (_contentRead + _response->available()) < _contentLength))
   {
     AHTTPS_LOGDEBUG(F("_onDisconnect: HTTPCODE_CONNECTION_LOST"));
     _HTTPcode = HTTPCODE_CONNECTION_LOST;
@@ -1625,15 +1578,10 @@ void  AsyncHTTPSRequest::_onDisconnect(AsyncSSLClient* client)
   _AHTTPS_unlock;
 }
 
-//**************************************************************************************************************
+////////////////////////////////////////
+
 void  AsyncHTTPSRequest::_onData(void* Vbuf, size_t len)
-{
-  AHTTPS_LOGDEBUG(F("========= _onData handler ======="));
-  AHTTPS_LOGDEBUG1(F("Vbuf ="), (char*) Vbuf);
-  AHTTPS_LOGDEBUG(F("================================="));
-  AHTTPS_LOGDEBUG1(F("Vbuf len ="), len);
-  AHTTPS_LOGDEBUG(F("================================="));
-   
+{  
   MUTEX_LOCK_NR
   
   _lastActivity = millis();
@@ -1642,11 +1590,7 @@ void  AsyncHTTPSRequest::_onData(void* Vbuf, size_t len)
   if (_chunks)
   {
     _chunks->write((uint8_t*)Vbuf, len);
-    
-    // KH, to remove
-    //AHTTPS_LOGDEBUG(F("_onData: _processChunks"));
-    ///////
-    
+        
     _processChunks();
   }
   else
@@ -1660,11 +1604,7 @@ void  AsyncHTTPSRequest::_onData(void* Vbuf, size_t len)
     if ( ! _collectHeaders())
     {
       _AHTTPS_unlock;
-      
-      // KH, to remove
-      //AHTTPS_LOGDEBUG(F("_onData: headers not complete"));
-      ///////
-      
+           
       return;
     }
   }
@@ -1682,13 +1622,7 @@ void  AsyncHTTPSRequest::_onData(void* Vbuf, size_t len)
 
     if (connectionHdr && (strcasecmp_P(connectionHdr, PSTR("close")) == 0))
     {
-      AHTTPS_LOGDEBUG(F("*all data received - closing TCP"));
-
       _client->close();
-    }
-    else
-    {
-      AHTTPS_LOGDEBUG(F("*all data received - no disconnect"));
     }
 
     _requestEndTime = millis();
@@ -1707,11 +1641,10 @@ void  AsyncHTTPSRequest::_onData(void* Vbuf, size_t len)
 
 }
 
-//**************************************************************************************************************
+////////////////////////////////////////
+
 bool  AsyncHTTPSRequest::_collectHeaders()
 {
-  AHTTPS_LOGDEBUG(F("_collectHeaders()"));
-
   // Loop to parse off each header line. Drop out and return false if no \r\n (incomplete)
   do
   {
@@ -1762,8 +1695,6 @@ bool  AsyncHTTPSRequest::_collectHeaders()
 
   if (hdr && strcasecmp_P(hdr->value, PSTR("chunked")) == 0)
   {
-    AHTTPS_LOGDEBUG(F("*transfer-encoding: chunked"));
-
     _chunked = true;
     _contentLength = 0;
     _chunks = new xbuf;
@@ -1774,7 +1705,6 @@ bool  AsyncHTTPSRequest::_collectHeaders()
   return true;
 }
 
-
 /*_____________________________________________________________________________________________________________
 
                         H   H  EEEEE   AAA   DDDD   EEEEE  RRRR    SSS
@@ -1784,7 +1714,8 @@ bool  AsyncHTTPSRequest::_collectHeaders()
                         H   H  EEEEE  A   A  DDDD   EEEEE  R   R   SSS
   ______________________________________________________________________________________________________________*/
 
-//**************************************************************************************************************
+////////////////////////////////////////
+
 void AsyncHTTPSRequest::setReqHeader(const char* name, const char* value)
 {
   if (_readyState <= readyStateOpened && _headers)
@@ -1793,7 +1724,8 @@ void AsyncHTTPSRequest::setReqHeader(const char* name, const char* value)
   }
 }
 
-//**************************************************************************************************************
+////////////////////////////////////////
+
 void AsyncHTTPSRequest::setReqHeader(const char* name, int32_t value)
 {
   if (_readyState <= readyStateOpened && _headers)
@@ -1801,10 +1733,12 @@ void AsyncHTTPSRequest::setReqHeader(const char* name, int32_t value)
     setReqHeader(name, String(value).c_str());
   }
 }
+////////////////////////////////////////
 
 #if ( defined(ESP32) || defined(ESP8266) )
 
-//**************************************************************************************************************
+////////////////////////////////////////
+
 void AsyncHTTPSRequest::setReqHeader(const char* name, const __FlashStringHelper* value)
 {
   if (_readyState <= readyStateOpened && _headers)
@@ -1816,7 +1750,8 @@ void AsyncHTTPSRequest::setReqHeader(const char* name, const __FlashStringHelper
   }
 }
 
-//**************************************************************************************************************
+////////////////////////////////////////
+
 void AsyncHTTPSRequest::setReqHeader(const __FlashStringHelper *name, const char* value)
 {
   if (_readyState <= readyStateOpened && _headers)
@@ -1828,7 +1763,8 @@ void AsyncHTTPSRequest::setReqHeader(const __FlashStringHelper *name, const char
   }
 }
 
-//**************************************************************************************************************
+////////////////////////////////////////
+
 void AsyncHTTPSRequest::setReqHeader(const __FlashStringHelper *name, const __FlashStringHelper* value)
 {
   if (_readyState <= readyStateOpened && _headers)
@@ -1842,7 +1778,8 @@ void AsyncHTTPSRequest::setReqHeader(const __FlashStringHelper *name, const __Fl
   }
 }
 
-//**************************************************************************************************************
+////////////////////////////////////////
+
 void AsyncHTTPSRequest::setReqHeader(const __FlashStringHelper *name, int32_t value)
 {
   if (_readyState <= readyStateOpened && _headers)
@@ -1853,10 +1790,12 @@ void AsyncHTTPSRequest::setReqHeader(const __FlashStringHelper *name, int32_t va
     SAFE_DELETE_ARRAY(_name)
   }
 }
+////////////////////////////////////////
 
 #endif
 
-//**************************************************************************************************************
+////////////////////////////////////////
+
 int AsyncHTTPSRequest::respHeaderCount()
 {
   if (_readyState < readyStateHdrsRecvd)
@@ -1874,7 +1813,8 @@ int AsyncHTTPSRequest::respHeaderCount()
   return count;
 }
 
-//**************************************************************************************************************
+////////////////////////////////////////
+
 char* AsyncHTTPSRequest::respHeaderName(int ndx) 
 {
   if (_readyState < readyStateHdrsRecvd) 
@@ -1888,7 +1828,8 @@ char* AsyncHTTPSRequest::respHeaderName(int ndx)
   return hdr->name;
 }
 
-//**************************************************************************************************************
+////////////////////////////////////////
+
 char* AsyncHTTPSRequest::respHeaderValue(const char* name)
 {
   if (_readyState < readyStateHdrsRecvd)
@@ -1902,7 +1843,8 @@ char* AsyncHTTPSRequest::respHeaderValue(const char* name)
   return hdr->value;
 }
 
-//**************************************************************************************************************
+////////////////////////////////////////
+
 char* AsyncHTTPSRequest::respHeaderValue(int ndx)
 {
   if (_readyState < readyStateHdrsRecvd)
@@ -1916,7 +1858,8 @@ char* AsyncHTTPSRequest::respHeaderValue(int ndx)
   return hdr->value;
 }
 
-//**************************************************************************************************************
+////////////////////////////////////////
+
 bool AsyncHTTPSRequest::respHeaderExists(const char* name)
 {
   if (_readyState < readyStateHdrsRecvd)
@@ -1930,10 +1873,12 @@ bool AsyncHTTPSRequest::respHeaderExists(const char* name)
   return true;
 }
 
+////////////////////////////////////////
 
 #if ( defined(ESP32) || defined(ESP8266) )
 
-//**************************************************************************************************************
+////////////////////////////////////////
+
 char* AsyncHTTPSRequest::respHeaderValue(const __FlashStringHelper *name)
 {
   if (_readyState < readyStateHdrsRecvd)
@@ -1950,7 +1895,8 @@ char* AsyncHTTPSRequest::respHeaderValue(const __FlashStringHelper *name)
   return hdr->value;
 }
 
-//**************************************************************************************************************
+////////////////////////////////////////
+
 bool AsyncHTTPSRequest::respHeaderExists(const __FlashStringHelper *name)
 {
   if (_readyState < readyStateHdrsRecvd)
@@ -1966,10 +1912,12 @@ bool AsyncHTTPSRequest::respHeaderExists(const __FlashStringHelper *name)
 
   return true;
 }
+////////////////////////////////////////
 
 #endif
 
-//**************************************************************************************************************
+////////////////////////////////////////
+
 String AsyncHTTPSRequest::headers()
 {
   MUTEX_LOCK(String())
@@ -1993,7 +1941,8 @@ String AsyncHTTPSRequest::headers()
   return response;
 }
 
-//**************************************************************************************************************
+////////////////////////////////////////
+
 AsyncHTTPSRequest::header*  AsyncHTTPSRequest::_addHeader(const char* name, const char* value)
 {
   MUTEX_LOCK(nullptr)
@@ -2053,7 +2002,8 @@ AsyncHTTPSRequest::header*  AsyncHTTPSRequest::_addHeader(const char* name, cons
   return hdr->next;
 }
 
-//**************************************************************************************************************
+////////////////////////////////////////
+
 AsyncHTTPSRequest::header* AsyncHTTPSRequest::_getHeader(const char* name)
 {
   MUTEX_LOCK(nullptr)
@@ -2073,7 +2023,8 @@ AsyncHTTPSRequest::header* AsyncHTTPSRequest::_getHeader(const char* name)
   return hdr;
 }
 
-//**************************************************************************************************************
+////////////////////////////////////////
+
 AsyncHTTPSRequest::header* AsyncHTTPSRequest::_getHeader(int ndx)
 {
   MUTEX_LOCK(nullptr)
@@ -2092,10 +2043,12 @@ AsyncHTTPSRequest::header* AsyncHTTPSRequest::_getHeader(int ndx)
 
   return hdr;
 }
+////////////////////////////////////////
 
 #if ( defined(ESP32) || defined(ESP8266) )
 
-//**************************************************************************************************************
+////////////////////////////////////////
+
 char* AsyncHTTPSRequest::_charstar(const __FlashStringHelper * str)
 {
   if ( ! str)
@@ -2111,8 +2064,9 @@ char* AsyncHTTPSRequest::_charstar(const __FlashStringHelper * str)
   // Return good ptr or nullptr
   return ptr;
 }
+////////////////////////////////////////
 
 #endif
-
+////////////////////////////////////////
 
 #endif    // ASYNC_HTTPS_REQUEST_GENERIC_IMPL_H

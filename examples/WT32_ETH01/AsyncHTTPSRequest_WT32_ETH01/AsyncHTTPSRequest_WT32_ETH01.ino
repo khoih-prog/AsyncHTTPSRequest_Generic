@@ -44,8 +44,9 @@
   #error This code is intended to run on the ESP32 platform! Please check your Tools->Board setting.
 #endif
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v2.1.3"
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             2001003
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v2.2.0"
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             2002000
+
 /////////////////////////////////////////////////////////
 
 // Use larger queue size if necessary for large data transfer. Default is 512 bytes if not defined here
@@ -146,8 +147,8 @@ void requestCB(void *optParm, AsyncHTTPSRequest *request, int readyState)
 
   if (readyState == readyStateDone)
   {
-    AHTTPS_LOGWARN0(F("\n**************************************\n"));
-    AHTTPS_LOGWARN1(F("Response Code = "), request->responseHTTPString());
+    AHTTPS_LOGDEBUG0(F("\n**************************************\n"));
+    AHTTPS_LOGDEBUG1(F("Response Code = "), request->responseHTTPString());
 
     if (request->responseHTTPcode() == 200)
     {

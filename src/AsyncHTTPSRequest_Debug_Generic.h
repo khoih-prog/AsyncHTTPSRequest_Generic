@@ -58,7 +58,7 @@
   #define _ASYNC_HTTPS_LOGLEVEL_       0
 #endif
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 const char AHTTPS_MARK[] = "[AHTTPS] ";
 
@@ -68,7 +68,7 @@ const char AHTTPS_MARK[] = "[AHTTPS] ";
 #define AHTTPS_PRINT        AHTTPS_DBG_PORT.print
 #define AHTTPS_PRINTLN      AHTTPS_DBG_PORT.println
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 #define AHTTPS_LOGERROR(x)         if(_ASYNC_HTTPS_LOGLEVEL_>0) { AHTTPS_PRINT_MARK; AHTTPS_PRINTLN(x); }
 #define AHTTPS_LOGERROR0(x)        if(_ASYNC_HTTPS_LOGLEVEL_>0) { AHTTPS_PRINT(x); }
@@ -76,7 +76,7 @@ const char AHTTPS_MARK[] = "[AHTTPS] ";
 #define AHTTPS_LOGERROR2(x,y,z)    if(_ASYNC_HTTPS_LOGLEVEL_>0) { AHTTPS_PRINT_MARK; AHTTPS_PRINT(x); AHTTPS_PRINT_SP; AHTTPS_PRINT(y); AHTTPS_PRINT_SP; AHTTPS_PRINTLN(z); }
 #define AHTTPS_LOGERROR3(x,y,z,w)  if(_ASYNC_HTTPS_LOGLEVEL_>0) { AHTTPS_PRINT_MARK; AHTTPS_PRINT(x); AHTTPS_PRINT_SP; AHTTPS_PRINT(y); AHTTPS_PRINT_SP; AHTTPS_PRINT(z); AHTTPS_PRINT_SP; AHTTPS_PRINTLN(w); }
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 #define AHTTPS_LOGWARN(x)          if(_ASYNC_HTTPS_LOGLEVEL_>1) { AHTTPS_PRINT_MARK; AHTTPS_PRINTLN(x); }
 #define AHTTPS_LOGWARN0(x)         if(_ASYNC_HTTPS_LOGLEVEL_>1) { AHTTPS_PRINT(x); }
@@ -84,7 +84,7 @@ const char AHTTPS_MARK[] = "[AHTTPS] ";
 #define AHTTPS_LOGWARN2(x,y,z)     if(_ASYNC_HTTPS_LOGLEVEL_>1) { AHTTPS_PRINT_MARK; AHTTPS_PRINT(x); AHTTPS_PRINT_SP; AHTTPS_PRINT(y); AHTTPS_PRINT_SP; AHTTPS_PRINTLN(z); }
 #define AHTTPS_LOGWARN3(x,y,z,w)   if(_ASYNC_HTTPS_LOGLEVEL_>1) { AHTTPS_PRINT_MARK; AHTTPS_PRINT(x); AHTTPS_PRINT_SP; AHTTPS_PRINT(y); AHTTPS_PRINT_SP; AHTTPS_PRINT(z); AHTTPS_PRINT_SP; AHTTPS_PRINTLN(w); }
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 #define AHTTPS_LOGINFO(x)          if(_ASYNC_HTTPS_LOGLEVEL_>2) { AHTTPS_PRINT_MARK; AHTTPS_PRINTLN(x); }
 #define AHTTPS_LOGINFO0(x)         if(_ASYNC_HTTPS_LOGLEVEL_>2) { AHTTPS_PRINT(x); }
@@ -92,7 +92,7 @@ const char AHTTPS_MARK[] = "[AHTTPS] ";
 #define AHTTPS_LOGINFO2(x,y,z)     if(_ASYNC_HTTPS_LOGLEVEL_>2) { AHTTPS_PRINT_MARK; AHTTPS_PRINT(x); AHTTPS_PRINT_SP; AHTTPS_PRINT(y); AHTTPS_PRINT_SP; AHTTPS_PRINTLN(z); }
 #define AHTTPS_LOGINFO3(x,y,z,w)   if(_ASYNC_HTTPS_LOGLEVEL_>2) { AHTTPS_PRINT_MARK; AHTTPS_PRINT(x); AHTTPS_PRINT_SP; AHTTPS_PRINT(y); AHTTPS_PRINT_SP; AHTTPS_PRINT(z); AHTTPS_PRINT_SP; AHTTPS_PRINTLN(w); }
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 #define AHTTPS_LOGDEBUG(x)         if(_ASYNC_HTTPS_LOGLEVEL_>3) { AHTTPS_PRINT_MARK; AHTTPS_PRINTLN(x); }
 #define AHTTPS_LOGDEBUG0(x)        if(_ASYNC_HTTPS_LOGLEVEL_>3) { AHTTPS_PRINT(x); }
@@ -100,7 +100,7 @@ const char AHTTPS_MARK[] = "[AHTTPS] ";
 #define AHTTPS_LOGDEBUG2(x,y,z)    if(_ASYNC_HTTPS_LOGLEVEL_>3) { AHTTPS_PRINT_MARK; AHTTPS_PRINT(x); AHTTPS_PRINT_SP; AHTTPS_PRINT(y); AHTTPS_PRINT_SP; AHTTPS_PRINTLN(z); }
 #define AHTTPS_LOGDEBUG3(x,y,z,w)  if(_ASYNC_HTTPS_LOGLEVEL_>3) { AHTTPS_PRINT_MARK; AHTTPS_PRINT(x); AHTTPS_PRINT_SP; AHTTPS_PRINT(y); AHTTPS_PRINT_SP; AHTTPS_PRINT(z); AHTTPS_PRINT_SP; AHTTPS_PRINTLN(w); }
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 #endif    // ASYNC_HTTPS_REQUEST_DEBUG_GENERIC_H
 

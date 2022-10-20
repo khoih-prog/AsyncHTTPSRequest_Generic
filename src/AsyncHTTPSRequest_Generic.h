@@ -17,7 +17,7 @@
   You should have received a copy of the GNU General Public License along with this program. 
   If not, see <https://www.gnu.org/licenses/>.  
  
-  Version: 2.1.3
+  Version: 2.2.0
   
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -34,6 +34,7 @@
   2.1.1    K Hoang     09/09/2022 Fix ESP32 chipID for example `AsyncHTTPSRequest_ESP_WiFiManager`
   2.1.2    K Hoang     18/09/2022 Fix bug and compiler error in some cases
   2.1.3    K Hoang     18/10/2022 Not try to reconnect to the same host:port after connected
+  2.2.0    K Hoang     20/10/2022 Fix crash and memory leak
  *****************************************************************************************************************************/
 
 #pragma once

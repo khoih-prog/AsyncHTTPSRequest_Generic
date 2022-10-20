@@ -17,7 +17,7 @@
   You should have received a copy of the GNU General Public License along with this program. 
   If not, see <https://www.gnu.org/licenses/>.  
  
-  Version: 2.1.3
+  Version: 2.2.0
   
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -34,6 +34,7 @@
   2.1.1    K Hoang     09/09/2022 Fix ESP32 chipID for example `AsyncHTTPSRequest_ESP_WiFiManager`
   2.1.2    K Hoang     18/09/2022 Fix bug and compiler error in some cases
   2.1.3    K Hoang     18/10/2022 Not try to reconnect to the same host:port after connected
+  2.2.0    K Hoang     20/10/2022 Fix crash and memory leak
  *****************************************************************************************************************************/
 
 #pragma once
@@ -41,17 +42,23 @@
 #ifndef ASYNC_HTTPS_REQUEST_GENERIC_HPP
 #define ASYNC_HTTPS_REQUEST_GENERIC_HPP
 
+////////////////////////////////////////
+
 #if !defined(ESP32)
   #error This AsyncHTTPSRequest library is currently supporting only ESP32
 #endif
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION             "AsyncHTTPSRequest_Generic v2.1.3"
+////////////////////////////////////////
+
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION             "AsyncHTTPSRequest_Generic v2.2.0"
 
 #define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MAJOR       2
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MINOR       1
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_PATCH       3
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MINOR       2
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_PATCH       0
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_INT         2001003
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_INT         2002000
+
+////////////////////////////////////////
 
 #include <Arduino.h>
 
@@ -69,6 +76,8 @@
 
 #define ASYNC_TCP_SSL_ENABLED     true
 
+////////////////////////////////////////
+
 // KH add for HTTPS
 #define SAFE_DELETE(object)         if (object) { delete object;}
 #define SAFE_DELETE_ARRAY(object)   if (object) { delete[] object;}
@@ -83,7 +92,8 @@
 #include <vector>
 
 #define SHA1_SIZE 								20
-//////
+
+////////////////////////////////////////
 
 #if defined(ESP32)
 
@@ -126,13 +136,15 @@
   #error Not supported board
 #endif
 
+////////////////////////////////////////
+
 #include <pgmspace.h>
 
 #if !defined(ASYNC_HTTP_REQUEST_GENERIC_VERSION)
 
 // Not necessary if already defined in AsyncHTTPRequest library
 // Merge xbuf
-////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 struct xseg
 {
@@ -233,13 +245,17 @@ class xbuf: public Print
 
 };
 
-////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 #define DEBUG_HTTP(format,...)  if(_debug){\
     DEBUG_IOTA_PORT.printf("Debug(%3ld): ", millis()-_requestStartTime);\
     DEBUG_IOTA_PORT.printf_P(PSTR(format),##__VA_ARGS__);}
 
-#define DEFAULT_RX_TIMEOUT           30                    // Seconds for timeout
+////////////////////////////////////////
+
+#define DEFAULT_RX_TIMEOUT           30				// Seconds for timeout
+
+////////////////////////////////////////
 
 #define HTTPCODE_CONNECTION_REFUSED  (-1)
 #define HTTPCODE_SEND_HEADER_FAILED  (-2)
@@ -263,6 +279,8 @@ typedef enum
 } reqStates;
   
 #endif    // #if !defined(ASYNC_HTTP_REQUEST_GENERIC_VERSION)
+
+////////////////////////////////////////
    
 class AsyncHTTPSRequest
 {
@@ -313,9 +331,9 @@ class AsyncHTTPSRequest
     AsyncHTTPSRequest();
     ~AsyncHTTPSRequest();
 
-
     //External functions in typical order of use:
-    //__________________________________________________________________________________________________________*/
+    ////////////////////////////////////////
+
     void        setDebug(bool);                                         // Turn debug message on/off
     bool        debug();                                                // is debug on or off?
 
@@ -369,22 +387,27 @@ class AsyncHTTPSRequest
     size_t      responseRead(uint8_t* buffer, size_t len);              // Read response into buffer
     uint32_t    elapsedTime();                                          // Elapsed time of in progress transaction or last completed (ms)
     String      version();                                              // Version of AsyncHTTPSRequest
-    //___________________________________________________________________________________________________________________________________
+
+    ////////////////////////////////////////
 
     // KH, for HTTPS
     AsyncHTTPSRequest& setSecure(bool secure);
     AsyncHTTPSRequest& addServerFingerprint(const uint8_t* fingerprint);
-    
-    //////
-    
+        
   private:
 
-    // New in v1.1.1
     bool _requestReadyToSend;
-    //////
-    
-    // New in v1.1.0
-    typedef enum  { HTTPmethodGET, HTTPmethodPOST, HTTPmethodPUT, HTTPmethodPATCH, HTTPmethodDELETE, HTTPmethodHEAD, HTTPmethodMAX } HTTPmethod;
+
+    typedef enum  
+    { 
+      HTTPmethodGET, 
+      HTTPmethodPOST, 
+      HTTPmethodPUT, 
+      HTTPmethodPATCH, 
+      HTTPmethodDELETE, 
+      HTTPmethodHEAD, 
+      HTTPmethodMAX 
+    } HTTPmethod;
     
     HTTPmethod _HTTPmethod;
     
@@ -454,5 +477,6 @@ class AsyncHTTPSRequest
     std::vector<std::array<uint8_t, SHA1_SIZE>> _secureServerFingerprints;
 };
 
+////////////////////////////////////////
 
 #endif    // ASYNC_HTTPS_REQUEST_GENERIC_HPP

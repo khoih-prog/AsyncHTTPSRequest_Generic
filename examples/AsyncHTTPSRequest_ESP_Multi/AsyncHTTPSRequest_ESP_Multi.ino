@@ -44,8 +44,8 @@
   #error This code is intended to run on the ESP8266 or ESP32 platform! Please check your Tools->Board setting.
 #endif
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v2.1.3"
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             2001003
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v2.2.0"
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             2002000
 
 // Level from 0-4
 #define ASYNC_HTTPS_DEBUG_PORT      Serial
@@ -181,8 +181,8 @@ void requestCB0(void *optParm, AsyncHTTPSRequest *thisRequest, int readyState)
 
   if (readyState == readyStateDone)
   {
-    AHTTPS_LOGWARN0(F("\n**************************************\n"));
-    AHTTPS_LOGWARN1(F("Response Code = "), thisRequest->responseHTTPString());
+    AHTTPS_LOGDEBUG0(F("\n**************************************\n"));
+    AHTTPS_LOGDEBUG1(F("Response Code = "), thisRequest->responseHTTPString());
 
     if (thisRequest->responseHTTPcode() == 200)
     {
@@ -202,8 +202,8 @@ void requestCB1(void *optParm, AsyncHTTPSRequest *thisRequest, int readyState)
 
   if (readyState == readyStateDone)
   {
-    AHTTPS_LOGWARN0(F("\n**************************************\n"));
-    AHTTPS_LOGWARN1(F("Response Code = "), thisRequest->responseHTTPString());
+    AHTTPS_LOGDEBUG0(F("\n**************************************\n"));
+    AHTTPS_LOGDEBUG1(F("Response Code = "), thisRequest->responseHTTPString());
 
     if (thisRequest->responseHTTPcode() == 200)
     {

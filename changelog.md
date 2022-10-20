@@ -11,6 +11,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v2.2.0](#releases-v220)
   * [Releases v2.1.3](#releases-v213)
   * [Releases v2.1.2](#releases-v212)
   * [Releases v2.1.1](#releases-v211)
@@ -31,10 +32,14 @@
 
 ## Changelog
 
+### Releases v2.2.0
+
+1. Fix crash when turn-on debug or start
+2. Fix memory leak. Check [Having problemen with AsyncHTTPS memory leak #11](https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/issues/11) and [Update for memleak in AsyncHTTPSRequest_Impl_Generic.h #13](https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/pull/13)
+
 ### Releases v2.1.3
 
 1. Not try to reconnect to the same host:port after connected. Check [setReuse feature #12](https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/issues/12)
-
 
 ### Releases v2.1.2
 

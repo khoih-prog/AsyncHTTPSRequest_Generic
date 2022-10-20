@@ -44,17 +44,17 @@
 #error This code is intended to run on the ESP8266 or ESP32 platform! Please check your Tools->Board setting.
 #endif
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v2.1.3"
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             2001003
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v2.2.0"
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             2002000
 
-#define ASYNC_HTTP_REQUEST_GENERIC_VERSION_MIN_TARGET       "AsyncHTTPRequest_Generic v1.9.1"
-#define ASYNC_HTTP_REQUEST_GENERIC_VERSION_MIN              1009001
+#define ASYNC_HTTP_REQUEST_GENERIC_VERSION_MIN_TARGET       "AsyncHTTPRequest_Generic v1.9.2"
+#define ASYNC_HTTP_REQUEST_GENERIC_VERSION_MIN              1009002
 
 // Level from 0-4
 #define ASYNC_HTTPS_DEBUG_PORT      Serial
 
 #define _ASYNC_TCP_SSL_LOGLEVEL_    1
-#define _ASYNC_HTTPS_LOGLEVEL_      2
+#define _ASYNC_HTTPS_LOGLEVEL_      1
 
 // 300s = 5 minutes to not flooding
 #define HTTPS_REQUEST_INTERVAL      120
@@ -245,8 +245,8 @@ void requestCB0(void *optParm, AsyncHTTPSRequest *thisRequest, int readyState)
 
   if (readyState == readyStateDone)
   {
-    AHTTPS_LOGWARN0(F("\n**************************************\n"));
-    AHTTPS_LOGWARN1(F("Response Code = "), thisRequest->responseHTTPString());
+    AHTTPS_LOGDEBUG0(F("\n**************************************\n"));
+    AHTTPS_LOGDEBUG1(F("Response Code = "), thisRequest->responseHTTPString());
 
     if (thisRequest->responseHTTPcode() == 200)
     {
@@ -267,8 +267,8 @@ void requestCB1(void *optParm, AsyncHTTPRequest *thisRequest, int readyState)
 
   if (readyState == readyStateDone)
   {
-    AHTTP_LOGWARN0(F("\n**************************************\n"));
-    AHTTP_LOGWARN1(F("Response Code = "), thisRequest->responseHTTPString());
+    AHTTPS_LOGDEBUG0(F("\n**************************************\n"));
+    AHTTPS_LOGDEBUG1(F("Response Code = "), thisRequest->responseHTTPString());
 
     if (thisRequest->responseHTTPcode() == 200)
     {
@@ -289,8 +289,8 @@ void requestCB2(void *optParm, AsyncHTTPRequest *thisRequest, int readyState)
 
   if (readyState == readyStateDone)
   {
-    AHTTP_LOGWARN0(F("\n**************************************\n"));
-    AHTTP_LOGWARN1(F("Response Code = "), thisRequest->responseHTTPString());
+    AHTTPS_LOGDEBUG0(F("\n**************************************\n"));
+    AHTTPS_LOGDEBUG1(F("Response Code = "), thisRequest->responseHTTPString());
 
     if (thisRequest->responseHTTPcode() == 200)
     {

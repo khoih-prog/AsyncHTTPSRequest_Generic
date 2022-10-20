@@ -46,11 +46,11 @@
   #error This code is intended to run on the ESP8266 or ESP32 platform! Please check your Tools->Board setting.
 #endif
 
-#define ESP_ASYNC_WIFIMANAGER_VERSION_MIN_TARGET          "ESPAsync_WiFiManager v1.15.0"
-#define ESP_ASYNC_WIFIMANAGER_VERSION_MIN                 1015000
+#define ESP_ASYNC_WIFIMANAGER_VERSION_MIN_TARGET            "ESPAsync_WiFiManager v1.15.0"
+#define ESP_ASYNC_WIFIMANAGER_VERSION_MIN                   1015000
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v2.1.3"
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             2001003
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v2.2.0"
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             2002000
 
 /////////////////////////////////////////////////////////
 
