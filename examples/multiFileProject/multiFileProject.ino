@@ -13,11 +13,16 @@
 // To demo how to include files in multi-file Projects
 
 #if !( defined(ESP32) )
-  #error This code is intended to run on the ESP32 platform! Please check your Tools->Board setting.
+	#error This code is intended to run on the ESP32 platform! Please check your Tools->Board setting.
 #endif
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v2.1.3"
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             2001003
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v2.2.1"
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             2002001
+
+/////////////////////////////////////////////////////////
+
+// Uncomment for certain HTTP site to optimize
+//#define NOT_SEND_HEADER_AFTER_CONNECTED        true
 
 #include "multiFileProject.h"
 
@@ -26,26 +31,29 @@
 // To be included only in main(), .ino with setup() to avoid `Multiple Definitions` Linker Error
 #include "AsyncHTTPSRequest_Generic.h"
 
-void setup() 
+void setup()
 {
-  Serial.begin(115200);
-  while (!Serial && millis() < 5000);
+	Serial.begin(115200);
 
-  delay(200);
-  
-  Serial.println(F("\nStart multiFileProject"));
-  Serial.println(ASYNC_HTTPS_REQUEST_GENERIC_VERSION);
+	while (!Serial && millis() < 5000);
+
+	delay(200);
+
+	Serial.println(F("\nStart multiFileProject"));
+	Serial.println(ASYNC_HTTPS_REQUEST_GENERIC_VERSION);
 
 #if defined(ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN)
-  if (ASYNC_HTTPS_REQUEST_GENERIC_VERSION_INT < ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN)
-  {
-    Serial.print(F("Warning. Must use this example on Version equal or later than : "));
-    Serial.println(ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET);
-  }
+
+	if (ASYNC_HTTPS_REQUEST_GENERIC_VERSION_INT < ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN)
+	{
+		Serial.print(F("Warning. Must use this example on Version equal or later than : "));
+		Serial.println(ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET);
+	}
+
 #endif
 }
 
-void loop() 
+void loop()
 {
-  // put your main code here, to run repeatedly:
+	// put your main code here, to run repeatedly:
 }

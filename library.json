@@ -1,6 +1,6 @@
 {
   "name":"AsyncHTTPSRequest_Generic",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description":"Simple Async HTTPS Request library, supporting GET, POST, PUT, PATCH, DELETE and HEAD, on top of AsyncTCP_SSL library for ESP32 (including ESP32_S2, ESP32_S3 and ESP32_C3), WT32_ETH01 (ESP32 + LAN8720). Supporting in the future for RP2040W, ESP8266, Portenta_H7, STM32 with built-in LAN8742A Ethernet, etc. Now you can send HTTP / HTTPS requests to multiple addresses and receive responses from them.",
   "keywords":"communication, async, tcp, https, ssl, tls, ESP8266, ESP32, ESP32-S2, wt32-eth01, ESPAsyncTCP, AsyncTCP, stm32, ethernet, wifi, lan8742a, lan8720, f407ve, nucleo-144, stm32f7",
   "authors": [
@@ -45,13 +45,13 @@
     {
       "owner": "khoih-prog",
       "name": "AsyncHTTPRequest_Generic",
-      "version": ">=1.9.2",
+      "version": ">=1.10.2",
       "platforms": ["espressif8266", "espressif32"]
     },
     {
       "owner": "khoih-prog",
       "name": "ESPAsync_WiFiManager",
-      "version": ">=1.15.0",
+      "version": ">=1.15.1",
       "platforms": ["espressif8266", "espressif32"]
     }
   ],

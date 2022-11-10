@@ -17,8 +17,8 @@
   You should have received a copy of the GNU General Public License along with this program. 
   If not, see <https://www.gnu.org/licenses/>.  
  
-  Version: 2.2.0
-  
+  Version: 2.2.1
+
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   1.0.0    K Hoang     21/10/2021 Initial coding to support only ESP32
@@ -35,6 +35,7 @@
   2.1.2    K Hoang     18/09/2022 Fix bug and compiler error in some cases
   2.1.3    K Hoang     18/10/2022 Not try to reconnect to the same host:port after connected
   2.2.0    K Hoang     20/10/2022 Fix crash and memory leak
+  2.2.1    K Hoang     09/11/2022 Default to reconnect to the same host:port after connected for new HTTP sites
  *****************************************************************************************************************************/
 
 #pragma once
@@ -50,19 +51,28 @@
 
 ////////////////////////////////////////
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION             "AsyncHTTPSRequest_Generic v2.2.0"
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION             "AsyncHTTPSRequest_Generic v2.2.1"
 
 #define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MAJOR       2
 #define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MINOR       2
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_PATCH       0
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_PATCH       1
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_INT         2002000
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_INT         2002001
 
 ////////////////////////////////////////
 
 #include <Arduino.h>
 
 #include "AsyncHTTPSRequest_Debug_Generic.h"
+
+////////////////////////////////////////
+
+#if !defined(NOT_SEND_HEADER_AFTER_CONNECTED)
+	// Default is false
+	#define NOT_SEND_HEADER_AFTER_CONNECTED				false
+#endif
+
+////////////////////////////////////////
 
 #ifndef DEBUG_IOTA_PORT
   #define DEBUG_IOTA_PORT Serial
@@ -107,6 +117,8 @@
   
   #define _AHTTPS_lock       xSemaphoreTakeRecursive(threadLock,portMAX_DELAY)
   #define _AHTTPS_unlock     xSemaphoreGiveRecursive(threadLock)
+
+////////////////////////////////////////
   
 #elif defined(ESP8266)
 
@@ -119,6 +131,8 @@
   
   #define _AHTTPS_lock
   #define _AHTTPS_unlock
+
+////////////////////////////////////////
   
 #elif ( defined(STM32F0) || defined(STM32F1) || defined(STM32F2) || defined(STM32F3)  ||defined(STM32F4) || defined(STM32F7) || \
        defined(STM32L0) || defined(STM32L1) || defined(STM32L4) || defined(STM32H7)  ||defined(STM32G0) || defined(STM32G4) || \
@@ -131,6 +145,8 @@
   #define MUTEX_LOCK(returnVal)
   #define _AHTTPS_lock
   #define _AHTTPS_unlock
+
+////////////////////////////////////////
   
 #else
   #error Not supported board
@@ -151,6 +167,9 @@ struct xseg
   xseg    *next;
   uint8_t data[];
 };
+
+////////////////////////////////////////
+////////////////////////////////////////
 
 class xbuf: public Print 
 {
@@ -268,6 +287,8 @@ class xbuf: public Print
 #define HTTPCODE_ENCODING            (-9)
 #define HTTPCODE_STREAM_WRITE        (-10)
 #define HTTPCODE_TIMEOUT             (-11)
+
+////////////////////////////////////////
 
 typedef enum
 {

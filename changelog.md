@@ -11,6 +11,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v2.2.1](#releases-v221)
   * [Releases v2.2.0](#releases-v220)
   * [Releases v2.1.3](#releases-v213)
   * [Releases v2.1.2](#releases-v212)
@@ -31,6 +32,11 @@
 
 
 ## Changelog
+
+### Releases v2.2.1
+
+1. Default to reconnect to the same `host:port` after connected for new HTTP sites. Check [Host/Headers not always sent with 1.10.1 #44](https://github.com/khoih-prog/AsyncHTTPRequest_Generic/issues/44) and [Getting 400 Bad Request on second call to same host #14](https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/issues/14)
+2. Use `allman astyle` and add `utils`
 
 ### Releases v2.2.0
 

@@ -41,11 +41,16 @@
 //*************************************************************************************************************
 
 #if !( defined(ESP8266) ||  defined(ESP32) )
-  #error This code is intended to run on the ESP8266 or ESP32 platform! Please check your Tools->Board setting.
+	#error This code is intended to run on the ESP8266 or ESP32 platform! Please check your Tools->Board setting.
 #endif
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v2.2.0"
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             2002000
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v2.2.1"
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             2002001
+
+/////////////////////////////////////////////////////////
+
+// Uncomment for certain HTTP site to optimize
+//#define NOT_SEND_HEADER_AFTER_CONNECTED        true
 
 // Level from 0-4
 #define ASYNC_HTTPS_DEBUG_PORT      Serial
@@ -65,9 +70,9 @@ const char* ssid        = "your_ssid";
 const char* password    = "your_pass";
 
 #if (ESP8266)
-  #include <ESP8266WiFi.h>
+	#include <ESP8266WiFi.h>
 #elif (ESP32)
-  #include <WiFi.h>
+	#include <WiFi.h>
 #endif
 
 // Use larger queue size if necessary for large data transfer. Default is 512 bytes if not defined here
@@ -87,124 +92,129 @@ Ticker ticker1;
 
 void heartBeatPrint()
 {
-  static int num = 1;
+	static int num = 1;
 
-  if (WiFi.status() == WL_CONNECTED)
-    Serial.print(F("H"));        // H means connected to WiFi
-  else
-    Serial.print(F("F"));        // F means not connected to WiFi
+	if (WiFi.status() == WL_CONNECTED)
+		Serial.print(F("H"));        // H means connected to WiFi
+	else
+		Serial.print(F("F"));        // F means not connected to WiFi
 
-  if (num == 80)
-  {
-    Serial.println();
-    num = 1;
-  }
-  else if (num++ % 10 == 0)
-  {
-    Serial.print(F(" "));
-  }
+	if (num == 80)
+	{
+		Serial.println();
+		num = 1;
+	}
+	else if (num++ % 10 == 0)
+	{
+		Serial.print(F(" "));
+	}
 }
 
 void sendRequest()
 {
-  static bool requestOpenResult;
+	static bool requestOpenResult;
 
-  if (request.readyState() == readyStateUnsent || request.readyState() == readyStateDone)
-  {
-    //requestOpenResult = request.open("GET", "https://worldtimeapi.org/api/timezone/Europe/London.txt");
-    //requestOpenResult = request.open("GET", "https://worldtimeapi.org/api/timezone/America/Toronto.txt");
-    requestOpenResult = request.open("GET", "https://worldtimeapi.org/api/timezone/America/Toronto.txt");
+	if (request.readyState() == readyStateUnsent || request.readyState() == readyStateDone)
+	{
+		//requestOpenResult = request.open("GET", "https://worldtimeapi.org/api/timezone/Europe/London.txt");
+		//requestOpenResult = request.open("GET", "https://worldtimeapi.org/api/timezone/America/Toronto.txt");
+		requestOpenResult = request.open("GET", "https://worldtimeapi.org/api/timezone/America/Toronto.txt");
 
-    if (requestOpenResult)
-    {
-      // Only send() if open() returns true, or crash
-      request.send();
-    }
-    else
-    {
-      Serial.println(F("Can't send bad request"));
-    }
-  }
-  else
-  {
-    Serial.println(F("Can't send request"));
-  }
+		if (requestOpenResult)
+		{
+			// Only send() if open() returns true, or crash
+			request.send();
+		}
+		else
+		{
+			Serial.println(F("Can't send bad request"));
+		}
+	}
+	else
+	{
+		Serial.println(F("Can't send request"));
+	}
 }
 
 void requestCB(void *optParm, AsyncHTTPSRequest *request, int readyState)
 {
-  (void) optParm;
+	(void) optParm;
 
-  if (readyState == readyStateDone)
-  {
-    AHTTPS_LOGDEBUG0(F("\n**************************************\n"));
-    AHTTPS_LOGDEBUG1(F("Response Code = "), request->responseHTTPString());
+	if (readyState == readyStateDone)
+	{
+		AHTTPS_LOGDEBUG0(F("\n**************************************\n"));
+		AHTTPS_LOGDEBUG1(F("Response Code = "), request->responseHTTPString());
 
-    if (request->responseHTTPcode() == 200)
-    {
-      Serial.println(F("\n**************************************"));
-      Serial.println(request->responseText());
-      Serial.println(F("**************************************"));
-    }
+		if (request->responseHTTPcode() == 200)
+		{
+			Serial.println(F("\n**************************************"));
+			Serial.println(request->responseText());
+			Serial.println(F("**************************************"));
+		}
 
-    request->setDebug(false);
-  }
+		request->setDebug(false);
+	}
 }
 
 void setup()
 {
-  // put your setup code here, to run once:
-  Serial.begin(115200);
-  while (!Serial && millis() < 5000);
+	// put your setup code here, to run once:
+	Serial.begin(115200);
 
-  delay(200);
+	while (!Serial && millis() < 5000);
 
-  Serial.print(F("\nStarting AsyncHTTPSRequest_ESP using ")); Serial.println(ARDUINO_BOARD);
+	delay(200);
+
+	Serial.print(F("\nStarting AsyncHTTPSRequest_ESP using "));
+	Serial.println(ARDUINO_BOARD);
 
 #if defined(ESP32)
-  Serial.println(ASYNC_TCP_SSL_VERSION);
+	Serial.println(ASYNC_TCP_SSL_VERSION);
 #else
-  //Serial.println(ESPASYNC_TCP_SSL_VERSION);
+	//Serial.println(ESPASYNC_TCP_SSL_VERSION);
 #endif
 
-  Serial.println(ASYNC_HTTPS_REQUEST_GENERIC_VERSION);
+	Serial.println(ASYNC_HTTPS_REQUEST_GENERIC_VERSION);
 
 #if defined(ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN)
-  if (ASYNC_HTTPS_REQUEST_GENERIC_VERSION_INT < ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN)
-  {
-    Serial.print(F("Warning. Must use this example on Version equal or later than : "));
-    Serial.println(ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET);
-  }
+
+	if (ASYNC_HTTPS_REQUEST_GENERIC_VERSION_INT < ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN)
+	{
+		Serial.print(F("Warning. Must use this example on Version equal or later than : "));
+		Serial.println(ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET);
+	}
+
 #endif
 
-  WiFi.mode(WIFI_STA);
+	WiFi.mode(WIFI_STA);
 
-  WiFi.begin(ssid, password);
+	WiFi.begin(ssid, password);
 
-  Serial.print(F("Connecting to WiFi SSID: ")); Serial.println(ssid);
+	Serial.print(F("Connecting to WiFi SSID: "));
+	Serial.println(ssid);
 
-  while (WiFi.status() != WL_CONNECTED)
-  {
-    delay(500);
-    Serial.print(".");
-  }
+	while (WiFi.status() != WL_CONNECTED)
+	{
+		delay(500);
+		Serial.print(".");
+	}
 
-  Serial.print(F("\nAsyncHTTPSRequest @ IP : "));
-  Serial.println(WiFi.localIP());
+	Serial.print(F("\nAsyncHTTPSRequest @ IP : "));
+	Serial.println(WiFi.localIP());
 
-  request.setDebug(false);
+	request.setDebug(false);
 
-  request.onReadyStateChange(requestCB);
+	request.onReadyStateChange(requestCB);
 
-  ticker.attach(HTTPS_REQUEST_INTERVAL, sendRequest);
+	ticker.attach(HTTPS_REQUEST_INTERVAL, sendRequest);
 
-  ticker1.attach(HEARTBEAT_INTERVAL, heartBeatPrint);
+	ticker1.attach(HEARTBEAT_INTERVAL, heartBeatPrint);
 
-  // Send first request now
-  sendRequest();
+	// Send first request now
+	sendRequest();
 }
 
 void loop()
 {
-  //delay(1);
+	//delay(1);
 }

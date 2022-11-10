@@ -41,14 +41,19 @@
 //*************************************************************************************************************
 
 #if !( defined(ESP8266) ||  defined(ESP32) )
-#error This code is intended to run on the ESP8266 or ESP32 platform! Please check your Tools->Board setting.
+	#error This code is intended to run on the ESP8266 or ESP32 platform! Please check your Tools->Board setting.
 #endif
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v2.2.0"
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             2002000
+#define ASYNC_HTTP_REQUEST_GENERIC_VERSION_MIN_TARGET       "AsyncHTTPRequest_Generic v1.10.2"
+#define ASYNC_HTTP_REQUEST_GENERIC_VERSION_MIN              1010002
 
-#define ASYNC_HTTP_REQUEST_GENERIC_VERSION_MIN_TARGET       "AsyncHTTPRequest_Generic v1.9.2"
-#define ASYNC_HTTP_REQUEST_GENERIC_VERSION_MIN              1009002
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v2.2.1"
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             2002001
+
+/////////////////////////////////////////////////////////
+
+// Uncomment for certain HTTP site to optimize
+//#define NOT_SEND_HEADER_AFTER_CONNECTED        true
 
 // Level from 0-4
 #define ASYNC_HTTPS_DEBUG_PORT      Serial
@@ -68,9 +73,9 @@ const char* ssid        = "your_ssid";
 const char* password    = "your_pass";
 
 #if (ESP8266)
-  #include <ESP8266WiFi.h>
+	#include <ESP8266WiFi.h>
 #elif (ESP32)
-  #include <WiFi.h>
+	#include <WiFi.h>
 #endif
 
 // Use larger queue size if necessary for large data transfer. Default is 512 bytes if not defined here
@@ -91,9 +96,9 @@ const char* password    = "your_pass";
 
 const char* addreses[][NUM_DIFFERENT_SITES] =
 {
-  {"https://worldtimeapi.org/api/timezone/America/Toronto.txt", "https://worldtimeapi.org/api/timezone/Europe/Prague.txt"},
-  {"http://worldtimeapi.org/api/timezone/Europe/London.txt",    "http://worldtimeapi.org/api/timezone/America/Vancouver.txt"},
-  {"http://www.myexternalip.com/raw"}
+	{"https://worldtimeapi.org/api/timezone/America/Toronto.txt", "https://worldtimeapi.org/api/timezone/Europe/Prague.txt"},
+	{"http://worldtimeapi.org/api/timezone/Europe/London.txt",    "http://worldtimeapi.org/api/timezone/America/Vancouver.txt"},
+	{"http://www.myexternalip.com/raw"}
 };
 
 #define NUM_ENTRIES_SITE_0        2
@@ -105,8 +110,8 @@ bool readySend[] = { true, true, true };
 
 typedef enum
 {
-  HTTP_REQUEST    = 0,
-  HTTPS_REQUEST   = 1,
+	HTTP_REQUEST    = 0,
+	HTTPS_REQUEST   = 1,
 } HTTP_Type;
 
 AsyncHTTPSRequest request0;
@@ -115,15 +120,15 @@ AsyncHTTPRequest  request2;
 
 typedef struct _AsyncHTTPRequestData
 {
-  void*       request;      // (void*) for AsyncHTTPRequest* or AsyncHTTPSRequest*
-  HTTP_Type   httpType;
+	void*       request;      // (void*) for AsyncHTTPRequest* or AsyncHTTPSRequest*
+	HTTP_Type   httpType;
 } AsyncHTTPRequestData;
 
 AsyncHTTPRequestData myAsyncHTTPRequestData[] =
 {
-  { (void*) &request0, HTTPS_REQUEST },
-  { (void*) &request1, HTTP_REQUEST  },
-  { (void*) &request2, HTTP_REQUEST  }
+	{ (void*) &request0, HTTPS_REQUEST },
+	{ (void*) &request1, HTTP_REQUEST  },
+	{ (void*) &request2, HTTP_REQUEST  }
 };
 
 // This is for HTTPS and must use AsyncHTTPSRequest
@@ -152,238 +157,244 @@ Ticker ticker1;
 
 void heartBeatPrint()
 {
-  static int num = 1;
+	static int num = 1;
 
-  if (WiFi.status() == WL_CONNECTED)
-    Serial.print(F("H"));        // H means connected to WiFi
-  else
-    Serial.print(F("F"));        // F means not connected to WiFi
+	if (WiFi.status() == WL_CONNECTED)
+		Serial.print(F("H"));        // H means connected to WiFi
+	else
+		Serial.print(F("F"));        // F means not connected to WiFi
 
-  if (num == 80)
-  {
-    Serial.println();
-    num = 1;
-  }
-  else if (num++ % 10 == 0)
-  {
-    Serial.print(F(" "));
-  }
+	if (num == 80)
+	{
+		Serial.println();
+		num = 1;
+	}
+	else if (num++ % 10 == 0)
+	{
+		Serial.print(F(" "));
+	}
 }
 
 void sendRequest(uint16_t index)
 {
-  static bool requestOpenResult;
+	static bool requestOpenResult;
 
-  reqCount[index]--;
-  readySend[index] = false;
+	reqCount[index]--;
+	readySend[index] = false;
 
-  if ( myAsyncHTTPRequestData[index].httpType == HTTPS_REQUEST )
-  {
-    requestOpenResult = ((AsyncHTTPSRequest *) myAsyncHTTPRequestData[index].request)->open("GET", addreses[index][reqCount[index]]);
-    
-    if (requestOpenResult)
-    {
-      // Only send() if open() returns true, or crash
-      Serial.print("\nSending HTTPS request: ");
-      ((AsyncHTTPSRequest *) myAsyncHTTPRequestData[index].request)->send();
-    }
-    else
-    {
-      Serial.print("\nCan't send bad HTTPS request : ");
-    }
-  }
-  else if ( myAsyncHTTPRequestData[index].httpType == HTTP_REQUEST )
-  {
-    requestOpenResult = ((AsyncHTTPRequest *) myAsyncHTTPRequestData[index].request)->open("GET", addreses[index][reqCount[index]]);
+	if ( myAsyncHTTPRequestData[index].httpType == HTTPS_REQUEST )
+	{
+		requestOpenResult = ((AsyncHTTPSRequest *) myAsyncHTTPRequestData[index].request)->open("GET", addreses[index][reqCount[index]]);
 
-    if (requestOpenResult)
-    {
-      // Only send() if open() returns true, or crash
-      Serial.print("\nSending HTTP request: ");
-      ((AsyncHTTPRequest *) myAsyncHTTPRequestData[index].request)->send();
-    }
-    else
-    {
-      Serial.print("\nCan't send bad HTTP request : ");
-    }
-  }
+		if (requestOpenResult)
+		{
+			// Only send() if open() returns true, or crash
+			Serial.print("\nSending HTTPS request: ");
+			((AsyncHTTPSRequest *) myAsyncHTTPRequestData[index].request)->send();
+		}
+		else
+		{
+			Serial.print("\nCan't send bad HTTPS request : ");
+		}
+	}
+	else if ( myAsyncHTTPRequestData[index].httpType == HTTP_REQUEST )
+	{
+		requestOpenResult = ((AsyncHTTPRequest *) myAsyncHTTPRequestData[index].request)->open("GET", addreses[index][reqCount[index]]);
 
-  Serial.println(addreses[index][reqCount[index]]);
+		if (requestOpenResult)
+		{
+			// Only send() if open() returns true, or crash
+			Serial.print("\nSending HTTP request: ");
+			((AsyncHTTPRequest *) myAsyncHTTPRequestData[index].request)->send();
+		}
+		else
+		{
+			Serial.print("\nCan't send bad HTTP request : ");
+		}
+	}
+
+	Serial.println(addreses[index][reqCount[index]]);
 }
 
 void sendRequest0()
 {
-  sendRequest(0);
+	sendRequest(0);
 }
 
 void sendRequest1()
 {
-  sendRequest(1);
+	sendRequest(1);
 }
 
 void sendRequest2()
 {
-  sendRequest(2);
+	sendRequest(2);
 }
 
 void sendRequests()
 {
-  for (int index = 0; index < NUM_DIFFERENT_SITES; index++)
-  {
-    reqCount[index] = 2;
-  }
-  
-  reqCount[0] = NUM_ENTRIES_SITE_0;
-  reqCount[1] = NUM_ENTRIES_SITE_1;
-  reqCount[2] = NUM_ENTRIES_SITE_2;
+	for (int index = 0; index < NUM_DIFFERENT_SITES; index++)
+	{
+		reqCount[index] = 2;
+	}
+
+	reqCount[0] = NUM_ENTRIES_SITE_0;
+	reqCount[1] = NUM_ENTRIES_SITE_1;
+	reqCount[2] = NUM_ENTRIES_SITE_2;
 }
 
 // This is for HTTPS and must use AsyncHTTPSRequest
 void requestCB0(void *optParm, AsyncHTTPSRequest *thisRequest, int readyState)
 {
-  (void) optParm;
+	(void) optParm;
 
-  if (readyState == readyStateDone)
-  {
-    AHTTPS_LOGDEBUG0(F("\n**************************************\n"));
-    AHTTPS_LOGDEBUG1(F("Response Code = "), thisRequest->responseHTTPString());
+	if (readyState == readyStateDone)
+	{
+		AHTTPS_LOGDEBUG0(F("\n**************************************\n"));
+		AHTTPS_LOGDEBUG1(F("Response Code = "), thisRequest->responseHTTPString());
 
-    if (thisRequest->responseHTTPcode() == 200)
-    {
-      Serial.println(F("\n**************************************"));
-      Serial.println(thisRequest->responseText());
-      Serial.println(F("**************************************"));
-    }
+		if (thisRequest->responseHTTPcode() == 200)
+		{
+			Serial.println(F("\n**************************************"));
+			Serial.println(thisRequest->responseText());
+			Serial.println(F("**************************************"));
+		}
 
-    thisRequest->setDebug(false);
-    readySend[0] = true;
-  }
+		thisRequest->setDebug(false);
+		readySend[0] = true;
+	}
 }
 
 // This is for HTTP and must use AsyncHTTPRequest
 void requestCB1(void *optParm, AsyncHTTPRequest *thisRequest, int readyState)
 {
-  (void) optParm;
+	(void) optParm;
 
-  if (readyState == readyStateDone)
-  {
-    AHTTPS_LOGDEBUG0(F("\n**************************************\n"));
-    AHTTPS_LOGDEBUG1(F("Response Code = "), thisRequest->responseHTTPString());
+	if (readyState == readyStateDone)
+	{
+		AHTTPS_LOGDEBUG0(F("\n**************************************\n"));
+		AHTTPS_LOGDEBUG1(F("Response Code = "), thisRequest->responseHTTPString());
 
-    if (thisRequest->responseHTTPcode() == 200)
-    {
-      Serial.println(F("\n**************************************"));
-      Serial.println(thisRequest->responseText());
-      Serial.println(F("**************************************"));
-    }
+		if (thisRequest->responseHTTPcode() == 200)
+		{
+			Serial.println(F("\n**************************************"));
+			Serial.println(thisRequest->responseText());
+			Serial.println(F("**************************************"));
+		}
 
-    thisRequest->setDebug(false);
-    readySend[1] = true;
-  }
+		thisRequest->setDebug(false);
+		readySend[1] = true;
+	}
 }
 
 // This is for HTTP and must use AsyncHTTPRequest
 void requestCB2(void *optParm, AsyncHTTPRequest *thisRequest, int readyState)
 {
-  (void) optParm;
+	(void) optParm;
 
-  if (readyState == readyStateDone)
-  {
-    AHTTPS_LOGDEBUG0(F("\n**************************************\n"));
-    AHTTPS_LOGDEBUG1(F("Response Code = "), thisRequest->responseHTTPString());
+	if (readyState == readyStateDone)
+	{
+		AHTTPS_LOGDEBUG0(F("\n**************************************\n"));
+		AHTTPS_LOGDEBUG1(F("Response Code = "), thisRequest->responseHTTPString());
 
-    if (thisRequest->responseHTTPcode() == 200)
-    {
-      Serial.println(F("\n**************************************"));
-      Serial.println(thisRequest->responseText());
-      Serial.println(F("**************************************"));
-    }
+		if (thisRequest->responseHTTPcode() == 200)
+		{
+			Serial.println(F("\n**************************************"));
+			Serial.println(thisRequest->responseText());
+			Serial.println(F("**************************************"));
+		}
 
-    thisRequest->setDebug(false);
-    readySend[2] = true;
-  }
+		thisRequest->setDebug(false);
+		readySend[2] = true;
+	}
 }
 
 
 void setup()
 {
-  // put your setup code here, to run once:
-  Serial.begin(115200);
-  while (!Serial && millis() < 5000);
+	// put your setup code here, to run once:
+	Serial.begin(115200);
 
-  delay(200);
+	while (!Serial && millis() < 5000);
 
-  Serial.print("\nStarting AsyncHTTP_HTTPSRequest_ESP on ");  Serial.println(ARDUINO_BOARD);
+	delay(200);
+
+	Serial.print("\nStarting AsyncHTTP_HTTPSRequest_ESP on ");
+	Serial.println(ARDUINO_BOARD);
 
 #if defined(ESP32)
-  Serial.println(ASYNC_TCP_SSL_VERSION);
+	Serial.println(ASYNC_TCP_SSL_VERSION);
 #else
-  //Serial.println(ESPASYNC_TCP_SSL_VERSION);
+	//Serial.println(ESPASYNC_TCP_SSL_VERSION);
 #endif
 
-  Serial.println(ASYNC_HTTPS_REQUEST_GENERIC_VERSION);
-  Serial.println(ASYNC_HTTP_REQUEST_GENERIC_VERSION);
+	Serial.println(ASYNC_HTTPS_REQUEST_GENERIC_VERSION);
+	Serial.println(ASYNC_HTTP_REQUEST_GENERIC_VERSION);
 
 #if defined(ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN)
-  if (ASYNC_HTTPS_REQUEST_GENERIC_VERSION_INT < ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN)
-  {
-    Serial.print(F("Warning. Must use this example on Version equal or later than : "));
-    Serial.println(ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET);
-  }
+
+	if (ASYNC_HTTPS_REQUEST_GENERIC_VERSION_INT < ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN)
+	{
+		Serial.print(F("Warning. Must use this example on Version equal or later than : "));
+		Serial.println(ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET);
+	}
+
 #endif
 
 #if defined(ASYNC_HTTP_REQUEST_GENERIC_VERSION_MIN)
-  if (ASYNC_HTTP_REQUEST_GENERIC_VERSION_INT < ASYNC_HTTP_REQUEST_GENERIC_VERSION_MIN)
-  {
-    Serial.print(F("Warning. Must use this example on Version equal or later than : "));
-    Serial.println(ASYNC_HTTP_REQUEST_GENERIC_VERSION_MIN_TARGET);
-  }
+
+	if (ASYNC_HTTP_REQUEST_GENERIC_VERSION_INT < ASYNC_HTTP_REQUEST_GENERIC_VERSION_MIN)
+	{
+		Serial.print(F("Warning. Must use this example on Version equal or later than : "));
+		Serial.println(ASYNC_HTTP_REQUEST_GENERIC_VERSION_MIN_TARGET);
+	}
+
 #endif
 
-  WiFi.mode(WIFI_STA);
+	WiFi.mode(WIFI_STA);
 
-  WiFi.begin(ssid, password);
+	WiFi.begin(ssid, password);
 
-  Serial.println("Connecting to WiFi SSID: " + String(ssid));
+	Serial.println("Connecting to WiFi SSID: " + String(ssid));
 
-  while (WiFi.status() != WL_CONNECTED)
-  {
-    delay(500);
-    Serial.print(".");
-  }
+	while (WiFi.status() != WL_CONNECTED)
+	{
+		delay(500);
+		Serial.print(".");
+	}
 
-  Serial.print(F("\nAsyncHTTPSRequest @ IP : "));
-  Serial.println(WiFi.localIP());
+	Serial.print(F("\nAsyncHTTPSRequest @ IP : "));
+	Serial.println(WiFi.localIP());
 
-  for (int index = 0; index < NUM_DIFFERENT_SITES; index++)
-  {
-    if ( myAsyncHTTPRequestData[index].httpType == HTTPS_REQUEST )
-    {
-      ((AsyncHTTPSRequest *) myAsyncHTTPRequestData[index].request)->setDebug(false);
-      ((AsyncHTTPSRequest *) myAsyncHTTPRequestData[index].request)->onReadyStateChange( (requestCallback0) requestCB[index]);
-    }
-    else if ( myAsyncHTTPRequestData[index].httpType == HTTP_REQUEST )
-    {
-      ((AsyncHTTPRequest *) myAsyncHTTPRequestData[index].request)->setDebug(false);
-      ((AsyncHTTPRequest *) myAsyncHTTPRequestData[index].request)->onReadyStateChange((requestCallback1) requestCB[index]);
-    }
-  }
+	for (int index = 0; index < NUM_DIFFERENT_SITES; index++)
+	{
+		if ( myAsyncHTTPRequestData[index].httpType == HTTPS_REQUEST )
+		{
+			((AsyncHTTPSRequest *) myAsyncHTTPRequestData[index].request)->setDebug(false);
+			((AsyncHTTPSRequest *) myAsyncHTTPRequestData[index].request)->onReadyStateChange( (requestCallback0) requestCB[index]);
+		}
+		else if ( myAsyncHTTPRequestData[index].httpType == HTTP_REQUEST )
+		{
+			((AsyncHTTPRequest *) myAsyncHTTPRequestData[index].request)->setDebug(false);
+			((AsyncHTTPRequest *) myAsyncHTTPRequestData[index].request)->onReadyStateChange((requestCallback1) requestCB[index]);
+		}
+	}
 
-  ticker.attach(HTTPS_REQUEST_INTERVAL, sendRequests);
+	ticker.attach(HTTPS_REQUEST_INTERVAL, sendRequests);
 
-  ticker1.attach(HEARTBEAT_INTERVAL, heartBeatPrint);
+	ticker1.attach(HEARTBEAT_INTERVAL, heartBeatPrint);
 }
 
 void loop()
 {
-  for (int index = 0; index < NUM_DIFFERENT_SITES; index++)
-  {
-    if ((reqCount[index] > 0) && readySend[index])
-    {
-      sendRequestCB[index]();
+	for (int index = 0; index < NUM_DIFFERENT_SITES; index++)
+	{
+		if ((reqCount[index] > 0) && readySend[index])
+		{
+			sendRequestCB[index]();
 
-      // Don't reduce this or possible crash. TLS needs long time to work.
-      delay(100);
-    }
-  }
+			// Don't reduce this or possible crash. TLS needs long time to work.
+			delay(100);
+		}
+	}
 }
