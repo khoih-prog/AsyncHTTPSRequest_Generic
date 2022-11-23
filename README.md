@@ -1,12 +1,15 @@
-# AsyncHTTPSRequest_Generic
+# AsyncHTTPSRequest_Generic Library
 
 [![arduino-library-badge](https://www.ardu-badge.com/badge/AsyncHTTPSRequest_Generic.svg?)](https://www.ardu-badge.com/AsyncHTTPSRequest_Generic)
 [![GitHub release](https://img.shields.io/github/release/khoih-prog/AsyncHTTPSRequest_Generic.svg)](https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/releases)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](#Contributing)
 [![GitHub issues](https://img.shields.io/github/issues/khoih-prog/AsyncHTTPSRequest_Generic.svg)](http://github.com/khoih-prog/AsyncHTTPSRequest_Generic/issues)
 
+
 <a href="https://www.buymeacoffee.com/khoihprog6" title="Donate to my libraries using BuyMeACoffee"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Donate to my libraries using BuyMeACoffee" style="height: 50px !important;width: 181px !important;" ></a>
 <a href="https://www.buymeacoffee.com/khoihprog6" title="Donate to my libraries using BuyMeACoffee"><img src="https://img.shields.io/badge/buy%20me%20a%20coffee-donate-orange.svg?logo=buy-me-a-coffee&logoColor=FFDD00" style="height: 20px !important;width: 200px !important;" ></a>
+<a href="https://profile-counter.glitch.me/khoih-prog/count.svg" title="Total khoih-prog Visitor count"><img src="https://profile-counter.glitch.me/khoih-prog/count.svg" style="height: 30px;width: 200px;"></a>
+<a href="https://profile-counter.glitch.me/khoih-prog-AsyncHTTPSRequest_Generic/count.svg" title="AsyncHTTPSRequest_Generic Visitor count"><img src="https://profile-counter.glitch.me/khoih-prog-AsyncHTTPSRequest_Generic/count.svg" style="height: 30px;width: 200px;"></a>
 
 ---
 ---
@@ -164,7 +167,6 @@ This library is based on, modified from:
 3. **STM32 using built-in LAN8742A**
 4. **Portenta_H7 using either Ethernet or built-in WiFi**
 
-
 ---
 ---
 
@@ -183,6 +185,7 @@ This library is based on, modified from:
 ## Installation
 
 ### Use Arduino Library Manager
+
 The best and easiest way is to use `Arduino Library Manager`. Search for `AsyncHTTPSRequest_Generic`, then select / install the latest version. You can also use this link [![arduino-library-badge](https://www.ardu-badge.com/badge/AsyncHTTPSRequest_Generic.svg?)](https://www.ardu-badge.com/AsyncHTTPSRequest_Generic) for more detailed instructions.
 
 ### Manual Install
@@ -346,7 +349,7 @@ https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/blob/67580364d2ecb2f3eb1
 
 Following is the debug terminal when running example [AsyncHTTPSRequest_ESP](examples/AsyncHTTPSRequest_ESP) on ESP32_DEV to demonstrate the operation of SSL Async HTTPS request, using [AsyncTCP_SSL Library](https://github.com/khoih-prog/AsyncTCP_SSL).
 
-```
+```cpp
 Starting AsyncHTTPSRequest_ESP using ESP32_DEV
 AsyncTCP_SSL v1.3.1
 AsyncHTTPSRequest_Generic v2.2.1
@@ -405,7 +408,7 @@ week_number: 45
 
 Following is the debug terminal when running example [AsyncHTTPSRequest_ESP](examples/AsyncHTTPSRequest_ESP) on ESP32S2_DEV to demonstrate the operation of SSL Async HTTPS request, using [AsyncTCP_SSL Library](https://github.com/khoih-prog/AsyncTCP_SSL).
 
-```
+```cpp
 Starting AsyncHTTPSRequest_ESP using ESP32S2_DEV
 AsyncTCP_SSL v1.3.1
 AsyncHTTPSRequest_Generic v2.2.1
@@ -482,7 +485,7 @@ week_number: 45
 
 Following is the debug terminal when running example [AsyncHTTPSRequest_ESP](examples/AsyncHTTPSRequest_ESP) on ESP32C3_DEV to demonstrate the operation of SSL Async HTTPS request, using [AsyncTCP_SSL Library](https://github.com/khoih-prog/AsyncTCP_SSL).
 
-```
+```cpp
 Starting AsyncHTTPSRequest_ESP using ESP32C3_DEV
 AsyncTCP_SSL v1.3.1
 AsyncHTTPSRequest_Generic v2.2.1
@@ -535,7 +538,7 @@ week_number: 45
 
 Following is the debug terminal when running example [AsyncHTTPSRequest_ESP_WiFiManager](examples/AsyncHTTPSRequest_ESP_WiFiManager) on ESP32_DEV to demonstrate the operation of SSL Async HTTPS request, using [AsyncTCP_SSL Library](https://github.com/khoih-prog/AsyncTCP_SSL), and [ESPAsync_WiFiManager Library](https://github.com/khoih-prog/ESPAsync_WiFiManager)
 
-```
+```cpp
 Starting AsyncHTTPSRequest_ESP_WiFiManager using LittleFS on ESP32_DEV
 ESPAsync_WiFiManager v1.15.0
 AsyncTCP_SSL v1.3.1
@@ -571,7 +574,7 @@ H
 
 Following is the debug terminal when running example [AsyncHTTPSRequest_WT32_ETH01](examples/WT32_ETH01/AsyncHTTPSRequest_WT32_ETH01) on WT32_ETH01 to demonstrate the operation of SSL Async HTTPS request, using [AsyncTCP_SSL Library](https://github.com/khoih-prog/AsyncTCP_SSL) and **ESP32 core v2.0.0**
 
-```
+```cpp
 Starting AsyncHTTPSRequest_WT32_ETH01 using ESP32_DEV with ETH_PHY_LAN8720
 WebServer_WT32_ETH01 v1.5.0 for core v2.0.0+
 AsyncTCP_SSL v1.3.1
@@ -605,7 +608,7 @@ week_number: 45
 
 Following is the debug terminal when running example [AsyncHTTPSRequest_WT32_ETH01](examples/WT32_ETH01/AsyncHTTPSRequest_WT32_ETH01) on WT32_ETH01 to demonstrate the operation of SSL Async HTTPS request, using [AsyncTCP_SSL Library](https://github.com/khoih-prog/AsyncTCP_SSL) and **ESP32 core v1.0.6**
 
-```
+```cpp
 Starting AsyncHTTPSRequest_WT32_ETH01 using ESP32_DEV with ETH_PHY_LAN8720
 WebServer_WT32_ETH01 v1.5.0 for core v1.0.6-
 AsyncTCP_SSL v1.3.1
@@ -639,7 +642,7 @@ week_number: 45
 
 Following is the debug terminal when running example [AsyncHTTPSRequest_ESP_WiFiManager](examples/AsyncHTTPSRequest_ESP_WiFiManager) on ESP32C3_DEV to demonstrate the operation of SSL Async HTTPS request, using [AsyncTCP_SSL Library](https://github.com/khoih-prog/AsyncTCP_SSL), and [ESPAsync_WiFiManager Library](https://github.com/khoih-prog/ESPAsync_WiFiManager)
 
-```
+```cpp
 Starting AsyncHTTPSRequest_ESP_WiFiManager using LittleFS on ESP32C3_DEV
 ESPAsync_WiFiManager v1.15.0
 AsyncHTTPSRequest_Generic v2.2.1
@@ -696,7 +699,7 @@ HH
 
 Following is the debug terminal when running example [AsyncHTTPSRequest_ESP_WiFiManager](examples/AsyncHTTPSRequest_ESP_WiFiManager) on ESP32S3_DEV to demonstrate the operation of SSL Async HTTPS request, using [AsyncTCP_SSL Library](https://github.com/khoih-prog/AsyncTCP_SSL), and [ESPAsync_WiFiManager Library](https://github.com/khoih-prog/ESPAsync_WiFiManager)
 
-```
+```cpp
 Starting AsyncHTTPSRequest_ESP_WiFiManager using LittleFS on ESP32S3_DEV
 ESPAsync_WiFiManager v1.15.0
 AsyncHTTPSRequest_Generic v2.2.1
@@ -732,7 +735,7 @@ HHHH
 
 The terminal output of [AsyncHTTPSRequest_ESP_Multi example](examples/AsyncHTTPSRequest_ESP_Multi) running on `ESP32_DEV` to demonstrate how to send requests to multiple addresses and receive responses from them. 
 
-```
+```cpp
 Starting AsyncHTTPSRequest_ESP_Multi on ESP32_DEV
 AsyncTCP_SSL v1.3.1
 AsyncHTTPSRequest_Generic v2.2.1
@@ -806,7 +809,7 @@ H
 
 The terminal output of [AsyncHTTP_HTTPSRequest_ESP example](examples/AsyncHTTP_HTTPSRequest_ESP) running on `ESP32_DEV` to demonstrate how to send HTTP and HTTPS requests to multiple addresses and receive responses from them. 
 
-```
+```cpp
 Starting AsyncHTTP_HTTPSRequest_ESP on ESP32_DEV
 AsyncTCP_SSL v1.3.1
 AsyncHTTPSRequest_Generic v2.2.1
@@ -927,7 +930,7 @@ Submit issues to: [AsyncHTTPSRequest_Generic issues](https://github.com/khoih-pr
 
  1. Fix bug. Add enhancement
  2. Add support to more Ethernet / WiFi shields
- 3. Add support to RP2040W, ESP8266, Portenta_H7, STM32 and many more boards
+ 3. Add support to `RP2040W`, `ESP8266`, `Portenta_H7`, `STM32` and many more boards
  4. Add many more examples.
  
  ---
@@ -955,6 +958,8 @@ Submit issues to: [AsyncHTTPSRequest_Generic issues](https://github.com/khoih-pr
 19. Not try to reconnect to the same `host:port` after connected.
 20. Fix crash and memory leak
 21. Default to reconnect to the same `host:port` after connected for new HTTP sites.
+22. Use `allman` astyle
+
 
 ---
 ---
