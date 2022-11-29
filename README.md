@@ -47,7 +47,7 @@
   * [For WT32_ETH01](#for-WT32_ETH01)
     * [1. AsyncHTTPSRequest_WT32_ETH01](examples/WT32_ETH01/AsyncHTTPSRequest_WT32_ETH01)
   * [For ESP32_ENC](#for-ESP32_ENC)
-    * [1. AsyncHTTPSRequest_ESP32_ENC](examples/WT32_ETH01/AsyncHTTPSRequest_ESP32_ENC)
+    * [1. AsyncHTTPSRequest_ESP32_ENC](examples/ESP32_ENC/AsyncHTTPSRequest_ESP32_ENC)
   * [For ESP32, WT32_ETH01 or ESP32_ENC](#For-ESP32-WT32_ETH01-or-ESP32_ENC) 
     * [1. multiFileProject](examples/multiFileProject)
 * [Example AsyncHTTP_HTTPSRequest_ESP](#example-AsyncHTTP_HTTPSRequest_ESP)
