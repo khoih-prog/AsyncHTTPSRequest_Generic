@@ -16,8 +16,8 @@
   #error This code is intended to run on the ESP32 platform! Please check your Tools->Board setting.
 #endif
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v2.2.1"
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             2002001
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN_TARGET      "AsyncHTTPSRequest_Generic v2.3.0"
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MIN             2003000
 
 /////////////////////////////////////////////////////////
 
