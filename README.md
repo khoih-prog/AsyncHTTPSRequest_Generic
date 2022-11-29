@@ -46,7 +46,9 @@
     * [4. AsyncHTTP_HTTPSRequest_ESP](examples/AsyncHTTP_HTTPSRequest_ESP) **New**
   * [For WT32_ETH01](#for-WT32_ETH01)
     * [1. AsyncHTTPSRequest_WT32_ETH01](examples/WT32_ETH01/AsyncHTTPSRequest_WT32_ETH01)
-  * [For ESP32 or WT32_ETH01](#for-esp32-or-WT32_ETH01) 
+  * [For ESP32_ENC](#for-ESP32_ENC)
+    * [1. AsyncHTTPSRequest_ESP32_ENC](examples/WT32_ETH01/AsyncHTTPSRequest_ESP32_ENC)
+  * [For ESP32, WT32_ETH01 or ESP32_ENC](#For-ESP32-WT32_ETH01-or-ESP32_ENC) 
     * [1. multiFileProject](examples/multiFileProject)
 * [Example AsyncHTTP_HTTPSRequest_ESP](#example-AsyncHTTP_HTTPSRequest_ESP)
 * [Debug Terminal Output Samples](#debug-terminal-output-samples) 
@@ -60,6 +62,7 @@
   * [ 8. AsyncHTTPSRequest_ESP_WiFiManager using LittleFS on ESP32S3_DEV](#8-AsyncHTTPSRequest_ESP_WiFiManager-using-LittleFS-on-ESP32S3_DEV)
   * [ 9. AsyncHTTPSRequest_ESP_Multi on ESP32_DEV](#9-AsyncHTTPSRequest_ESP_Multi-on-ESP32_DEV) **New**
   * [10. AsyncHTTP_HTTPSRequest_ESP on ESP32_DEV](#10-AsyncHTTP_HTTPSRequest_ESP-on-ESP32_DEV) **New**
+  * [11. AsyncHTTPSRequest_ESP32_ENC using ESP32_DEV with ESP32_ENC28J60](#11-AsyncHTTPSRequest_ESP32_ENC-using-ESP32_DEV-with-ESP32_ENC28J60) **New**
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
 * [Issues](#issues)
@@ -110,7 +113,7 @@ To use with core v1.0.6-, just define in your sketch
 
 ### Features
 
-1. Asynchronous HTTPS Request library for **ESP32, ESP32_S2, ESP32_C3, ESP32_S3** using built-in WiFi or **WT32_ETH01** using either WiFi of built-in LAN8720 Ethernet
+1. Asynchronous HTTPS Request library for **ESP32, ESP32_S2, ESP32_C3, ESP32_S3** using built-in WiFi, **WT32_ETH01** using either WiFi of built-in LAN8720 Ethernet and ESP32 boards using `LwIP ENC28J60 Ethernet`
 2. Providing a subset of HTTPS.
 3. Relying on [`AsyncTCP_SSL` library](https://github.com/khoih-prog/AsyncTCP_SSL) for ESP32
 4. Methods similar in format and usage to `XmlHTTPrequest` in Javascript.
@@ -158,6 +161,9 @@ This library is based on, modified from:
 
 #### 2. **WT32_ETH01** using ESP32-based boards and LAN8720 Ethernet
 
+#### 3. **ESP32 boards using LwIP ENC28J60 Ethernet**
+
+
 ---
 
 ### To be supported boards in the future
@@ -166,6 +172,7 @@ This library is based on, modified from:
 2. **RP2040W using arduino-pico core**
 3. **STM32 using built-in LAN8742A**
 4. **Portenta_H7 using either Ethernet or built-in WiFi**
+5. **ESP32 using either LwIP W5x00, LAN83848, etc. Ethernet**
 
 ---
 ---
@@ -176,8 +183,11 @@ This library is based on, modified from:
  2. [`ESP32 Core 2.0.5+`](https://github.com/espressif/arduino-esp32) for ESP32-based boards. [Latest stable release ![Release Version](https://img.shields.io/github/release/espressif/arduino-esp32.svg?style=plastic)
  3. [`AsyncTCP_SSL v1.3.1+`](https://github.com/khoih-prog/AsyncTCP_SSL) for ESP32. [![GitHub release](https://img.shields.io/github/release/khoih-prog/AsyncTCP_SSL.svg)](https://github.com/khoih-prog/AsyncTCP_SSL/releases)
  4. [`WebServer_WT32_ETH01 v1.5.1+`](https://github.com/khoih-prog/WebServer_WT32_ETH01) for ESP32-based WT32_ETH01 using **either ESP32 core v2.0.0+ or v1.0.6-**. [![GitHub release](https://img.shields.io/github/release/khoih-prog/WebServer_WT32_ETH01.svg)](https://github.com/khoih-prog/WebServer_WT32_ETH01/releases)
+ 5. [`WebServer_ESP32_ENC v1.5.1+`](https://github.com/khoih-prog/WebServer_ESP32_ENC) for ESP32 boards using `LwIP ENC28J60 Ethernet`. [![GitHub release](https://img.shields.io/github/release/khoih-prog/WebServer_ESP32_ENC.svg)](https://github.com/khoih-prog/WebServer_ESP32_ENC/releases)
  5. [`ESPAsync_WiFiManager library v1.15.1+`](https://github.com/khoih-prog/ESPAsync_WiFiManager) for ESP32/ESP8266 using some examples. [![GitHub release](https://img.shields.io/github/release/khoih-prog/ESPAsync_WiFiManager.svg)](https://github.com/khoih-prog/ESPAsync_WiFiManager/releases)
- 6. [`AsyncHTTPRequest_Generic library v1.10.2+`](https://github.com/khoih-prog/AsyncHTTPRequest_Generic) for ESP32/ESP8266 using with [AsyncHTTP_HTTPSRequest_ESP example](https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/tree/main/examples/AsyncHTTP_HTTPSRequest_ESP). [![GitHub release](https://img.shields.io/github/release/khoih-prog/AsyncHTTPRequest_Generic.svg)](https://github.com/khoih-prog/AsyncHTTPRequest_Generic/releases)
+ 6. [`AsyncHTTPRequest_Generic library v1.11.0+`](https://github.com/khoih-prog/AsyncHTTPRequest_Generic) for ESP32/ESP8266 using with [AsyncHTTP_HTTPSRequest_ESP example](https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/tree/main/examples/AsyncHTTP_HTTPSRequest_ESP). [![GitHub release](https://img.shields.io/github/release/khoih-prog/AsyncHTTPRequest_Generic.svg)](https://github.com/khoih-prog/AsyncHTTPRequest_Generic/releases)
+
+
 
 ---
 ---
@@ -285,8 +295,8 @@ Please have a look at [**ESP_WiFiManager Issue 39: Not able to read analog port 
 
 #### 2. ESP32 ADCs functions
 
-- ADC1 controls ADC function for pins **GPIO32-GPIO39**
-- ADC2 controls ADC function for pins **GPIO0, 2, 4, 12-15, 25-27**
+- `ADC1` controls ADC function for pins **GPIO32-GPIO39**
+- `ADC2` controls ADC function for pins **GPIO0, 2, 4, 12-15, 25-27**
 
 #### 3.. ESP32 WiFi uses ADC2 for WiFi functions
 
@@ -308,10 +318,10 @@ Look in file [**adc_common.c**](https://github.com/espressif/esp-idf/blob/master
 > adc2_spinlock should be acquired first, then adc2_wifi_lock or rtc_spinlock.
 
 
-- In order to use ADC2 for other functions, we have to **acquire complicated firmware locks and very difficult to do**
-- So, it's not advisable to use ADC2 with WiFi/BlueTooth (BT/BLE).
-- Use ADC1, and pins GPIO32-GPIO39
-- If somehow it's a must to use those pins serviced by ADC2 (**GPIO0, 2, 4, 12, 13, 14, 15, 25, 26 and 27**), use the **fix mentioned at the end** of [**ESP_WiFiManager Issue 39: Not able to read analog port when using the autoconnect example**](https://github.com/khoih-prog/ESP_WiFiManager/issues/39) to work with ESP32 WiFi/BlueTooth (BT/BLE).
+- In order to use `ADC2` for other functions, we have to **acquire complicated firmware locks and very difficult to do**
+- So, it's not advisable to use `ADC2` with WiFi/BlueTooth (BT/BLE).
+- Use `ADC1`, and pins GPIO32-GPIO39
+- If somehow it's a must to use those pins serviced by `ADC2` (**GPIO0, 2, 4, 12, 13, 14, 15, 25, 26 and 27**), use the **fix mentioned at the end** of [**ESP_WiFiManager Issue 39: Not able to read analog port when using the autoconnect example**](https://github.com/khoih-prog/ESP_WiFiManager/issues/39) to work with ESP32 WiFi/BlueTooth (BT/BLE).
 
 ---
 ---
@@ -329,7 +339,11 @@ Look in file [**adc_common.c**](https://github.com/espressif/esp-idf/blob/master
 
  1. [AsyncHTTPSRequest_WT32_ETH01](examples/WT32_ETH01/AsyncHTTPSRequest_WT32_ETH01)
  
-#### For ESP32 or WT32_ETH01
+#### For ESP32_ENC
+
+ 1. [AsyncHTTPSRequest_ESP32_ENC](examples/ESP32_ENC/AsyncHTTPSRequest_ESP32_ENC)
+ 
+#### For ESP32, WT32_ETH01 or ESP32_ENC
 
   1. [multiFileProject](examples/multiFileProject)
  
@@ -366,19 +380,19 @@ AsyncHTTPSRequest @ IP : 192.168.2.80
 **************************************
 abbreviation: EST
 client_ip: aaa.bbb.ccc.ddd
-datetime: 2022-11-09T22:02:45.237136-05:00
-day_of_week: 3
-day_of_year: 313
+datetime: 2022-11-28T23:48:55.451234-05:00
+day_of_week: 1
+day_of_year: 332
 dst: false
 dst_from: 
 dst_offset: 0
 dst_until: 
 raw_offset: -18000
 timezone: America/Toronto
-unixtime: 1668049365
-utc_datetime: 2022-11-10T03:02:45.237136+00:00
+unixtime: 1669697335
+utc_datetime: 2022-11-29T04:48:55.451234+00:00
 utc_offset: -05:00
-week_number: 45
+week_number: 48
 **************************************
 HH[AHTTPS] open: already connected    <====== No more connect attempt. Optional
 H
@@ -388,19 +402,20 @@ H
 **************************************
 abbreviation: EST
 client_ip: aaa.bbb.ccc.ddd
-datetime: 2022-11-09T22:02:45.237136-05:00
-day_of_week: 3
-day_of_year: 313
+datetime: 2022-11-28T23:49:55.445279-05:00
+day_of_week: 1
+day_of_year: 332
 dst: false
 dst_from: 
 dst_offset: 0
 dst_until: 
 raw_offset: -18000
 timezone: America/Toronto
-unixtime: 1668049365
-utc_datetime: 2022-11-10T03:02:45.237136+00:00
+unixtime: 1669697395
+utc_datetime: 2022-11-29T04:49:55.445279+00:00
 utc_offset: -05:00
-week_number: 45
+week_number: 48
+**************************************
 ```
 ---
 
@@ -463,19 +478,19 @@ HHHHHH
 **************************************
 abbreviation: EST
 client_ip: aaa.bbb.ccc.ddd
-datetime: 2022-11-09T22:03:25.244353-05:00
-day_of_week: 3
-day_of_year: 313
+datetime: 2022-11-28T23:47:57.517380-05:00
+day_of_week: 1
+day_of_year: 332
 dst: false
 dst_from: 
 dst_offset: 0
 dst_until: 
 raw_offset: -18000
 timezone: America/Toronto
-unixtime: 1668049405
-utc_datetime: 2022-11-10T03:03:25.244353+00:00
+unixtime: 1669697277
+utc_datetime: 2022-11-29T04:47:57.517380+00:00
 utc_offset: -05:00
-week_number: 45
+week_number: 48
 **************************************
 ```
 
@@ -495,40 +510,37 @@ AsyncHTTPSRequest @ IP : 192.168.2.80
 **************************************
 abbreviation: EST
 client_ip: aaa.bbb.ccc.ddd
-datetime: 2022-11-09T22:03:15.240199-05:00
-day_of_week: 3
-day_of_year: 313
+datetime: 2022-11-29T00:02:55.406184-05:00
+day_of_week: 2
+day_of_year: 333
 dst: false
 dst_from: 
 dst_offset: 0
 dst_until: 
 raw_offset: -18000
 timezone: America/Toronto
-unixtime: 1668049395
-utc_datetime: 2022-11-10T03:03:15.240199+00:00
+unixtime: 1669698175
+utc_datetime: 2022-11-29T05:02:55.406184+00:00
 utc_offset: -05:00
-week_number: 45
+week_number: 48
 **************************************
 HHHHHH
 **************************************
-[AHTTPS] Response Code =  HTTP OK
-
-**************************************
 abbreviation: EST
 client_ip: aaa.bbb.ccc.ddd
-datetime: 2022-11-09T22:03:25.244353-05:00
-day_of_week: 3
-day_of_year: 313
+datetime: 2022-11-29T00:03:55.405276-05:00
+day_of_week: 2
+day_of_year: 333
 dst: false
 dst_from: 
 dst_offset: 0
 dst_until: 
 raw_offset: -18000
 timezone: America/Toronto
-unixtime: 1668049405
-utc_datetime: 2022-11-10T03:03:25.244353+00:00
+unixtime: 1669698235
+utc_datetime: 2022-11-29T05:03:55.405276+00:00
 utc_offset: -05:00
-week_number: 45
+week_number: 48
 **************************************
 ```
 
@@ -551,19 +563,19 @@ H
 **************************************
 abbreviation: EST
 client_ip: aaa.bbb.ccc.ddd
-datetime: 2022-11-09T22:03:25.244353-05:00
-day_of_week: 3
-day_of_year: 313
+datetime: 2022-11-28T23:59:55.338997-05:00
+day_of_week: 1
+day_of_year: 332
 dst: false
 dst_from: 
 dst_offset: 0
 dst_until: 
 raw_offset: -18000
 timezone: America/Toronto
-unixtime: 1668049405
-utc_datetime: 2022-11-10T03:03:25.244353+00:00
+unixtime: 1669697995
+utc_datetime: 2022-11-29T04:59:55.338997+00:00
 utc_offset: -05:00
-week_number: 45
+week_number: 48
 **************************************
 H
 ```
@@ -586,19 +598,19 @@ HTTP WebClient is @ IP : 192.168.2.82
 **************************************
 abbreviation: EST
 client_ip: aaa.bbb.ccc.ddd
-datetime: 2022-11-09T22:03:35.242713-05:00
-day_of_week: 3
-day_of_year: 313
+datetime: 2022-11-28T23:57:55.422547-05:00
+day_of_week: 1
+day_of_year: 332
 dst: false
 dst_from: 
 dst_offset: 0
 dst_until: 
 raw_offset: -18000
 timezone: America/Toronto
-unixtime: 1668049415
-utc_datetime: 2022-11-10T03:03:35.242713+00:00
+unixtime: 1669697875
+utc_datetime: 2022-11-29T04:57:55.422547+00:00
 utc_offset: -05:00
-week_number: 45
+week_number: 48
 **************************************
 ```
 
@@ -619,19 +631,19 @@ HTTP WebClient is @ IP : 192.168.2.232
 **************************************
 abbreviation: EST
 client_ip: aaa.bbb.ccc.ddd
-datetime: 2022-11-09T22:03:45.237077-05:00
-day_of_week: 3
-day_of_year: 313
+datetime: 2022-11-28T23:55:57.561485-05:00
+day_of_week: 1
+day_of_year: 332
 dst: false
 dst_from: 
 dst_offset: 0
 dst_until: 
 raw_offset: -18000
 timezone: America/Toronto
-unixtime: 1668049425
-utc_datetime: 2022-11-10T03:03:45.237077+00:00
+unixtime: 1669697757
+utc_datetime: 2022-11-29T04:55:57.561485+00:00
 utc_offset: -05:00
-week_number: 45
+week_number: 48
 **************************************
 ```
 
@@ -654,40 +666,37 @@ H
 **************************************
 abbreviation: EST
 client_ip: aaa.bbb.ccc.ddd
-datetime: 2022-11-09T22:03:35.242713-05:00
-day_of_week: 3
-day_of_year: 313
+datetime: 2022-11-28T23:51:55.438493-05:00
+day_of_week: 1
+day_of_year: 332
 dst: false
 dst_from: 
 dst_offset: 0
 dst_until: 
 raw_offset: -18000
 timezone: America/Toronto
-unixtime: 1668049415
-utc_datetime: 2022-11-10T03:03:35.242713+00:00
+unixtime: 1669697515
+utc_datetime: 2022-11-29T04:51:55.438493+00:00
 utc_offset: -05:00
-week_number: 45
+week_number: 48
 **************************************
-HHHHHH
-**************************************
-[AHTTPS] Response Code =  HTTP OK
-
+HHHHHH 
 **************************************
 abbreviation: EST
 client_ip: aaa.bbb.ccc.ddd
-datetime: 2022-11-09T22:03:45.237077-05:00
-day_of_week: 3
-day_of_year: 313
+datetime: 2022-11-28T23:52:55.359363-05:00
+day_of_week: 1
+day_of_year: 332
 dst: false
 dst_from: 
 dst_offset: 0
 dst_until: 
 raw_offset: -18000
 timezone: America/Toronto
-unixtime: 1668049425
-utc_datetime: 2022-11-10T03:03:45.237077+00:00
+unixtime: 1669697575
+utc_datetime: 2022-11-29T04:52:55.359363+00:00
 utc_offset: -05:00
-week_number: 45
+week_number: 48
 **************************************
 HH
 ```
@@ -711,19 +720,19 @@ H
 **************************************
 abbreviation: EST
 client_ip: aaa.bbb.ccc.ddd
-datetime: 2022-11-09T22:03:45.237077-05:00
-day_of_week: 3
-day_of_year: 313
+datetime: 2022-11-28T23:50:55.443495-05:00
+day_of_week: 1
+day_of_year: 332
 dst: false
 dst_from: 
 dst_offset: 0
 dst_until: 
 raw_offset: -18000
 timezone: America/Toronto
-unixtime: 1668049425
-utc_datetime: 2022-11-10T03:03:45.237077+00:00
+unixtime: 1669697455
+utc_datetime: 2022-11-29T04:50:55.443495+00:00
 utc_offset: -05:00
-week_number: 45
+week_number: 48
 **************************************
 HHHH
 ```
@@ -891,6 +900,72 @@ week_number: 42
 **************************************
 ```
 
+
+---
+
+
+#### 11. AsyncHTTPSRequest_ESP32_ENC using ESP32_DEV with ESP32_ENC28J60
+
+Following is the debug terminal when running example [AsyncHTTPSRequest_ESP32_ENC](examples/ESP32_ENC/AsyncHTTPSRequest_ESP32_ENC) on `ESP32_DEV` boards using `LwIP ENC28J60 Ethernet`, to demonstrate the operation of SSL Async HTTPS request, using [AsyncTCP_SSL Library](https://github.com/khoih-prog/AsyncTCP_SSL)
+
+
+```cpp
+Starting AsyncHTTPSRequest_ESP32_ENC using ESP32_DEV with ESP32_ENC28J60
+WebServer_ESP32_ENC v1.5.1 for core v2.0.0+
+AsyncTCP_SSL v1.3.1
+AsyncHTTPSRequest_Generic v2.2.1
+[AHTTPS] Default SPI pinout:
+[AHTTPS] MOSI: 23
+[AHTTPS] MISO: 19
+[AHTTPS] SCK: 18
+[AHTTPS] CS: 5
+[AHTTPS] INT: 4
+[AHTTPS] SPI Clock (MHz): 8
+[AHTTPS] =========================
+
+ETH Started
+ETH Connected
+ETH MAC: DE:AD:BE:EF:FE:01, IPv4: 192.168.2.95
+FULL_DUPLEX, 10Mbps
+
+HTTP WebClient is @ IP : 192.168.2.95
+
+**************************************
+abbreviation: EST
+client_ip: aaa.bbb.ccc.ddd
+datetime: 2022-11-28T23:47:57.517380-05:00
+day_of_week: 1
+day_of_year: 332
+dst: false
+dst_from: 
+dst_offset: 0
+dst_until: 
+raw_offset: -18000
+timezone: America/Toronto
+unixtime: 1669697277
+utc_datetime: 2022-11-29T04:47:57.517380+00:00
+utc_offset: -05:00
+week_number: 48
+**************************************
+HHHHHH
+**************************************
+abbreviation: EST
+client_ip: aaa.bbb.ccc.ddd
+datetime: 2022-11-28T23:48:55.451234-05:00
+day_of_week: 1
+day_of_year: 332
+dst: false
+dst_from: 
+dst_offset: 0
+dst_until: 
+raw_offset: -18000
+timezone: America/Toronto
+unixtime: 1669697335
+utc_datetime: 2022-11-29T04:48:55.451234+00:00
+utc_offset: -05:00
+week_number: 48
+**************************************
+```
 ---
 ---
 
@@ -959,7 +1034,7 @@ Submit issues to: [AsyncHTTPSRequest_Generic issues](https://github.com/khoih-pr
 20. Fix crash and memory leak
 21. Default to reconnect to the same `host:port` after connected for new HTTP sites.
 22. Use `allman` astyle
-
+23. Add support to ESP32 boards using `LwIP ENC28J60 Ethernet`
 
 ---
 ---

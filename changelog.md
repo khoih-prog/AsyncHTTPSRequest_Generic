@@ -17,6 +17,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v2.3.0](#releases-v230)
   * [Releases v2.2.1](#releases-v221)
   * [Releases v2.2.0](#releases-v220)
   * [Releases v2.1.3](#releases-v213)
@@ -38,6 +39,10 @@
 
 
 ## Changelog
+
+### Releases v2.3.0
+
+1. Add support to ESP32 boards using `LwIP ENC28J60 Ethernet`
 
 ### Releases v2.2.1
 

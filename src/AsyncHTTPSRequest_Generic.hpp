@@ -17,7 +17,7 @@
   You should have received a copy of the GNU General Public License along with this program. 
   If not, see <https://www.gnu.org/licenses/>.  
  
-  Version: 2.2.1
+  Version: 2.3.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -36,6 +36,7 @@
   2.1.3    K Hoang     18/10/2022 Not try to reconnect to the same host:port after connected
   2.2.0    K Hoang     20/10/2022 Fix crash and memory leak
   2.2.1    K Hoang     09/11/2022 Default to reconnect to the same host:port after connected for new HTTP sites
+  2.3.0    K Hoang     28/11/2022 Add support to ESP32 boards using LwIP ENC28J60 Ethernet
  *****************************************************************************************************************************/
 
 #pragma once
@@ -51,13 +52,13 @@
 
 ////////////////////////////////////////
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION             "AsyncHTTPSRequest_Generic v2.2.1"
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION             "AsyncHTTPSRequest_Generic v2.3.0"
 
 #define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MAJOR       2
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MINOR       2
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_PATCH       1
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MINOR       3
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_PATCH       0
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_INT         2002001
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_INT         2003000
 
 ////////////////////////////////////////
 
