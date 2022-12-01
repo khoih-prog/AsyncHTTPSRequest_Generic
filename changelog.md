@@ -40,6 +40,11 @@
 
 ## Changelog
 
+### Releases v2.4.0
+
+1. Add support to ESP32 boards using `LwIP W5500 Ethernet`
+2. Fix bug. Check [Fix "blank new line in chunk" bug #50](https://github.com/khoih-prog/AsyncHTTPRequest_Generic/pull/50)
+
 ### Releases v2.3.0
 
 1. Add support to ESP32 boards using `LwIP ENC28J60 Ethernet`
