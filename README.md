@@ -50,7 +50,7 @@
     * [1. AsyncHTTPSRequest_WT32_ETH01](examples/WT32_ETH01/AsyncHTTPSRequest_WT32_ETH01)
   * [For ESP32_ENC](#for-ESP32_ENC)
     * [1. AsyncHTTPSRequest_ESP32_ENC](examples/ESP32_ENC/AsyncHTTPSRequest_ESP32_ENC)
-  * [For ESP32, WT32_ETH01 or ESP32_ENC](#For-ESP32-WT32_ETH01-or-ESP32_ENC) 
+  * [For ESP32, WT32_ETH01, ESP32_ENC or ESP32_W5500](#For-ESP32-WT32_ETH01-ESP32_ENC-or-ESP32_W5500) 
     * [1. multiFileProject](examples/multiFileProject)
 * [Example AsyncHTTP_HTTPSRequest_ESP](#example-AsyncHTTP_HTTPSRequest_ESP)
 * [Debug Terminal Output Samples](#debug-terminal-output-samples) 
@@ -376,7 +376,7 @@ https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/blob/6168613ea8c6cb4fd9d
 
  1. [AsyncHTTPSRequest_ESP32_W5500](examples/ESP32_W5500/AsyncHTTPSRequest_ESP32_W5500) 
  
-#### For ESP32, WT32_ETH01 or ESP32_ENC
+#### For ESP32, WT32_ETH01, ESP32_ENC or ESP32_W5500
 
   1. [multiFileProject](examples/multiFileProject)
  
@@ -384,7 +384,7 @@ https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/blob/6168613ea8c6cb4fd9d
 
 ### Example [AsyncHTTP_HTTPSRequest_ESP](examples/AsyncHTTP_HTTPSRequest_ESP)
 
-https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/blob/67580364d2ecb2f3eb1e350f001ba5535087faba/examples/AsyncHTTP_HTTPSRequest_ESP/AsyncHTTP_HTTPSRequest_ESP.ino#L43-L400
+https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/blob/c1fc1a5e4c6948f30b741553db2ce5e95c555175/examples/AsyncHTTP_HTTPSRequest_ESP/AsyncHTTP_HTTPSRequest_ESP.ino#L43-L402
 
 
 ---
