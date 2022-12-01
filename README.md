@@ -1032,7 +1032,7 @@ HTTP WebClient is @ IP : 192.168.2.103
 
 **************************************
 abbreviation: EST
-client_ip: 216.154.12.9
+client_ip: aaa.bbb.ccc.ddd
 datetime: 2022-11-30T19:05:25.743559-05:00
 day_of_week: 3
 day_of_year: 334
@@ -1050,7 +1050,7 @@ week_number: 48
 HHHHHH
 **************************************
 abbreviation: EST
-client_ip: 216.154.12.9
+client_ip: aaa.bbb.ccc.ddd
 datetime: 2022-11-30T19:06:24.624668-05:00
 day_of_week: 3
 day_of_year: 334
