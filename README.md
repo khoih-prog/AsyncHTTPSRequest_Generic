@@ -69,7 +69,7 @@
   * [10. AsyncHTTP_HTTPSRequest_ESP on ESP32_DEV](#10-AsyncHTTP_HTTPSRequest_ESP-on-ESP32_DEV) **New**
   * [11. AsyncHTTPSRequest_ESP32_ENC using ESP32_DEV with ESP32_ENC28J60](#11-AsyncHTTPSRequest_ESP32_ENC-using-ESP32_DEV-with-ESP32_ENC28J60) **New**
   * [12. AsyncHTTPSRequest_ESP32_W5500 using ESP32_DEV with ESP32_W5500](#12-AsyncHTTPSRequest_ESP32_W5500-using-ESP32_DEV-with-ESP32_W5500) **New**
-  * [13. AsyncHTTPSRequest_ESP32_W6100 using ESP32_DEV with ESP32_W6100](#12-AsyncHTTPSRequest_ESP32_6100-using-ESP32_DEV-with-ESP32_W6100) **New**
+  * [13. AsyncHTTPSRequest_ESP32_W6100 using ESP32_DEV with ESP32_W6100](#13-AsyncHTTPSRequest_ESP32_6100-using-ESP32_DEV-with-ESP32_W6100) **New**
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
 * [Issues](#issues)
@@ -385,7 +385,7 @@ https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/blob/6168613ea8c6cb4fd9d
  
 #### For ESP32_W6100
 
- 1. [AsyncHTTPSRequest_ESP32_W5100](https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/tree/main/examples/ESP32_W6100/AsyncHTTPSRequest_ESP32_W6100)
+ 1. [AsyncHTTPSRequest_ESP32_W6100](https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/tree/main/examples/ESP32_W6100/AsyncHTTPSRequest_ESP32_W6100)
  
 #### For ESP32, WT32_ETH01, ESP32_ENC, ESP32_W5500 or ESP32_W6100
 
@@ -1225,7 +1225,7 @@ This library is based on, modified, bug-fixed and improved from:
 - to report the issue in [Having problemen with AsyncHTTPS memory leak #11](https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/issues/11) 
 - to make a terrific PR in [Update for memleak in AsyncHTTPSRequest_Impl_Generic.h #13](https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/pull/13)
 leading to new release v2.2.0 to fix crash and memory leak
-6. Thanks to [yocal](https://github.com/yocal) to report [Getting 400 Bad Request on second call to same host #14](https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/issues/14) leading to new release v2.2.1
+6. Thanks to [emmettprexus](https://github.com/emmettprexus) to report [Getting 400 Bad Request on second call to same host #14](https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/issues/14) leading to new release v2.2.1
 7. Thanks to [joaorolemberg](https://github.com/joaorolemberg) to report [Callback behavior buggy #19](https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/issues/19) leading to new release v2.5.0
 8. Thanks to [redphx](https://github.com/redphx) to report [Bug with _parseURL() #21](https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/issues/21) leading to new release v2.5.0
 
@@ -1236,7 +1236,7 @@ leading to new release v2.2.0 to fix crash and memory leak
     <td align="center"><a href="https://github.com/glennswest"><img src="https://github.com/glennswest.png" width="100px;" alt="glennswest"/><br /><sub><b>Glenn West</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/rjjrbatarao"><img src="https://github.com/rjjrbatarao.png" width="100px;" alt="rjjrbatarao"/><br /><sub><b>rjjrbatarao</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/roel80"><img src="https://github.com/roel80.png" width="100px;" alt="roel80"/><br /><sub><b>Roeland Kluit</b></sub></a><br /></td>
-    <td align="center"><a href="https://github.com/yocal"><img src="https://github.com/yocal.png" width="100px;" alt="yocal"/><br /><sub><b>yocal</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/emmettprexus"><img src="https://github.com/emmettprexus.png" width="100px;" alt="emmettprexus"/><br /><sub><b>emmettprexus</b></sub></a><br /></td>
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/joaorolemberg"><img src="https://github.com/joaorolemberg.png" width="100px;" alt="joaorolemberg"/><br /><sub><b> joaorolemberg</b></sub></a><br /></td>
