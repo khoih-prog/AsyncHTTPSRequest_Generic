@@ -1,7 +1,7 @@
 {
   "name":"AsyncHTTPSRequest_Generic",
-  "version": "2.4.0",
-  "description":"Simple Async HTTPS Request library, supporting GET, POST, PUT, PATCH, DELETE and HEAD, on top of AsyncTCP_SSL library for ESP32 (including ESP32_S2, ESP32_S3 and ESP32_C3), WT32_ETH01 (ESP32 + LAN8720) and ESP32 with LwIP ENC28J60. Supporting in the future for RP2040W, ESP8266, Portenta_H7, STM32 with built-in LAN8742A Ethernet, etc. Now you can send HTTP / HTTPS requests to multiple addresses and receive responses from them.",
+  "version": "2.5.0",
+  "description":"Simple Async HTTPS Request library, supporting GET, POST, PUT, PATCH, DELETE and HEAD, on top of AsyncTCP_SSL library for ESP32 (including ESP32_S2, ESP32_S3 and ESP32_C3), WT32_ETH01 (ESP32 + LAN8720) and ESP32 with LwIP ENC28J60, W5500 or W6100. Supporting in the future for RP2040W, ESP8266, Portenta_H7, STM32 with built-in LAN8742A Ethernet, etc. Now you can send HTTP / HTTPS requests to multiple addresses and receive responses from them.",
   "keywords":"communication, async, tcp, https, ssl, tls, ESP8266, ESP32, ESP32-S2, wt32-eth01, ESPAsyncTCP, AsyncTCP, stm32, ethernet, wifi, lan8742a, lan8720, f407ve, nucleo-144, stm32f7",
   "authors": [
     {
@@ -45,13 +45,19 @@
     {
       "owner": "khoih-prog",
       "name": "WebServer_ESP32_ENC",
-      "version": ">=1.5.1",
+      "version": ">=1.5.3",
       "platforms": ["espressif32"]
     },
     {
       "owner": "khoih-prog",
       "name": "WebServer_ESP32_W5500",
-      "version": ">=1.5.1",
+      "version": ">=1.5.3",
+      "platforms": ["espressif32"]
+    },
+    {
+      "owner": "khoih-prog",
+      "name": "WebServer_ESP32_W6100",
+      "version": ">=1.5.3",
       "platforms": ["espressif32"]
     },
     {
@@ -69,7 +75,7 @@
   ],
   "license": "LGPL-3.0",
   "frameworks": "arduino",
-  "platforms": ["espressif8266", "espressif32"],
+  "platforms": ["espressif32"],
   "examples": "examples/*/*/*.ino",
   "headers": ["AsyncHTTPSRequest_Generic.h","AsyncHTTPSRequest_Generic.hpp"]
 }

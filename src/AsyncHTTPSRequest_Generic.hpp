@@ -17,7 +17,7 @@
   You should have received a copy of the GNU General Public License along with this program. 
   If not, see <https://www.gnu.org/licenses/>.  
  
-  Version: 2.4.0
+  Version: 2.5.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -38,6 +38,7 @@
   2.2.1    K Hoang     09/11/2022 Default to reconnect to the same host:port after connected for new HTTP sites
   2.3.0    K Hoang     28/11/2022 Add support to ESP32 boards using LwIP ENC28J60 Ethernet
   2.4.0    K Hoang     30/11/2022 Add support to ESP32 boards using LwIP W5500 Ethernet. Fix bug
+  2.5.0    K Hoang     31/01/2023 Fix bug of wrong reqStates and _parseURL()
  *****************************************************************************************************************************/
 
 #pragma once
@@ -53,13 +54,13 @@
 
 ////////////////////////////////////////
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION             "AsyncHTTPSRequest_Generic v2.4.0"
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION             "AsyncHTTPSRequest_Generic v2.5.0"
 
 #define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MAJOR       2
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MINOR       4
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_MINOR       5
 #define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_PATCH       0
 
-#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_INT         2004000
+#define ASYNC_HTTPS_REQUEST_GENERIC_VERSION_INT         2005000
 
 ////////////////////////////////////////
 
@@ -274,7 +275,9 @@ class xbuf: public Print
 
 ////////////////////////////////////////
 
-#define DEFAULT_RX_TIMEOUT           30				// Seconds for timeout
+#if !defined(DEFAULT_RX_TIMEOUT)
+	#define DEFAULT_RX_TIMEOUT 					30					// Seconds for timeout
+#endif
 
 ////////////////////////////////////////
 

@@ -9,12 +9,14 @@
 <a href="https://www.buymeacoffee.com/khoihprog6" title="Donate to my libraries using BuyMeACoffee"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Donate to my libraries using BuyMeACoffee" style="height: 50px !important;width: 181px !important;" ></a>
 <a href="https://www.buymeacoffee.com/khoihprog6" title="Donate to my libraries using BuyMeACoffee"><img src="https://img.shields.io/badge/buy%20me%20a%20coffee-donate-orange.svg?logo=buy-me-a-coffee&logoColor=FFDD00" style="height: 20px !important;width: 200px !important;" ></a>
 
+
 ---
 ---
 
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v2.5.0](#releases-v250)
   * [Releases v2.4.0](#releases-v240)
   * [Releases v2.3.0](#releases-v230)
   * [Releases v2.2.1](#releases-v221)
@@ -38,6 +40,13 @@
 
 
 ## Changelog
+
+### Releases v2.5.0
+
+1. Add support to ESP32 boards using `LwIP W6100 Ethernet`
+2. Fix bug of wrong `reqStates`. Check [Callback behavior buggy #19](https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/issues/19)
+3. Fix bug of `_parseURL()`. Check [Bug with _parseURL() #21](https://github.com/khoih-prog/AsyncHTTPSRequest_Generic/issues/21)
+4. Improve `README.md` so that links can be used in other sites, such as `PIO`
 
 ### Releases v2.4.0
 

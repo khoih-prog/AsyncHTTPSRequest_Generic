@@ -17,7 +17,7 @@
   You should have received a copy of the GNU General Public License along with this program.
   If not, see <https://www.gnu.org/licenses/>.
 
-  Version: 2.4.0
+  Version: 2.5.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -38,6 +38,7 @@
   2.2.1    K Hoang     09/11/2022 Default to reconnect to the same host:port after connected for new HTTP sites
   2.3.0    K Hoang     28/11/2022 Add support to ESP32 boards using LwIP ENC28J60 Ethernet
   2.4.0    K Hoang     30/11/2022 Add support to ESP32 boards using LwIP W5500 Ethernet. Fix bug
+  2.5.0    K Hoang     31/01/2023 Fix bug of wrong reqStates and _parseURL()
  *****************************************************************************************************************************/
 
 #pragma once
@@ -775,6 +776,7 @@ bool  AsyncHTTPSRequest::send(const uint8_t* body, size_t len)
   if (!_requestReadyToSend)
   {
     AHTTPS_LOGERROR(CANT_SEND_BAD_REQUEST);
+    
     return false;
   }
 
@@ -805,6 +807,7 @@ bool AsyncHTTPSRequest::send(xbuf* body, size_t len)
   if (!_requestReadyToSend)
   {
     AHTTPS_LOGERROR(CANT_SEND_BAD_REQUEST);
+    
     return false;
   }
 
@@ -1054,6 +1057,7 @@ String AsyncHTTPSRequest::responseText()
   if (localString.length() < avail)
   {
     AHTTPS_LOGERROR(F("!responseText() no buffer"))
+    
     _HTTPcode = HTTPCODE_TOO_LESS_RAM;
     _client->abort();
     _AHTTPS_unlock;
@@ -1242,13 +1246,30 @@ bool  AsyncHTTPSRequest::_parseURL(const String& url)
   //////
 
   int pathBeg = url.indexOf('/', hostBeg);
-
+  
+  int hostEnd;
+  int portBeg;
+  
   if (pathBeg < 0)
-    return false;
-
-  int hostEnd = pathBeg;
-  int portBeg = url.indexOf(':', hostBeg);
-
+  {
+    if ( url.indexOf(':', hostBeg) < 0 )
+    {
+      // No port, just https://www.aaa.com
+      hostEnd = url.length();
+    }
+    else
+    {
+      // with port, https://www.aaa.com:443
+      hostEnd = url.indexOf(':', hostBeg);
+    }
+  }
+  else
+  {
+    hostEnd = pathBeg;
+  }
+  
+  portBeg = url.indexOf(':', hostBeg);
+  
   if (portBeg > 0 && portBeg < pathBeg)
   {
     _URL->port = url.substring(portBeg + 1, pathBeg).toInt();
@@ -1261,7 +1282,7 @@ bool  AsyncHTTPSRequest::_parseURL(const String& url)
     return false;
 
   strcpy(_URL->host, url.substring(hostBeg, hostEnd).c_str());
-
+  
   int queryBeg = url.indexOf('?');
 
   if (queryBeg < 0)
@@ -1273,14 +1294,14 @@ bool  AsyncHTTPSRequest::_parseURL(const String& url)
     return false;
 
   strcpy(_URL->path, url.substring(pathBeg, queryBeg).c_str());
-
+  
   _URL->query = new char[url.length() - queryBeg + 1];
 
   if (_URL->query == nullptr)
     return false;
 
   strcpy(_URL->query, url.substring(queryBeg).c_str());
-
+  
   return true;
 }
 
@@ -1408,9 +1429,7 @@ size_t  AsyncHTTPSRequest::_send()
   if ( ! _client->connected())
   {
     // KH fix bug https://github.com/khoih-prog/AsyncHTTPRequest_Generic/issues/38
-    _HTTPcode = HTTPCODE_NOT_CONNECTED;
-    _setReadyState(readyStateUnsent);
-    ///////////////////////////
+    _timeout = DEFAULT_RX_TIMEOUT;
 
     return 0;
   }
@@ -1497,7 +1516,6 @@ void  AsyncHTTPSRequest::_processChunks()
     size_t chunkLength = strtol(chunkHeader.c_str(), nullptr, 16);
     _contentLength += chunkLength;
 
-    //if (chunkLength == 0)
     if (chunkHeader == "0\r\n")
     {
       char* connectionHdr = respHeaderValue("connection");
@@ -1535,50 +1553,11 @@ void  AsyncHTTPSRequest::_onConnect(AsyncSSLClient* client)
   _client = client;
   _setReadyState(readyStateOpened);
 
-  // KH Add HTTPS, not tested yet !!!
-#if 0   //(ESP8266)
-
-  if (_secure && _secureServerFingerprints.size() > 0)
-  {
-    //SSL* clientSsl = _client.getSSL();
-
-    bool sslFoundFingerprint = false;
-
-    for (std::array<uint8_t, SHA1_SIZE> fingerprint : _secureServerFingerprints)
-    {
-      //if (ssl_match_fingerprint(clientSsl, fingerprint.data()) == SSL_OK)
-      {
-        AHTTPS_LOGDEBUG(F("_onConnect handler: sslFoundFingerprint"));
-
-        sslFoundFingerprint = true;
-        break;
-      }
-    }
-
-    if (!sslFoundFingerprint)
-    {
-      AHTTPS_LOGDEBUG(F("_onConnect handler: _tlsBadFingerprint"));
-
-      _tlsBadFingerprint = true;
-      _client->close(true);
-      return;
-    }
-  }
-
-#endif
-
-  // KH test
   _response = new xbuf;
-  //_response = new xbuf(256);
-  //////
 
   if (!_response)
   {
     _AHTTPS_unlock;
-
-    // KH, to remove
-    AHTTPS_LOGERROR(F("_onConnect: Can't new _response"));
-    ///////
 
     return;
   }
@@ -1671,11 +1650,9 @@ void  AsyncHTTPSRequest::_onDisconnect(AsyncSSLClient* client)
     _HTTPcode = HTTPCODE_CONNECTION_LOST;
   }
 
-  // KH, Not in AsyncHTTPRequest
   SAFE_DELETE(_client)
 
   _client = nullptr;
-  //////
 
   SAFE_DELETE_ARRAY(_connectedHost)
 
