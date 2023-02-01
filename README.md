@@ -69,7 +69,7 @@
   * [10. AsyncHTTP_HTTPSRequest_ESP on ESP32_DEV](#10-AsyncHTTP_HTTPSRequest_ESP-on-ESP32_DEV) **New**
   * [11. AsyncHTTPSRequest_ESP32_ENC using ESP32_DEV with ESP32_ENC28J60](#11-AsyncHTTPSRequest_ESP32_ENC-using-ESP32_DEV-with-ESP32_ENC28J60) **New**
   * [12. AsyncHTTPSRequest_ESP32_W5500 using ESP32_DEV with ESP32_W5500](#12-AsyncHTTPSRequest_ESP32_W5500-using-ESP32_DEV-with-ESP32_W5500) **New**
-  * [13. AsyncHTTPSRequest_ESP32_W6100 using ESP32_DEV with ESP32_W6100](#13-AsyncHTTPSRequest_ESP32_6100-using-ESP32_DEV-with-ESP32_W6100) **New**
+  * [13. AsyncHTTPSRequest_ESP32_W6100 using ESP32_DEV with ESP32_W6100](#13-AsyncHTTPSRequest_ESP32_W6100-using-ESP32_DEV-with-ESP32_W6100) **New**
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
 * [Issues](#issues)
