@@ -38,7 +38,7 @@
   2.2.1    K Hoang     09/11/2022 Default to reconnect to the same host:port after connected for new HTTP sites
   2.3.0    K Hoang     28/11/2022 Add support to ESP32 boards using LwIP ENC28J60 Ethernet
   2.4.0    K Hoang     30/11/2022 Add support to ESP32 boards using LwIP W5500 Ethernet. Fix bug
-  2.5.0    K Hoang     31/01/2023 Fix bug of wrong reqStates and _parseURL()
+  2.5.0    K Hoang     31/01/2023 Add support to ESP32 using LwIP W6100 Ethernet. Fix bug of wrong reqStates and _parseURL()
  *****************************************************************************************************************************/
 
 #pragma once
